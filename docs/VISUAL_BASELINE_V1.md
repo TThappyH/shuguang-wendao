@@ -9,9 +9,9 @@
 
 | 项目 | 值 |
 |---|---|
-| 被测文件 | `D:\1\曙光猎人_V6.7.2_启动修复版.html` |
+| 被测文件 | `local V6.7.2 candidate fixture` |
 | 被测文件 SHA-256 | `FBC38A5EEBB8024471C1F4AE6D9BC86500279814E495E47EA23ECDD980637364` |
-| 测试副本 | `E:\shuguang_visual_gate_v1\曙光问道_V6.7.2_gate_instrumented.html` |
+| 测试副本 | `evidence/visual-gate-v1/曙光问道_V6.7.2_gate_instrumented.html` |
 | 测试副本 SHA-256 | `A344C70F329E366E8ECE00AAC9EF6379A2C0D96321545B4A146C1444D521948F` |
 | 测试服务器 | `http://127.0.0.1:8899/` |
 | 浏览器 | Playwright CLI Chromium，headless |
@@ -61,7 +61,7 @@
 | C high density | 1440x900 | 6.073 | 164.67 | 8.4 | 887 | 50,106 | 953 | 2 | 309 | 325 | 96 | 8 | 74 | 3 |
 | D Boss | 1440x900 | 5.224 | 191.43 | 4.2 | 222 | 25,012 | 330 | 2 | 102 | 160 | 17 | 2 | 21 | 7 |
 
-完整 JSON：`E:\shuguang_visual_gate_v1\baseline_metrics.json`。
+完整 JSON：`evidence/visual-gate-v1/baseline_metrics.json`（external evidence workspace）。
 
 ### 指标解释
 
@@ -73,12 +73,12 @@
 
 | 场景 | 文件 |
 |---|---|
-| A 1920 | `E:\shuguang_visual_gate_v1\golden-A-menu-1920.png` |
-| A 1440 | `E:\shuguang_visual_gate_v1\golden-A-menu-1440.png` |
-| A mobile | `E:\shuguang_visual_gate_v1\golden-A-menu-mobile.png` |
-| B combat | `E:\shuguang_visual_gate_v1\golden-B-active-combat.png` |
-| C high density | `E:\shuguang_visual_gate_v1\golden-C-high-density.png` |
-| D Boss | `E:\shuguang_visual_gate_v1\golden-D-boss-telegraph.png` |
+| A 1920 | `evidence/visual-gate-v1/golden-A-menu-1920.png` |
+| A 1440 | `evidence/visual-gate-v1/golden-A-menu-1440.png` |
+| A mobile | `evidence/visual-gate-v1/golden-A-menu-mobile.png` |
+| B combat | `evidence/visual-gate-v1/golden-B-active-combat.png` |
+| C high density | `evidence/visual-gate-v1/golden-C-high-density.png` |
+| D Boss | `evidence/visual-gate-v1/golden-D-boss-telegraph.png` |
 
 ## 5. 当前门禁判定
 
@@ -106,14 +106,14 @@
 ## 7. 本轮代码变更
 
 - Git 提交只新增：`docs/VISUAL_QUALITY_GATE_V1.md`、`docs/VISUAL_BASELINE_V1.md`。
-- 未修改 `D:\1\曙光猎人_V6.7.2_启动修复版.html`。
+- 未修改 `local V6.7.2 candidate fixture`。
 - 未新增玩法、武器、Boss、地图、法宝、路径或大型 VFX。
 - 未修改现有运行时生命周期、状态机或 CSS。
 
 ## 8. 已知限制
 
 - 本地 HTML 通过 CDN 加载 Three.js/GSAP；离线、CDN 失败和真实移动设备尚未纳入本次基线。
-- B/C/D 的注入 harness 位于 `E:\shuguang_visual_gate_v1`，没有提交到产品仓库；复现需要同一测试副本和浏览器条件。
+- B/C/D 的注入 harness 位于 external evidence workspace，没有提交到产品仓库；复现需要同一测试副本和浏览器条件。
 - 当前没有把 V6.7.2 单文件纳入 Git 分支，因此 Git 分支只能承载门禁文档，不能视为 PR #14 运行时修复。
 - 本次只建立第一版基线，未使用主观“更好看”“更流畅”作为通过依据。
 
@@ -124,3 +124,28 @@
 3. 在固定 60Hz 环境和至少一个真实移动设备上重跑帧时间/资源矩阵。
 4. 对同一状态做冷启动 3 次、开始 3 次、重启 3 次，对比 geometries、materials、scene children 和截图。
 5. 门禁达到 PASS 后，再由 GitHub PR 进行合并审查；本基线不启动 V6.8 设计。
+## 10. V6.7 Runtime Closure Gate 重跑
+
+本节只追加收口证据，不重写 V1 规则。测试分支基于 PR #14 head，canonical runtime 为 `runtime-source/v6.7.html`。
+
+| Item | Result | Evidence |
+|---|---|---|
+| Weapon lifecycle | PASS | `Start → Restart × 5` 后 scene children/geometries/materials/weapon objects 稳定；`disposeWeaponRuntime()` 已接入 `clearRuntime()`。 |
+| Player transient state | PASS | `ifr`、`invuln`、`dashCd`、`dashT`、`animTime`、`moveBlend`、`stepTimer`、`attackT`、`hitT` 与视觉 scale 重置。 |
+| Codex phase | PASS | `PLAY → CODEX → PLAY`、`PAUSE → CODEX → PAUSE`、Escape、death overlay 均已实测。 |
+| Boss cooldown | PASS | 4.0s 初始 cooldown 实测首次 4.0167s，后续 2.7167s；单帧只扣减一次。 |
+| Player base scale | PASS | Dash/Hurt 各 10 次后最终为 `[1.18,1.18,1.18]`。 |
+| Project branding | PASS | runtime-source、loader、页面可见文本中旧名称已清零；`gravehunt_best` 保留为 legacy compatibility key。 |
+| Trail allocation | PASS_WARMUP_STABLE | 3600 个固定步进射击 + 120 步排空后，64 个共享 trail 对象稳定，geometry 191→191。 |
+| Gzip roundtrip | PASS | `tools/build_runtime_v6_7.py --check`；source/decompressed bytes 与 SHA256 完全一致。 |
+| Browser loader | PASS | index/release 真实加载；损坏 chunk 可诊断为 `base64 decode failure`。 |
+| Cold start | PASS | 完成 3 次独立 browser session 的 loader/runtime/constructor/start/HUD/input 检查。 |
+| A/B/C/D | PARTIAL | 截图与指标已重跑；高密度 fixed-step 60Hz CPU profile P95 为 41.8ms，仍未满足 16.667ms 预算。 |
+
+### Closure metrics
+
+完整收口 JSON：`evidence/closure_report.json`（external evidence workspace）。
+
+A/B/C/D 的 Playwright RAF 数值来自 headless Chromium 高刷新环境；另行执行了 isolated fixed-step `dt=1/60` profile。该 profile 的高密度样本为平均 14.4057ms、P95 41.8ms、最大 66.1ms，因此当前结论为 `PARTIAL`，不把高刷新 RAF 数字冒充真实 60Hz 通过。
+
+本轮未提交浏览器 cache、临时 harness、用户本机绝对路径日志或截图垃圾；截图保存在 external evidence workspace。

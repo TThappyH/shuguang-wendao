@@ -112,4 +112,4 @@ V1 只建立可复现的视觉质量门禁和性能基线，不新增玩法、�
 - `PARTIAL`：规则、场景或部分指标已落地，但仍有门禁缺口；不得作为合并批准。
 - `BLOCKED`：存在启动、状态机、身份、资源生命周期、关键可读性或性能证据阻断项。
 
-当前 V6.7.2 候选按本规则为 `BLOCKED`：本轮已完成规则和基线采样，但没有修改运行时代码，已有候选的身份、Codex/暂停状态、武器 Mesh 生命周期和正式 60Hz/重启基线仍未闭环。
+初始 V6.7.2 候选按本规则为 `BLOCKED`。Runtime Closure Gate 已关闭身份、Codex/暂停状态、武器 Mesh 生命周期、玩家瞬时状态、Boss cooldown、Trail 热路径和 gzip/browser loader 阻断；当前 closure rerun 为 `PARTIAL`，原因是高密度 isolated fixed-step 60Hz profile 的 P95 仍为 41.8ms，且远端 Review 尚未完成。
