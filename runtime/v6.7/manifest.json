@@ -1,0 +1,53 @@
+{
+  "version": "v6.7",
+  "source": {
+    "path": "runtime-source/v6.7.html",
+    "bytes": 216689,
+    "sha256": "B6827807B4D3F8FA2C2655A8F30C140B6E209CB58E42192456539AB94F09A349"
+  },
+  "gzip": {
+    "bytes": 64337,
+    "sha256": "186241654F378310A851EF7D6EC1EF79DAEA33B0A5A424284C86748CF65A44DB",
+    "crc32": "D1EE86C6",
+    "isize": 216689
+  },
+  "chunks": {
+    "count": 6,
+    "encoding": "base64-ascii",
+    "split_chars": 15000,
+    "concatenated_b64_sha256": "818FFDEBC6FB079689B33FF1FBA036CAADA0A86AA6CD89BC116571292C5A943B",
+    "concatenated_gzip_sha256": "186241654F378310A851EF7D6EC1EF79DAEA33B0A5A424284C86748CF65A44DB",
+    "items": [
+      {
+        "file": "gzip-01.b64",
+        "chars": 15000,
+        "bytes": 15000
+      },
+      {
+        "file": "gzip-02.b64",
+        "chars": 15000,
+        "bytes": 15000
+      },
+      {
+        "file": "gzip-03.b64",
+        "chars": 15000,
+        "bytes": 15000
+      },
+      {
+        "file": "gzip-04.b64",
+        "chars": 15000,
+        "bytes": 15000
+      },
+      {
+        "file": "gzip-05.b64",
+        "chars": 15000,
+        "bytes": 15000
+      },
+      {
+        "file": "gzip-06.b64",
+        "chars": 10784,
+        "bytes": 10784
+      }
+    ]
+  }
+}
