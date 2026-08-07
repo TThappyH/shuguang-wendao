@@ -790,12 +790,12 @@ const BOSSES=[
 ];
 class Game{
  constructor(){
-  this.canvas=$('game');this.renderer=new THREE.WebGLRenderer({canvas:this.canvas,antialias:true,powerPreference:'high-performance'});this.renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.7));this.renderer.setSize(innerWidth,innerHeight);this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.32;this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-  this.scene=new THREE.Scene();this.scene.background=new THREE.Color(0xbfd9e9);this.scene.fog=new THREE.FogExp2(0xc8d7cf,.0068);
-  this.camera=new THREE.PerspectiveCamera(34.5,innerWidth/innerHeight,.1,180);this.camera.position.set(0,21.6,6.4);this.camera.lookAt(0,0,-1.8);this.cameraMode='survivor';this.cameraLead=new THREE.Vector2(0,-1.6);this.moveIntent=new THREE.Vector2(0,0);
+  this.canvas=$('game');this.visualSlice=location.search.includes('visual-slice');this.renderer=new THREE.WebGLRenderer({canvas:this.canvas,antialias:true,powerPreference:'high-performance'});this.renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.7));this.renderer.setSize(innerWidth,innerHeight);this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.08;this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  this.scene=new THREE.Scene();this.scene.background=new THREE.Color(0x9fcbd1);this.scene.fog=new THREE.FogExp2(0x9fc6b3,.0038);
+  this.camera=new THREE.PerspectiveCamera(36,innerWidth/innerHeight,.1,180);this.camera.position.set(0,14.2,10.5);this.camera.lookAt(0,0,-1.8);this.cameraMode='survivor';this.cameraLead=new THREE.Vector2(0,-1.6);this.moveIntent=new THREE.Vector2(0,0);
   this.clock=new THREE.Clock();this.phase=GamePhase.MENU;this.diff='hunt';this.keys=new Set();this.touch={x:0,y:0,active:false};this.last=performance.now();this.elapsed=0;this.spawnT=0;this.kills=0;this.souls=0;this.shake=0;this.hitstop=0;this.fovPunch=0;this.enemyId=1;this.lastBossIndex=-1;this.nextElite=34;this.bloodMoon=false;this.bloodMoonUntil=0;this.weaponCooldowns={};this.ravenShots=0;this.lightningKills=0;this.reviveUsed=false;this.runSerial=0;this.resonance=this.createResonanceState();
   this.weaponVisuals=[];this.transientVisuals=new Set();this.trailPool={items:[],geometry:null,material:null,next:0};this.sparkPool={items:[],geometry:null,material:null,mesh:null,helper:new THREE.Object3D(),color:new THREE.Color(),next:0,capacity:512};this.floaterPool={items:[],next:0,capacity:96};this.floatProjector=new THREE.Vector3();this.codexReturnPhase=null;
-  this.enemies=[];this.projectiles=[];this.enemyProjectiles=[];this.pickups=[];this.effects=[];this.hazards=[];this.voids=[];this.relics=[];this.audio=null;this.worldAnim={crystals:[],waters:[],trees:[],banners:[]};
+  this.enemies=[];this.projectiles=[];this.enemyProjectiles=[];this.pickups=[];this.effects=[];this.hazards=[];this.voids=[];this.relics=[];this.audio=null;this.qingyunGrassUniforms=[];this.worldAnim={crystals:[],waters:[],trees:[],banners:[],landmark:null};
   this.mat=this.createMaterials();this.sharedMaterials=new Set(Object.values(this.mat));this.buildLights();this.buildWorld();this.player=this.createHunter();this.scene.add(this.player.group);this.bindUI();this.bindInput();this.updateWeaponBar();this.animateMenu();this.loop(performance.now());
  }
  seeded(seed){let t=seed>>>0;return()=>{t+=0x6D2B79F5;let x=Math.imul(t^(t>>>15),1|t);x^=x+Math.imul(x^(x>>>7),61|x);return((x^(x>>>14))>>>0)/4294967296}}
@@ -845,18 +845,25 @@ class Game{
  }
  buildLights(){
   // 明亮幻想：蓝天环境光 + 暖色太阳 + 轻微冷色补光。
-  this.scene.add(new THREE.HemisphereLight(0xeaf8ff,0x72885d,2.85));
-  const sun=new THREE.DirectionalLight(0xfff0c8,3.25);sun.position.set(-15,24,10);sun.castShadow=true;sun.shadow.mapSize.set(1536,1536);
-  sun.shadow.camera.left=-32;sun.shadow.camera.right=32;sun.shadow.camera.top=32;sun.shadow.camera.bottom=-32;sun.shadow.bias=-.00018;sun.shadow.normalBias=.03;this.scene.add(sun);this.sunLight=sun;
-  const fill=new THREE.DirectionalLight(0x9ed9ea,.72);fill.position.set(12,10,-14);this.scene.add(fill);
-  const warm=new THREE.PointLight(0xffcf77,2.2,15,2);warm.position.set(0,4,-5);this.scene.add(warm);
+  this.scene.add(new THREE.HemisphereLight(0xeaf8ff,0x6f8f69,2.15));
+  const sun=new THREE.DirectionalLight(0xffe6ad,2.35);sun.position.set(-18,26,13);sun.castShadow=true;sun.shadow.mapSize.set(1536,1536);
+  sun.shadow.camera.left=-34;sun.shadow.camera.right=34;sun.shadow.camera.top=34;sun.shadow.camera.bottom=-34;sun.shadow.bias=-.00018;sun.shadow.normalBias=.03;this.scene.add(sun);this.sunLight=sun;
+  const fill=new THREE.DirectionalLight(0xa8dbe3,1.05);fill.position.set(18,14,-18);this.scene.add(fill);this.fillLight=fill;
+  const rim=new THREE.DirectionalLight(0xf4fbf0,.8);rim.position.set(-8,11,-26);this.scene.add(rim);this.rimLight=rim;
+  const warm=new THREE.PointLight(0xffd88b,1.1,18,2);warm.position.set(0,4,-9);this.scene.add(warm);
  }
  buildWorld(){
   const floor=new THREE.Mesh(new THREE.PlaneGeometry(140,140),this.mat.ground);floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;this.scene.add(floor);
   const rng=this.seeded(4137);
 
   this.buildSky();
-  this.buildSunlitRuins();
+  this.buildQingyunBackdrop(rng);
+  this.buildQingyunLandmark();
+  if(this.visualSlice){
+    this.buildPath(-2,-44,5,45,112,.62,rng);
+    this.buildInstancedNature(rng);
+    return;
+  }
 
   // 两条弯曲石径，把空旷地面切成有方向的“游戏世界”。
   this.buildPath(-2,-44,5,45,112,.62,rng);
@@ -918,6 +925,26 @@ class Game{
     this.scene.add(g);
   }
  }
+ buildQingyunBackdrop(rng){
+  const mountainGeo=new THREE.ConeGeometry(1,1,7);const layers=[
+    {z:-56,count:9,material:new THREE.MeshStandardMaterial({color:0x91b6a0,roughness:1}),height:15,spread:52},
+    {z:-43,count:8,material:new THREE.MeshStandardMaterial({color:0x6e9e7c,roughness:1}),height:11,spread:44},
+    {z:-32,count:7,material:new THREE.MeshStandardMaterial({color:0x4f805f,roughness:1}),height:8,spread:36}
+  ];
+  for(const layer of layers){const mesh=new THREE.InstancedMesh(mountainGeo,layer.material,layer.count);for(let i=0;i<layer.count;i++){const x=(i/(layer.count-1)-.5)*layer.spread+(rng()-.5)*4;const h=layer.height*(.65+rng()*.65),w=5+rng()*6;const d=new THREE.Object3D();d.position.set(x,h*.5,layer.z+(rng()-.5)*4);d.scale.set(w,h,w*.72);d.rotation.y=rng()*TAU;d.updateMatrix();mesh.setMatrixAt(i,d.matrix)}mesh.receiveShadow=true;this.scene.add(mesh)}
+  const cloudGeo=new THREE.IcosahedronGeometry(1.8,1),cloudMat=new THREE.MeshBasicMaterial({color:0xf4f1da,transparent:true,opacity:.42,depthWrite:false,fog:false});const clouds=new THREE.InstancedMesh(cloudGeo,cloudMat,18);for(let i=0;i<18;i++){const d=new THREE.Object3D();d.position.set((rng()-.5)*62,5.2+rng()*3.5,-26-rng()*30);d.scale.set(2.6+rng()*3.8,.35+rng()*.5,1.1+rng()*1.6);d.rotation.y=rng()*TAU;d.updateMatrix();clouds.setMatrixAt(i,d.matrix)}this.scene.add(clouds);this.worldAnim.clouds=clouds;
+ }
+ buildQingyunLandmark(){
+  const g=new THREE.Group();g.position.set(0,0,-17);g.scale.set(.9,.78,.9);g.name='QingyunWhiteJadeGate';
+  const jade=this.mat.ruinWhite,shade=this.mat.ruinShade,gold=this.mat.gold;
+  const base=new THREE.Mesh(new THREE.CylinderGeometry(5.8,6.4,.32,12),shade);base.position.y=.16;base.receiveShadow=true;g.add(base);
+  for(const x of [-2.7,2.7]){const post=new THREE.Mesh(new THREE.BoxGeometry(.72,5.4,.72),jade);post.position.set(x,2.9,0);post.castShadow=true;g.add(post)}
+  const lintel=new THREE.Mesh(new THREE.BoxGeometry(6.0,.64,.82),jade);lintel.position.set(0,5.18,0);lintel.castShadow=true;g.add(lintel);
+  const roof=new THREE.Mesh(new THREE.CylinderGeometry(3.8,4.4,.62,4),jade);roof.rotation.y=Math.PI/4;roof.position.y=5.75;roof.scale.z=.62;roof.castShadow=true;g.add(roof);
+  const crest=new THREE.Mesh(new THREE.OctahedronGeometry(.48,0),gold);crest.position.set(0,5.18,.48);crest.scale.y=1.35;crest.castShadow=true;g.add(crest);
+  const seal=new THREE.Mesh(new THREE.TorusGeometry(.72,.07,8,24),gold);seal.position.set(0,3.45,.44);seal.rotation.x=Math.PI/2;g.add(seal);
+  this.scene.add(g);this.worldAnim.landmark=g;
+ }
  buildPath(x0,z0,x1,z1,count,width,rng){
   const geo=new THREE.CylinderGeometry(.46,.5,.055,6),mesh=new THREE.InstancedMesh(geo,this.mat.sand,count),dummy=new THREE.Object3D();
   for(let i=0;i<count;i++){
@@ -931,15 +958,23 @@ class Game{
  buildInstancedNature(rng){
   const dummy=new THREE.Object3D();
 
-  // 草簇
-  const grassGeo=new THREE.ConeGeometry(.075,.5,4),grassCount=520,grass=new THREE.InstancedMesh(grassGeo,this.mat.grass,grassCount);
+  // QingyunGrassField: one instanced field, three shader wind bands, no per-blade JS updates.
+  const grassGeo=new THREE.PlaneGeometry(.42,1.02,1,3);
+  const grassMat=new THREE.MeshBasicMaterial({color:0x448f55,side:THREE.DoubleSide});
+  grassMat.onBeforeCompile=shader=>{
+    shader.uniforms.uTime={value:0};shader.uniforms.uPush={value:new THREE.Vector3(0,0,0)};this.qingyunGrassUniforms.push(shader.uniforms);
+    shader.vertexShader='uniform float uTime;uniform vec3 uPush;\n'+shader.vertexShader;
+    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`vec3 transformed=vec3(position);float h=clamp(position.y/.51+.5,0.0,1.0);vec3 base=(instanceMatrix*vec4(0.0,0.0,0.0,1.0)).xyz;float globalSway=sin(uTime*.72+base.x*.055+base.z*.045)*.08;float gust=sin(uTime*.34+base.x*.12+base.z*.07)*.11;float flutter=sin(uTime*3.6+base.x*2.0+base.z*1.7)*.022;vec2 pushDelta=base.xz-uPush.xz;float pushDist=length(pushDelta);float pushFalloff=1.0-smoothstep(.35,2.7,pushDist);vec2 pushDir=pushDist>.001?normalize(pushDelta):vec2(0.0);transformed.xz+=(vec2(globalSway+gust,globalSway*.35)+pushDir*pushFalloff*.24+vec2(flutter,-flutter))*(h*h);`);
+  };
+  const grassCount=560,grass=new THREE.InstancedMesh(grassGeo,grassMat,grassCount);
   for(let i=0;i<grassCount;i++){
-    let x=(rng()-.5)*88,z=(rng()-.5)*88;if(Math.hypot(x,z)<8){x+=12;z+=10}
-    dummy.position.set(x,.22,z);dummy.rotation.set((rng()-.5)*.16,rng()*TAU,(rng()-.5)*.18);const s=.55+rng()*.9;dummy.scale.set(.65+rng()*.6,s,.65+rng()*.6);dummy.updateMatrix();grass.setMatrixAt(i,dummy.matrix);
+    let x=(rng()-.5)*88,z=(rng()-.5)*88;if(Math.hypot(x,z)<7||Math.hypot(x,z+17)<6){x+=10;z+=12}
+    dummy.position.set(x,.69,z);dummy.rotation.set((rng()-.5)*.08,rng()*TAU,(rng()-.5)*.08);const s=.65+rng()*1.15;dummy.scale.set(.65+rng()*.55,s,.65+rng()*.55);dummy.updateMatrix();grass.setMatrixAt(i,dummy.matrix);
   }
-  grass.castShadow=false;this.scene.add(grass);
+  grass.instanceMatrix.needsUpdate=true;grass.castShadow=false;this.scene.add(grass);this.worldAnim.qingyunGrass=grass;
 
-  // 花朵
+  // 灵草 patch：较少实例，承担青绿与淡金色点缀，不填满战斗可读区域。
+  if(!this.visualSlice){
   const flowerGeo=new THREE.OctahedronGeometry(.10,0),colors=[this.mat.flowerPink,this.mat.flowerYellow,this.mat.flowerBlue];
   for(let c=0;c<3;c++){
     const count=68,flowers=new THREE.InstancedMesh(flowerGeo,colors[c],count);
@@ -949,12 +984,12 @@ class Game{
     this.scene.add(flowers);
   }
 
-  // 岩石
   const rockGeo=new THREE.DodecahedronGeometry(.38,0),rocks=new THREE.InstancedMesh(rockGeo,this.mat.ruinShade,84);
   for(let i=0;i<84;i++){
     const x=(rng()-.5)*86,z=(rng()-.5)*86;dummy.position.set(x,.12,z);dummy.rotation.set(rng(),rng()*TAU,rng());const s=.35+rng()*.9;dummy.scale.set(s,.45+rng()*.6,s*(.8+rng()*.5));dummy.updateMatrix();rocks.setMatrixAt(i,dummy.matrix);
   }
   rocks.castShadow=true;rocks.receiveShadow=true;this.scene.add(rocks);
+  }
  }
  buildSunlitRuins(){
   const group=new THREE.Group();
@@ -1033,6 +1068,8 @@ class Game{
   for(const w of this.worldAnim.waters){w.material.opacity=.62+Math.sin(t*1.7+w.position.x*.1)*.055;w.rotation.z=Math.sin(t*.16+w.position.z)*.015}
   for(const tree of this.worldAnim.trees){const crown=tree.userData.crown;if(crown){crown.rotation.z=Math.sin(t*.75+tree.userData.seed)*.018;crown.rotation.x=Math.cos(t*.6+tree.userData.seed)*.012}}
   for(const b of this.worldAnim.banners){if(b.userData.cloth)b.userData.cloth.rotation.y=Math.sin(t*1.5+b.userData.seed)*.06}
+  for(const uniforms of this.qingyunGrassUniforms){uniforms.uTime.value=t;if(this.player)uniforms.uPush.value.set(this.player.x,0,this.player.z)}
+  if(this.worldAnim.landmark)this.worldAnim.landmark.rotation.y=Math.sin(t*.16)*.012;
  }
  createHunter(){
   const group=new THREE.Group();group.position.set(0,0,2);
@@ -1793,9 +1830,9 @@ class Game{
  render(realDt){
   // particles that need velocity
   for(const f of this.effects){if(f.type==='particle'){f.mesh.position.x+=f.vx*realDt;f.mesh.position.y+=f.vy*realDt;f.mesh.position.z+=f.vz*realDt;f.vy-=4*realDt}}
-  const targetX=this.player.x,targetZ=this.player.z;const aspect=innerWidth/innerHeight;const portrait=aspect<.9;let dist=portrait?6.6:6.25,height=portrait?24.0:21.8,baseFov=portrait?39.5:34.5;if(this.cameraMode==='wide'){dist=portrait?7.5:7.2;height=portrait?26.2:24.2;baseFov=portrait?42:37.2}
+  const targetX=this.player.x,targetZ=this.player.z;const aspect=innerWidth/innerHeight;const portrait=aspect<.9;let dist=this.visualSlice?(portrait?10.2:11.4):(portrait?6.6:6.25),height=this.visualSlice?(portrait?10.4:9.2):(portrait?24.0:21.8),baseFov=this.visualSlice?(portrait?43:42):(portrait?39.5:34.5);if(this.cameraMode==='wide'){if(this.visualSlice){dist+=.8;height+=1.2;baseFov+=2}else{dist=portrait?7.5:7.2;height=portrait?26.2:24.2;baseFov=portrait?42:37.2}}
   const desiredLeadX=this.moveIntent.x*(portrait?.8:1.15),desiredLeadZ=this.moveIntent.y*(portrait?1.0:1.45)-(portrait?.8:1.65),leadEase=1-Math.exp(-realDt*5.2);this.cameraLead.x+=(desiredLeadX-this.cameraLead.x)*leadEase;this.cameraLead.y+=(desiredLeadZ-this.cameraLead.y)*leadEase;
-  const follow=1-Math.exp(-realDt*12.5);this.camera.position.x+=(targetX-this.camera.position.x)*follow;this.camera.position.z+=(targetZ+dist-this.camera.position.z)*follow;this.camera.position.y+=(height-this.camera.position.y)*(1-Math.exp(-realDt*10.5));this.camera.lookAt(targetX+this.cameraLead.x,0,targetZ+this.cameraLead.y);
+  const follow=1-Math.exp(-realDt*12.5);this.camera.position.x+=(targetX-this.camera.position.x)*follow;this.camera.position.z+=(targetZ+dist-this.camera.position.z)*follow;this.camera.position.y+=(height-this.camera.position.y)*(1-Math.exp(-realDt*10.5));this.camera.lookAt(targetX+this.cameraLead.x,this.visualSlice?1.9:0,targetZ+this.cameraLead.y-(this.visualSlice?8.5:0));
   this.shake=Math.max(0,this.shake-realDt*2.3);const trauma=this.shake*this.shake;if(trauma>0){this.camera.position.x+=rand(-.032,.032)*trauma;this.camera.position.y+=rand(-.016,.016)*trauma;this.camera.position.z+=rand(-.024,.024)*trauma}
   this.fovPunch*=Math.exp(-realDt/.1);this.camera.fov=baseFov+clamp(this.fovPunch,0,.7);this.camera.updateProjectionMatrix();this.renderer.render(this.scene,this.camera);this.updateUI();
  }
