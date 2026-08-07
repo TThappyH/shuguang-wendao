@@ -4,6 +4,8 @@
 
 当前版本：**V6.7 · 法宝共鸣**
 
+当前开发分支：`dev/v6.7-treasure-resonance`
+
 ## 核心定位
 
 《曙光问道》不是“幸存者换一套中文名字”，而是逐步把 **境界、功法、灵器、法宝、道途、天劫、秘境推进** 真正做进单局循环。
@@ -38,9 +40,13 @@
 
 ## 运行
 
-直接打开 `index.html` 即可运行。
+通过任意静态 HTTP 服务打开仓库根目录的 `index.html`，例如 GitHub Pages、VS Code Live Server 或：
 
-> 当前版本通过 CDN 加载 Three.js 与 GSAP，因此需要联网。
+```bash
+python -m http.server 8000
+```
+
+当前 `index.html` 会加载 `runtime/v6.7/` 下的压缩版本快照。游戏本体仍通过 CDN 加载 Three.js 与 GSAP，因此需要联网。
 
 ## 版本路线
 
@@ -61,6 +67,14 @@
 | **V8.0** | 第一版完整《曙光问道》 |
 
 详细设计见 [`docs/GAME_DESIGN.md`](docs/GAME_DESIGN.md)，版本计划见 [`docs/ROADMAP.md`](docs/ROADMAP.md)。
+
+## 迭代方式
+
+后续版本按以下流程推进：
+
+> Issue → `dev/...` 开发分支 → 实现与检查 → Pull Request → 合并 `main` → `releases/` 保留版本快照
+
+当前开发任务是 Issue #1：V6.7 法宝共鸣。
 
 ## 开发原则
 
