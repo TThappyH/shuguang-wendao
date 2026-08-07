@@ -150,3 +150,7 @@
 A/B/C/D 的 Playwright RAF 数值来自 headless Chromium 高刷新环境；另行执行了 isolated fixed-step `dt=1/60` profile。命中碎片已改为 InstancedMesh 固定池，但高密度样本仍为平均 11.5803ms、P95 37.0ms、P99 51.8ms、最大 55.2ms，因此当前结论为 `PARTIAL`，不把高刷新 RAF 数字冒充真实 60Hz 通过。
 
 本轮未提交浏览器 cache、临时 harness、用户本机绝对路径日志或截图垃圾；截图保存在 external evidence workspace。
+
+## 10. V6.7 Closure R2.1 supersession
+
+R2.1 在相同高密度真实渲染夹具下完成 FAST LOOP 与唯一 3000 帧终测：FAST LOOP 三次 P95 为 `13.9 / 14.2 / 14.3ms`，终测 P95 `15.4ms`、P99 `18.8ms`，性能门禁通过。生命周期修复、固定 spark/trail/floater 池和 gzip/browser loader 验证见 `docs/V6.7_CLOSURE_R2.1.md`。

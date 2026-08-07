@@ -113,3 +113,7 @@ V1 只建立可复现的视觉质量门禁和性能基线，不新增玩法、�
 - `BLOCKED`：存在启动、状态机、身份、资源生命周期、关键可读性或性能证据阻断项。
 
 初始 V6.7.2 候选按本规则为 `BLOCKED`。Runtime Closure Gate 已关闭身份、Codex/暂停状态、武器 Mesh 生命周期、玩家瞬时状态、Boss cooldown、Trail/命中碎片热路径和 gzip/browser loader 阻断；当前 closure rerun 为 `PARTIAL`，原因是高密度 isolated fixed-step 60Hz profile 的 P95 仍为 37.0ms，且远端 Review 尚未完成。
+
+## 11. V6.7 Closure R2.1 supersession
+
+R2.1 已用单命令 FAST LOOP 替代开发阶段重复 3000 帧 profile：同一 96-enemy high-density fixture 连续三次 600 帧 P95 为 `13.9 / 14.2 / 14.3ms`。随后唯一一次 3000 帧终测为平均 `12.646ms`、P95 `15.4ms`、P99 `18.8ms`，因此本节第 10 节中的旧 `37.0ms` 指标不再代表当前 runtime head。详见 `docs/V6.7_CLOSURE_R2.1.md`。
