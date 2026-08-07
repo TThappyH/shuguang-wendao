@@ -137,15 +137,16 @@
 | Player base scale | PASS | Dash/Hurt 各 10 次后最终为 `[1.18,1.18,1.18]`。 |
 | Project branding | PASS | runtime-source、loader、页面可见文本中旧名称已清零；`gravehunt_best` 保留为 legacy compatibility key。 |
 | Trail allocation | PASS_WARMUP_STABLE | 3600 个固定步进射击 + 120 步排空后，64 个共享 trail 对象稳定，geometry 191→191。 |
+| Hit spark allocation | PASS_POOL_STABLE | 命中碎片改为 512 实例固定池；池预热后重复 Start×5 不新增 geometry/material/scene children。 |
 | Gzip roundtrip | PASS | `tools/build_runtime_v6_7.py --check`；source/decompressed bytes 与 SHA256 完全一致。 |
 | Browser loader | PASS | index/release 真实加载；损坏 chunk 可诊断为 `base64 decode failure`。 |
 | Cold start | PASS | 完成 3 次独立 browser session 的 loader/runtime/constructor/start/HUD/input 检查。 |
-| A/B/C/D | PARTIAL | 截图与指标已重跑；高密度 fixed-step 60Hz CPU profile P95 为 41.8ms，仍未满足 16.667ms 预算。 |
+| A/B/C/D | PARTIAL | 截图与指标已重跑；命中碎片已去除逐次 Geometry/Material 分配，但高密度 fixed-step 60Hz CPU profile P95 为 37.0ms，仍未满足 16.667ms 预算。 |
 
 ### Closure metrics
 
 完整收口 JSON：`evidence/closure_report.json`（external evidence workspace）。
 
-A/B/C/D 的 Playwright RAF 数值来自 headless Chromium 高刷新环境；另行执行了 isolated fixed-step `dt=1/60` profile。该 profile 的高密度样本为平均 14.4057ms、P95 41.8ms、最大 66.1ms，因此当前结论为 `PARTIAL`，不把高刷新 RAF 数字冒充真实 60Hz 通过。
+A/B/C/D 的 Playwright RAF 数值来自 headless Chromium 高刷新环境；另行执行了 isolated fixed-step `dt=1/60` profile。命中碎片已改为 InstancedMesh 固定池，但高密度样本仍为平均 11.5803ms、P95 37.0ms、P99 51.8ms、最大 55.2ms，因此当前结论为 `PARTIAL`，不把高刷新 RAF 数字冒充真实 60Hz 通过。
 
 本轮未提交浏览器 cache、临时 harness、用户本机绝对路径日志或截图垃圾；截图保存在 external evidence workspace。
