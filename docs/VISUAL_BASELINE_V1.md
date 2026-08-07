@@ -153,4 +153,4 @@ A/B/C/D 的 Playwright RAF 数值来自 headless Chromium 高刷新环境；另�
 
 ## 10. V6.7 Closure R2.1 supersession
 
-R2.1 在相同高密度真实渲染夹具下完成 FAST LOOP 与唯一 3000 帧终测：FAST LOOP 三次 P95 为 `13.9 / 14.2 / 14.3ms`，终测 P95 `15.4ms`、P99 `18.8ms`，性能门禁通过。生命周期修复、固定 spark/trail/floater 池和 gzip/browser loader 验证见 `docs/V6.7_CLOSURE_R2.1.md`。
+R2.1 在相同高密度真实渲染夹具下完成 FAST LOOP 与唯一 3000 帧终测：FAST LOOP 三次 P95 为 `13.9 / 14.2 / 14.3ms`，终测平均 `11.723ms`、P95 `15.4ms`、P99 `18.8ms`、最大 `34.7ms`，性能门禁通过。生命周期修复、固定 spark/trail/floater 池和 gzip/browser loader 验证见 `docs/V6.7_CLOSURE_R2.1.md`。

@@ -116,4 +116,4 @@ V1 只建立可复现的视觉质量门禁和性能基线，不新增玩法、�
 
 ## 11. V6.7 Closure R2.1 supersession
 
-R2.1 已用单命令 FAST LOOP 替代开发阶段重复 3000 帧 profile：同一 96-enemy high-density fixture 连续三次 600 帧 P95 为 `13.9 / 14.2 / 14.3ms`。随后唯一一次 3000 帧终测为平均 `12.646ms`、P95 `15.4ms`、P99 `18.8ms`，因此本节第 10 节中的旧 `37.0ms` 指标不再代表当前 runtime head。详见 `docs/V6.7_CLOSURE_R2.1.md`。
+R2.1 已用单命令 FAST LOOP 替代开发阶段重复 3000 帧 profile：同一 96-enemy high-density fixture 连续三次 600 帧 P95 为 `13.9 / 14.2 / 14.3ms`。随后唯一一次 3000 帧终测为平均 `11.723ms`、P95 `15.4ms`、P99 `18.8ms`、最大 `34.7ms`，因此本节第 10 节中的旧 `37.0ms` 指标不再代表当前 runtime head。详见 `docs/V6.7_CLOSURE_R2.1.md`。
