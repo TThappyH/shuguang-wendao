@@ -866,7 +866,7 @@ class Game{
  emitSwordDomain(e){this.ring(e.x,e.z,2.3,0xd7af58,.28);for(const x of this.enemies)if(!x.dead&&Math.hypot(x.x-e.x,x.z-e.z)<2.8)this.hitEnemy(x,32*this.player.damageMul,0xd7af58,'realmSword')}
  castThreatTechnique(){const e=this.nearest();if(!e)return;this.beam(this.player.x,1.0,this.player.z,e.x,.8,e.z,0xa6dca0);this.hitEnemy(e,68*this.player.damageMul,0xa6dca0,'realmSpirit')}
  spawnRealmNode(x,z,color){this.spawnResonanceField('array',x,z,1.65,3.2,24,color)}
- bindTestHooks(){const query=new URLSearchParams(location.search),test=query.get('test');window.__V68_TEST__={game:this,triggerBreakthrough:(toIndex=1)=>{const to=REALMS[toIndex];this.realmState.pendingBreakthrough={fromId:this.currentRealm().id,toId:to.id,bossIndex:to.milestone?.bossIndex??-1,bossName:to.bossGate||'测试节点'};this.requestModal('BREAKTHROUGH');},setRealm:id=>{const r=this.realmData(id);this.realmState.currentRealm=r.id;this.realmState.currentIndex=r.index;this.updateUI()},selectChoice:id=>this.selectBreakthrough(id),simulateBossKill:(index,reward=true)=>{this.pendingBossReward=reward;this.handleBossMilestone({bossIndex:index,name:BOSSES[index]?.name||'测试首领'})},queueLevel:()=>this.requestModal('LEVEL'),queueChest:()=>this.requestModal('CHEST',{bossChest:false}),forceWeaponEvolution:id=>{this.player.weapons[id]={level:4,cd:0,evolved:false};const w=this.upgradeWeapon(id);this.updateWeaponBar();return w},sampleMotion:kind=>{const p=this.player;p.dashT=0;p.attackT=0;p.hitT=0;const moving=kind==='MOVE';if(kind==='CAST')p.attackT=.18;if(kind==='HIT')p.hitT=.22;if(kind==='DASH')p.dashT=.20;this.updateHunterAnimation(.016,moving,1,0);return {state:p.motionState,rotation:{x:p.externalModelRoot.rotation.x,y:p.externalModelRoot.rotation.y,z:p.externalModelRoot.rotation.z},scale:{x:p.externalModelRoot.scale.x,y:p.externalModelRoot.scale.y,z:p.externalModelRoot.scale.z}}},inspect:()=>({phase:this.phase,motionState:this.player.motionState,realmState:JSON.parse(JSON.stringify(this.realmState)),modal:this.modalState,hookCounts:Object.fromEntries(Object.entries(this.activeHooks).map(([k,v])=>[k,v.length])),signatureWeapon:this.player.signatureWeapon||null,weapons:Object.fromEntries(Object.entries(this.player.weapons).map(([id,w])=>[id,{level:w.level,evolved:Boolean(w.evolved),signature:this.player.signatureWeapon===id}]))}),reset:()=>this.start()};if(test==='realm')setTimeout(()=>this.start(),30)}
+ bindTestHooks(){const query=new URLSearchParams(location.search),test=query.get('test');window.__V68_TEST__={game:this,triggerBreakthrough:(toIndex=1)=>{const to=REALMS[toIndex];this.realmState.pendingBreakthrough={fromId:this.currentRealm().id,toId:to.id,bossIndex:to.milestone?.bossIndex??-1,bossName:to.bossGate||'测试节点'};this.requestModal('BREAKTHROUGH');},setRealm:id=>{const r=this.realmData(id);this.realmState.currentRealm=r.id;this.realmState.currentIndex=r.index;this.updateUI()},selectChoice:id=>this.selectBreakthrough(id),simulateBossKill:(index,reward=true)=>{this.pendingBossReward=reward;this.handleBossMilestone({bossIndex:index,name:BOSSES[index]?.name||'测试首领'})},queueLevel:()=>this.requestModal('LEVEL'),queueChest:()=>this.requestModal('CHEST',{bossChest:false}),spawnBossForTest:(index=0)=>{const e=this.createBoss(index);return {id:e.id,name:e.name,phase:e.phase}},sampleBossPhase:(id,ratio)=>{const e=this.enemies.find(x=>x.boss&&x.id===id);if(!e)return null;e.hp=e.maxHp*ratio;const dx=this.player.x-e.x,dz=this.player.z-e.z,d=Math.hypot(dx,dz)||1;this.updateBoss(e,.016,dx,dz,d);return {id:e.id,name:e.name,phase:e.phase,lastPhase:e.lastPhase,phaseTransitions:[...(e.phaseTransitions||[])],scale:e.group.scale.x}},forceWeaponEvolution:id=>{this.player.weapons[id]={level:4,cd:0,evolved:false};const w=this.upgradeWeapon(id);this.updateWeaponBar();return w},sampleMotion:kind=>{const p=this.player;p.dashT=0;p.attackT=0;p.hitT=0;const moving=kind==='MOVE';if(kind==='CAST')p.attackT=.18;if(kind==='HIT')p.hitT=.22;if(kind==='DASH')p.dashT=.20;this.updateHunterAnimation(.016,moving,1,0);return {state:p.motionState,rotation:{x:p.externalModelRoot.rotation.x,y:p.externalModelRoot.rotation.y,z:p.externalModelRoot.rotation.z},scale:{x:p.externalModelRoot.scale.x,y:p.externalModelRoot.scale.y,z:p.externalModelRoot.scale.z}}},inspect:()=>({phase:this.phase,motionState:this.player.motionState,realmState:JSON.parse(JSON.stringify(this.realmState)),modal:this.modalState,hookCounts:Object.fromEntries(Object.entries(this.activeHooks).map(([k,v])=>[k,v.length])),signatureWeapon:this.player.signatureWeapon||null,weapons:Object.fromEntries(Object.entries(this.player.weapons).map(([id,w])=>[id,{level:w.level,evolved:Boolean(w.evolved),signature:this.player.signatureWeapon===id}])),bosses:this.enemies.filter(e=>e.boss&&!e.dead).map(e=>({id:e.id,name:e.name,phase:e.phase,lastPhase:e.lastPhase,phaseTransitions:[...(e.phaseTransitions||[])],scale:e.group.scale.x}))}),reset:()=>this.start()};if(test==='realm')setTimeout(()=>this.start(),30)}
  seeded(seed){let t=seed>>>0;return()=>{t+=0x6D2B79F5;let x=Math.imul(t^(t>>>15),1|t);x^=x+Math.imul(x^(x>>>7),61|x);return((x^(x>>>14))>>>0)/4294967296}}
  makeGroundTexture(){
   const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d'),rng=this.seeded(9271);
@@ -1215,7 +1215,7 @@ class Game{
  createBoss(index){
   const cfg=BOSSES[index],a=Math.random()*TAU,r=20;
   const e={id:this.enemyId++,kind:'boss',boss:true,bossIndex:index,name:cfg.name,title:cfg.title,x:this.player.x+Math.cos(a)*r,z:this.player.z+Math.sin(a)*r,
-    r:cfg.r,hp:cfg.hp*DIFF[this.diff].hp,maxHp:0,speed:cfg.speed,dmg:cfg.dmg*DIFF[this.diff].dmg,xp:cfg.xp,elite:false,dead:false,hitCd:0,skill:2.2,skill2:4.5,phase:1,chargeT:0,chargeA:0};
+    r:cfg.r,hp:cfg.hp*DIFF[this.diff].hp,maxHp:0,speed:cfg.speed,dmg:cfg.dmg*DIFF[this.diff].dmg,xp:cfg.xp,elite:false,dead:false,hitCd:0,skill:2.2,skill2:4.5,phase:1,lastPhase:1,phaseTransitions:[],phasePulse:0,chargeT:0,chargeA:0};
   e.maxHp=e.hp;e.group=this.buildBossModel(e);e.group.position.set(e.x,0,e.z);this.scene.add(e.group);this.enemies.push(e);
   this.banner('☯ '+e.title+' · '+e.name+' 降临');this.addShake(.48);this.ring(e.x,e.z,2.8,cfg.color,.5);return e;
  }
@@ -1299,16 +1299,25 @@ class Game{
   return g;
  }
  animateBossModel(e,dt){
-  if(!e||!e.group)return;const t=this.elapsed,idx=e.bossIndex;
+   if(!e||!e.group)return;const t=this.elapsed,idx=e.bossIndex;
   for(const o of e.group.children){
     if(o.userData&&o.userData.spin)o.rotation.z+=dt*o.userData.spin;
     if(o.userData&&o.userData.orbit!==undefined){const a=t*.85+o.userData.orbit*TAU/5;o.position.x=Math.cos(a)*1.05;o.position.z=Math.sin(a)*1.05;o.position.y=1.72+Math.sin(a*2)*.18;o.rotation.y=-a}
     if(o.userData&&o.userData.orbitSword!==undefined){const a=t*.72+o.userData.orbitSword*TAU/6;o.position.x=Math.cos(a)*1.2;o.position.z=Math.sin(a)*.78-.2;o.position.y=1.72+Math.sin(a*1.5)*.30;o.rotation.z=Math.PI+Math.cos(a)*.22}
   }
-  if(idx===3)e.group.position.y=.08+Math.sin(t*3.2)*.06;
-  else if(idx===1||idx===2||idx===5)e.group.position.y=.03+Math.sin(t*2.2+idx)*.035;
-  else e.group.position.y=0;
- }
+   if(idx===3)e.group.position.y=.08+Math.sin(t*3.2)*.06;
+   else if(idx===1||idx===2||idx===5)e.group.position.y=.03+Math.sin(t*2.2+idx)*.035;
+   else e.group.position.y=0;
+   const phaseScale=e.phase===3?1.16:e.phase===2?1.08:1, pulse=1+Math.min(.12,(e.phasePulse||0)*.18),targetScale=phaseScale*pulse,blend=Math.min(1,dt*7);
+   e.group.scale.x+=(targetScale-e.group.scale.x)*blend;e.group.scale.y+=(targetScale-e.group.scale.y)*blend;e.group.scale.z+=(targetScale-e.group.scale.z)*blend;e.phasePulse=Math.max(0,(e.phasePulse||0)-dt);
+  }
+
+  onBossPhaseChange(e,nextPhase){
+   if(!e||nextPhase===e.lastPhase)return;
+   e.lastPhase=nextPhase;e.phaseTransitions=e.phaseTransitions||[];e.phaseTransitions.push(nextPhase);e.phasePulse=.65;e.skill=Math.min(e.skill,.28);e.skill2=Math.min(e.skill2,.72);
+   const trueBody=nextPhase===3,label=trueBody?'真身':'二相',color=trueBody?0xffd36d:0x8fe6df;
+   this.banner(e.name+' · '+label);this.addShake(trueBody ? .52 : .34);this.ring(e.x,e.z,trueBody?3.6:3.0,color,.5);this.telegraph(e.x,e.z,trueBody?2.6:2.1,color,.55);
+  }
 
   bindUI(){
    document.querySelectorAll('.diff').forEach(b=>b.onclick=()=>{this.diff=b.dataset.d;document.querySelectorAll('.diff').forEach(x=>x.classList.toggle('sel',x===b))});
@@ -1518,8 +1527,9 @@ class Game{
   this.enemies=this.enemies.filter(e=>{if(!e.dead)return true;this.disposeRuntimeObject(e.group);return false})
  }
  updateBoss(e,dt,dx,dz,d){
-  e.phase=e.hp/e.maxHp<.24?3:e.hp/e.maxHp<.55?2:1;
-  this.animateBossModel(e,dt);
+   const nextPhase=e.hp/e.maxHp<.24?3:e.hp/e.maxHp<.55?2:1;
+   if(nextPhase!==e.phase){e.phase=nextPhase;this.onBossPhaseChange(e,nextPhase)}
+   this.animateBossModel(e,dt);
   e.group.position.x=e.x;e.group.position.z=e.z;e.group.rotation.y=Math.atan2(dx,dz);
   e.skill-=dt;e.skill2-=dt;
   const phaseMul=e.phase===3?.72:e.phase===2?.86:1;
