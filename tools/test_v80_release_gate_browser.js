@@ -87,6 +87,10 @@ async (page) => {
 
     t.reset();
     g.elapsed = 42;
+    g.relics = [];
+    g.recomputeResonances(false);
+    g.reviveUsed = true;
+    g.player.ifr = 0;
     g.hurt(9999);
     check(g.phase === 'DEAD', 'lethal damage did not open death settlement');
     check(g.modalState.active?.type === 'DEAD', 'death modal state is missing');
