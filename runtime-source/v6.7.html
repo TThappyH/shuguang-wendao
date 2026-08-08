@@ -585,8 +585,8 @@ html,body{background:#a8cada;color:#304845;font-family:Inter,system-ui,-apple-sy
   </div>
 </div>
 <div id="pause" class="overlay"><div class="modal" style="max-width:470px;text-align:center"><h2 class="modal-title">入定</h2><p class="modal-sub">神识收敛，万籁暂歇</p><div class="pause-actions"><button id="resumeBtn">继续</button><button id="restartPauseBtn">重新开始</button></div></div></div>
- <div id="death" class="overlay"><div class="modal" style="max-width:520px;text-align:center"><h2 class="modal-title">问道止步</h2><p class="modal-sub" id="finalText"></p><button id="restartBtn" class="main-btn">再入秘境</button></div></div>
- <div id="runComplete" class="overlay"><div class="modal" style="max-width:620px;text-align:center"><h2 class="modal-title">一局功成</h2><p class="modal-sub">六道节点已完整走通，本局记录已封存。</p><div id="runSummary" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0;text-align:left"></div><button id="runCompleteOk" class="main-btn">返回起始</button></div></div>
+  <div id="death" class="overlay"><div class="modal" style="max-width:520px;text-align:center"><h2 class="modal-title">问道止步</h2><p class="modal-sub" id="finalText"></p><div class="pause-actions"><button id="runExportDeath">导出本局记录</button><button id="restartBtn" class="main-btn">再入秘境</button></div></div></div>
+  <div id="runComplete" class="overlay"><div class="modal" style="max-width:620px;text-align:center"><h2 class="modal-title">一局功成</h2><p class="modal-sub">六道节点已完整走通，本局记录已封存。</p><div id="runSummary" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0;text-align:left"></div><div class="pause-actions"><button id="runExport">导出本局记录</button><button id="runCompleteOk" class="main-btn">返回起始</button></div></div></div>
  <div id="touch"><div id="joy"><div id="joyKnob"></div></div><button id="dashTouch">闪避</button></div>
 <script>
 (function(){
@@ -1323,7 +1323,7 @@ class Game{
 
   bindUI(){
    document.querySelectorAll('.diff').forEach(b=>b.onclick=()=>{this.diff=b.dataset.d;document.querySelectorAll('.diff').forEach(x=>x.classList.toggle('sel',x===b))});
-   $('startBtn').onclick=()=>this.start();$('restartBtn').onclick=()=>this.start();$('restartPauseBtn').onclick=()=>this.start();$('pauseBtn').onclick=()=>this.togglePause();$('cameraBtn').onclick=()=>this.toggleCamera();$('treasureBtn').onclick=()=>this.toggleTreasureBook();$('treasureClose').onclick=()=>this.toggleTreasureBook(false);$('resumeBtn').onclick=()=>this.togglePause();$('chestOk').onclick=()=>this.closeModal(this.modalState.active?.type||'CHEST');$('runCompleteOk').onclick=()=>this.closeModal('RUN_COMPLETE');
+   $('startBtn').onclick=()=>this.start();$('restartBtn').onclick=()=>this.start();$('restartPauseBtn').onclick=()=>this.start();$('pauseBtn').onclick=()=>this.togglePause();$('cameraBtn').onclick=()=>this.toggleCamera();$('treasureBtn').onclick=()=>this.toggleTreasureBook();$('treasureClose').onclick=()=>this.toggleTreasureBook(false);$('resumeBtn').onclick=()=>this.togglePause();$('chestOk').onclick=()=>this.closeModal(this.modalState.active?.type||'CHEST');$('runExport').onclick=()=>this.exportRunRecord();$('runExportDeath').onclick=()=>this.exportRunRecord();$('runCompleteOk').onclick=()=>this.closeModal('RUN_COMPLETE');
  }
  toggleCamera(){this.cameraMode=this.cameraMode==='survivor'?'wide':'survivor';this.banner(this.cameraMode==='survivor'?'标准俯视':'宽视野');this.fovPunch=0;$('cameraBtn').textContent=this.cameraMode==='survivor'?'▣':'⊞'}
  bindInput(){
@@ -1711,6 +1711,7 @@ class Game{
    this.ring(this.player.x,this.player.z,reward.tier==='仙阶'?3.2:2.2,reward.tier==='仙阶'?0xe96f61:reward.tier==='天阶'?0xe5bd59:0x75c8ae,.42)
   }
   renderRunSummary(){const r=this.runRecord,card=(label,value)=>`<div style="padding:10px 12px;background:rgba(255,250,226,.72);border:1px solid rgba(65,88,83,.13);border-radius:8px"><small style="display:block;color:#71817e;font-size:10px">${label}</small><b style="display:block;margin-top:4px;color:#315b57;font-size:16px">${value}</b></div>`;$('runSummary').innerHTML=card('结算','完整通关')+card('用时',fmtTime(r.elapsed))+card('等级',this.player.level)+card('击杀',r.kills)+card('伤害',Math.round(r.damageDealt))+card('受伤',Math.round(r.damageTaken))+card('道途',this.realmState.activeRealmRules.length+' 条')+card('境界',this.realmState.breakthroughCount+' 次')+card('Boss',r.bosses.filter(b=>b.defeatedAt!==null).length+' / '+BOSSES.length)}
+  exportRunRecord(){const snapshot={schema:'shuguang-wendao.run.v1',exportedAt:new Date().toISOString(),difficulty:this.diff,player:{level:this.player.level,hp:this.player.hp,maxHp:this.player.maxHp,signatureWeapon:this.player.signatureWeapon,weapons:this.player.weapons,passives:this.player.passives,relics:this.relics},realmState:this.realmState,runRecord:this.runRecord};const blob=new Blob([JSON.stringify(snapshot,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`shuguang-wendao-run-${this.runRecord.serial}-${this.runRecord.status.toLowerCase()}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);this.toast('本局记录已导出')}
  applyRelicEffect(id){
   if(id==='glass'){this.player.damageMul*=1.35;this.player.maxHp*=.82;this.player.hp=Math.min(this.player.hp,this.player.maxHp)}
   if(id==='windboots')this.player.speed*=1.14;

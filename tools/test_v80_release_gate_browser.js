@@ -21,6 +21,7 @@ async (page) => {
     check(g.qingyaoModel.status === 'ready', 'Qingyao GLB is not ready');
     check(g.player.visual.visible === false && g.player.externalModelRoot.visible === true, 'old Qingyao GLB is not the active visual');
     check(Object.keys(g.resonance.tiers).length === 6, 'six resonance paths are not registered');
+    check(typeof g.exportRunRecord === 'function', 'run record export is not available');
 
     const beforeMove = {x: g.player.x, z: g.player.z};
     g.keys.add('w');

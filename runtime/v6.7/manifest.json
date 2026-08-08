@@ -2,21 +2,21 @@
   "version": "v6.7",
   "source": {
     "path": "runtime-source/v6.7.html",
-    "bytes": 248950,
-    "sha256": "C815F8FF7D7DC989BECDE9E08E8EF49CFF7F707A73AEAEF434BEE1222E0D1957"
+    "bytes": 249989,
+    "sha256": "25957C468479ECC0AB422B442C6B92CD19A261406115FB9C78F2DA12618FDF95"
   },
   "gzip": {
-    "bytes": 74972,
-    "sha256": "792F7E4D874BFCA27D3A20D07284F341DE42608BB884E4A592606A19B4F17F73",
-    "crc32": "6FC96BF4",
-    "isize": 248950
+    "bytes": 75359,
+    "sha256": "764B67166D2901AABB69E92D91D860480A97C26F7FF93C5B7B3B233813310F0F",
+    "crc32": "93A98F38",
+    "isize": 249989
   },
   "chunks": {
     "count": 7,
     "encoding": "base64-ascii",
     "split_chars": 15000,
-    "concatenated_b64_sha256": "68F4ACDBED84F2810C1131267AF90F859568BD0181AE470E63F43E937FFF4A6D",
-    "concatenated_gzip_sha256": "792F7E4D874BFCA27D3A20D07284F341DE42608BB884E4A592606A19B4F17F73",
+    "concatenated_b64_sha256": "F257B993E4D8FED0AAD1EA2462EDE979E4809C27531C71C50D50C208307EE296",
+    "concatenated_gzip_sha256": "764B67166D2901AABB69E92D91D860480A97C26F7FF93C5B7B3B233813310F0F",
     "items": [
       {
         "file": "gzip-01.b64",
@@ -50,8 +50,8 @@
       },
       {
         "file": "gzip-07.b64",
-        "chars": 9964,
-        "bytes": 9964
+        "chars": 10480,
+        "bytes": 10480
       }
     ]
   }
