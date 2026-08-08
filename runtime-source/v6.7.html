@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
-<title>曙光问道 · V6.7.2 启动热修</title><link rel="icon" href="data:,">
+<title>曙光问道 · V8 Foundation</title><link rel="icon" href="data:,">
 <style>
 :root{
   --bone:#efe5d2;--muted:#a69c8e;--blood:#b83242;--blood2:#ed5a64;--gold:#d7ad5d;--moon:#8fc7d7;
@@ -443,7 +443,7 @@ html,body{background:#a8cada;color:#304845;font-family:Inter,system-ui,-apple-sy
 .boss-wing{color:#b88c3a!important}
 
 /* ======================================================
-   V6.7 · 法宝共鸣 / 六大道途
+   V8 Foundation · 单局闭环 / 六大道途
    只显示真正激活的共鸣，避免 HUD 再次变成网页面板。
    ====================================================== */
 #resonanceHud{
@@ -548,7 +548,7 @@ html,body{background:#a8cada;color:#304845;font-family:Inter,system-ui,-apple-sy
 </div>
 <div id="toast"></div>
 <div id="breakthrough" class="overlay"><div class="modal breakthrough-modal"><h2 class="modal-title">境界突破</h2><div id="breakthroughRoute" class="breakthrough-route"></div><p id="breakthroughSub" class="modal-sub">首领已倒，三道基选择显化。</p><div id="breakthroughCards" class="cards"></div></div></div>
-<div id="start" class="overlay show"><div class="menu-shell"><div class="title-kicker">RESONANCE PATHS · V6.7.2</div><h1 class="title">曙光问道<span>六 道 共 鸣 · PATHS RESONATE</span></h1><p class="menu-copy">法宝不再只是独立词条。剑、雷、火、阵、御灵、炼体六大道途拥有 2 / 4 件共鸣；不同法宝会共同改变攻击节奏、走位方式与战场控制。</p><div class="diffs"><button class="diff" data-d="normal">游猎</button><button class="diff sel" data-d="hunt">猎杀</button><button class="diff" data-d="hell">地狱</button></div><button id="startBtn" class="main-btn">踏入秘境</button><div class="controls-hint">WASD 移动 · SPACE 闪避 · P 暂停 · 角色前方保留更多观察空间</div></div></div>
+<div id="start" class="overlay show"><div class="menu-shell"><div class="title-kicker">RESONANCE PATHS · V8 FOUNDATION</div><h1 class="title">曙光问道<span>六 道 共 鸣 · PATHS RESONATE</span></h1><p class="menu-copy">法宝不再只是独立词条。剑、雷、火、阵、御灵、炼体六大道途拥有 2 / 4 件共鸣；不同法宝会共同改变攻击节奏、走位方式与战场控制。</p><div class="diffs"><button class="diff" data-d="normal">游猎</button><button class="diff sel" data-d="hunt">猎杀</button><button class="diff" data-d="hell">地狱</button></div><button id="startBtn" class="main-btn">踏入秘境</button><div class="controls-hint">WASD 移动 · SPACE 闪避 · P 暂停 · 角色前方保留更多观察空间</div></div></div>
 <div id="levelup" class="overlay"><div class="modal"><h2 class="modal-title">天机悟道</h2><p class="modal-sub">三道天机显化，只可择其一。灵器五炼圆满，可蜕变为本命杀招。</p><div id="cards" class="cards"></div></div></div>
 <div id="chest" class="overlay"><div class="modal treasure-reveal-modal"><h2 class="modal-title">开匣鉴宝</h2><p class="modal-sub">灵光出匣，先观品阶、器类与道韵，再决定如何纳入本局流派。</p><div id="chestContent"></div><button id="chestOk" class="main-btn" style="margin-top:18px">收下</button></div></div>
 
@@ -610,7 +610,7 @@ html,body{background:#a8cada;color:#304845;font-family:Inter,system-ui,-apple-sy
     if(copy) copy.innerHTML = '<b style="color:#9d453c">启动失败</b><br>' + title + '：' + message + '<br><span style="font-size:11px;color:#647b75">请用 Chrome / Edge / Safari 正常浏览器打开，不要在文件预览器里运行。</span>';
     const btn = document.getElementById('startBtn');
     if(btn){ btn.disabled = true; btn.textContent = '启动失败 · 查看提示'; btn.style.opacity = '.65'; }
-    console.error('[V6.7.2 boot]', title, err);
+    console.error('[V8 boot]', title, err);
   };
 
   window.addEventListener('error', e => {
