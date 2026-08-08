@@ -84,6 +84,18 @@ async (page) => {
 
     g.closeModal('RUN_COMPLETE');
     check(g.phase === 'MENU', 'closing settlement did not return to menu');
+
+    t.reset();
+    g.elapsed = 42;
+    g.hurt(9999);
+    check(g.phase === 'DEAD', 'lethal damage did not open death settlement');
+    check(g.modalState.active?.type === 'DEAD', 'death modal state is missing');
+    check(document.querySelector('#death')?.classList.contains('show'), 'death settlement overlay is hidden');
+    check(g.runRecord.status === 'DEAD' && g.runRecord.result === 'PLAYER_DEAD', 'death run was not recorded');
+    check(g.runRecord.damageTaken > 0 && g.runRecord.endedAt > 0, 'death damage ledger is incomplete');
+    check(typeof g.exportRunRecord === 'function' && document.querySelector('#runExportDeath'), 'death export entry is missing');
+    g.start();
+    check(g.phase === 'PLAY' && g.runRecord.status === 'RUNNING', 'restart after death did not reset the run');
     check(consoleErrors.length === 0, `browser console errors: ${consoleErrors.join(' | ')}`);
     return JSON.stringify({
       passed: failures.length === 0,

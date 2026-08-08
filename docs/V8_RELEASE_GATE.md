@@ -55,7 +55,7 @@ python tools/build_runtime_v6_7.py --check
 python tools/test_v80_release_gate.py
 ```
 
-`test_v80_release_gate.py` 会通过真实 HTTP 入口冷启动页面，等待 Three.js / GLTFLoader / GSAP 与青曜 GLB 就绪，检查移动、攻击、暂停、宝录、真实 XP 升级、五次境界突破、六个 Boss、奖励弹层、完整结算、记录导出入口以及浏览器 Console Errors。人工测试步骤见 [`docs/V8_HUMAN_TEST.md`](V8_HUMAN_TEST.md)，在通关或死亡结算页点击“导出本局记录”即可得到 JSON 复盘文件。
+`test_v80_release_gate.py` 会通过真实 HTTP 入口冷启动页面，等待 Three.js / GLTFLoader / GSAP 与青曜 GLB 就绪，检查移动、攻击、暂停、宝录、真实 XP 升级、五次境界突破、六个 Boss、奖励弹层、完整结算、死亡结算、重开、记录导出入口以及浏览器 Console Errors。人工测试步骤见 [`docs/V8_HUMAN_TEST.md`](V8_HUMAN_TEST.md)，在通关或死亡结算页点击“导出本局记录”即可得到 JSON 复盘文件。
 
 ### 本地发布包
 
