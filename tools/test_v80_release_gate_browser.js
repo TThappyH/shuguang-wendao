@@ -41,8 +41,10 @@ async (page) => {
     g.toggleTreasureBook(false);
     check(g.phase === 'PLAY', 'treasure book did not close');
 
-    t.queueLevel();
-    check(g.phase === 'LEVEL', 'level-up modal did not open');
+    g.player.xp = g.player.xpNeed - 1;
+    g.addXP(1);
+    check(g.phase === 'LEVEL', 'real XP threshold did not open level-up modal');
+    check(g.runRecord.levelUps === 1, 'level-up was not recorded');
     g.takeChoice({kind: 'passive', id: 'might'}, 1);
     check(g.phase === 'PLAY' && g.runRecord.levelChoices.length > 0, 'level choice did not return to play or record');
     g.hurt(8);
