@@ -30,3 +30,13 @@ python tools/validate_v8_run_record.py PATH\TO\shuguang-wendao-run-*.json --requ
 - 结算状态：`BOSS_CLEARED` 或 `DEAD`。
 
 至少收集一份完整通关记录和一份死亡记录后，再讨论敌人血量、接触伤害、生成节奏或 Boss 技能冷却。工具输出的 `DATA_READY_FOR_HUMAN_REVIEW` 只代表证据齐全，不代表平衡已经通过。
+
+## 双样本门禁
+
+把人工导出的通关与死亡 JSON 放进同一个目录后运行：
+
+```powershell
+python tools/review_v8_evidence.py evidence\v8-balance --require-both --output evidence\v8-balance\review.json
+```
+
+只有同时存在至少一份 `BOSS_CLEARED` 和一份 `DEAD`，且所有记录字段通过校验时，才会输出 `READY_FOR_FIRST_BALANCE_REVIEW`。这一步仍然只是允许开始比较数据，不代表平衡完成。
