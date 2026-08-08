@@ -51,12 +51,10 @@ V8 不是把版本号改成 8，而是形成一条可完整跑通、可复盘、
 ### 自动化验收入口
 
 ```powershell
-python tools/build_runtime_v6_7.py --check
-python tools/test_v80_release_gate.py
-python tools/test_v8_resonance_paths.py
+python tools/test_v8_all.py --output evidence\v8-release-gate.json
 ```
 
-`test_v80_release_gate.py` 会通过真实 HTTP 入口冷启动页面，等待 Three.js / GLTFLoader / GSAP 与青曜 GLB 就绪，检查移动、攻击、暂停、宝录、真实 XP 升级、五次境界突破、六个 Boss、奖励弹层、完整结算、死亡结算、重开、记录导出入口以及浏览器 Console Errors。`test_v8_resonance_paths.py` 逐条验证六大道途的 4/4 组合能同时出现在 HUD 与宝录中。人工测试步骤见 [`docs/V8_HUMAN_TEST.md`](V8_HUMAN_TEST.md)，在通关或死亡结算页点击“导出本局记录”即可得到 JSON 复盘文件。
+`test_v8_all.py` 会依次运行构建、V6.8～V7.3 回归、V8 单局门禁、六大道途 HUD/宝录门禁、复盘契约和发布包契约。需要额外性能采样时运行 `python tools/test_v8_all.py --with-profiles`。人工测试步骤见 [`docs/V8_HUMAN_TEST.md`](V8_HUMAN_TEST.md)，在通关或死亡结算页点击“导出本局记录”即可得到 JSON 复盘文件。
 
 ### 本地发布包
 
