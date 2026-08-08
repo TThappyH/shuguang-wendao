@@ -43,6 +43,10 @@ V8 不是把版本号改成 8，而是形成一条可完整跑通、可复盘、
 - 遭遇导演必须按休整、预告、分批入场、清场闭环运行，不允许整批瞬间生成
 - 远程、重甲和蛮兽敌人的战术状态必须产生不同的空间压力
 - 生产源码字符数不得低于 200,000，且不计生成块、二进制资产、证据、压缩包和缓存
+- 实际入口只构建 V8.3 白模地图根节点；旧草原装饰数组必须为 0
+- 5 个战斗房间和 4 条连接必须形成完整可达图
+- 玩家不可进入地图虚空或穿过白模掩体
+- 青曜 GLB 必须解析为 225,303 vertices / 411,054 triangles，旧角色始终不可见
 
 ### 3. 视觉与角色
 
@@ -62,7 +66,7 @@ V8 不是把版本号改成 8，而是形成一条可完整跑通、可复盘、
 python tools/test_v8_all.py --output evidence\v8-release-gate.json
 ```
 
-`test_v8_all.py` 会依次运行代码量、构建、V6.8～V7.3 回归、V8 单局门禁、V8.1 灵脉争夺、V8.2 五域/遭遇导演、六大道途 HUD/宝录、复盘契约和发布包契约。需要额外性能采样时运行 `python tools/test_v8_all.py --with-profiles`。人工测试步骤见 [`docs/V8_HUMAN_TEST.md`](V8_HUMAN_TEST.md)，在通关或死亡结算页点击“导出本局记录”即可得到 JSON 复盘文件。
+`test_v8_all.py` 会依次运行代码量、构建、V6.8～V7.3 回归、V8 单局门禁、V8.1 灵脉争夺、V8.2 遭遇导演、V8.3 青曜/白模地图、六大道途 HUD/宝录、复盘契约和发布包契约。需要额外性能采样时运行 `python tools/test_v8_all.py --with-profiles`。人工测试步骤见 [`docs/V8_HUMAN_TEST.md`](V8_HUMAN_TEST.md)。
 
 ### 本地发布包
 
@@ -73,7 +77,7 @@ python tools/package_v8.py
 python tools/test_v8_package.py
 ```
 
-默认产物为 `releases/v8.2-five-region-<git-head>.zip`。包内包含 `index.html`、已校验的 `runtime/v6.7`、旧版青曜 GLB、运行源码、V8 审核文档、代码量门禁以及运行记录校验/双样本复盘工具；`PACKAGE_MANIFEST.json` 记录入口、分支、HEAD、文件大小与哈希。包仍需通过 HTTP 静态服务启动，并需要联网加载 CDN 上的 Three.js / GSAP。
+默认产物为 `releases/v8.3-whitebox-map-<git-head>.zip`。包内包含 `index.html`、已校验的 `runtime/v6.7`、青曜 GLB、白模地图说明、运行源码、审核文档、代码量门禁以及运行记录工具；`PACKAGE_MANIFEST.json` 记录入口、分支、HEAD、文件大小与哈希。
 
 ## 推进顺序
 

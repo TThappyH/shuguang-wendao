@@ -1,1 +1,32 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>曙光问道 · V8 Foundation</title><link rel="icon" href="data:,"><style>html,body{margin:0;width:100%;height:100%;display:grid;place-items:center;background:#dceae1;color:#31594f;font-family:system-ui,"Microsoft YaHei",sans-serif}.boot{letter-spacing:.16em;white-space:pre-wrap;max-width:min(720px,90vw)}</style></head><body><div class="boot" id="boot">六道共鸣展开中…</div><script>(async()=>{const boot=document.getElementById('boot');const base='./';const fail=(stage,e)=>{boot.textContent='V8 加载失败\n阶段：'+stage+'\n'+String(e&&e.message||e);console.error('[V8 loader]',stage,e)};let manifest;try{const r=await fetch(base+'runtime/v6.7/manifest.json',{cache:'no-store'});if(!r.ok)throw new Error('manifest '+r.status);manifest=await r.json()}catch(e){return fail('chunk network failure',e)}let b64='';try{for(const item of manifest.chunks.items){const r=await fetch(base+'runtime/v6.7/'+item.file,{cache:'no-store'});if(!r.ok)throw new Error(item.file+' '+r.status);b64+=(await r.text()).trim()}}catch(e){return fail('chunk network failure',e)}let bytes;try{const bin=atob(b64);bytes=Uint8Array.from(bin,c=>c.charCodeAt(0))}catch(e){return fail('base64 decode failure',e)}if(!('DecompressionStream'in window))return fail('gzip decompression failure',new Error('浏览器不支持 DecompressionStream'));let html;try{const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));html=await new Response(stream).text()}catch(e){return fail('gzip decompression failure',e)}try{document.open();document.write(html);document.close()}catch(e){return fail('runtime initialization failure',e)}})();</script></body></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>曙光问道 · V8.3 白模地图</title>
+  <link rel="icon" href="data:,">
+  <style>
+    html,body{margin:0;width:100%;height:100%;display:grid;place-items:center;background:#dce4e3;color:#315258;font-family:system-ui,"Microsoft YaHei",sans-serif}
+    .boot{letter-spacing:.12em;white-space:pre-wrap;max-width:min(720px,90vw)}
+  </style>
+</head>
+<body>
+  <div class="boot" id="boot">青曜与白模秘境加载中…</div>
+  <script>
+  (async()=>{
+    const boot=document.getElementById('boot'),base='./';
+    const fail=(stage,error)=>{boot.textContent='V8.3 加载失败\n阶段：'+stage+'\n'+String(error&&error.message||error);console.error('[V8.3 loader]',stage,error)};
+    let manifest;
+    try{const response=await fetch(base+'runtime/v6.7/manifest.json',{cache:'no-store'});if(!response.ok)throw new Error('manifest '+response.status);manifest=await response.json()}catch(error){return fail('chunk network failure',error)}
+    let b64='';
+    try{for(const item of manifest.chunks.items){const response=await fetch(base+'runtime/v6.7/'+item.file,{cache:'no-store'});if(!response.ok)throw new Error(item.file+' '+response.status);b64+=(await response.text()).trim()}}catch(error){return fail('chunk network failure',error)}
+    let bytes;
+    try{const binary=atob(b64);bytes=Uint8Array.from(binary,char=>char.charCodeAt(0))}catch(error){return fail('base64 decode failure',error)}
+    if(!('DecompressionStream'in window))return fail('gzip decompression failure',new Error('浏览器不支持 DecompressionStream'));
+    let html;
+    try{const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));html=await new Response(stream).text()}catch(error){return fail('gzip decompression failure',error)}
+    try{document.open();document.write(html);document.close()}catch(error){return fail('runtime initialization failure',error)}
+  })();
+  </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
-<title>曙光问道 · V8.2 五域秘境</title><link rel="icon" href="data:,">
+<title>曙光问道 · V8.3 白模地图</title><link rel="icon" href="data:,">
 <style>
 :root{
   --bone:#efe5d2;--muted:#a69c8e;--blood:#b83242;--blood2:#ed5a64;--gold:#d7ad5d;--moon:#8fc7d7;
@@ -452,7 +452,7 @@ html,body{background:#a8cada;color:#304845;font-family:Inter,system-ui,-apple-sy
 .boss-wing{color:#b88c3a!important}
 
 /* ======================================================
-    V8.2 · 五域秘境 / 遭遇远征
+    V8.3 · 白模地图 / 结构评审
    只显示真正激活的共鸣，避免 HUD 再次变成网页面板。
    ====================================================== */
 #resonanceHud{
@@ -522,6 +522,14 @@ html,body{background:#a8cada;color:#304845;font-family:Inter,system-ui,-apple-sy
 #regionText{display:flex;flex-direction:column;align-items:flex-start;gap:1px}#regionName{font:900 10px/1 Inter,system-ui,sans-serif;letter-spacing:.10em}#directorState{font:800 7px/1 Inter,system-ui,sans-serif;letter-spacing:.13em;color:#d3eadc;opacity:.9}
 #regionDiscovery{position:absolute;left:50%;top:26%;z-index:8;transform:translate(-50%,-12px);padding:11px 22px;border:1px solid rgba(244,226,158,.55);border-radius:3px 18px 3px 18px;background:linear-gradient(105deg,rgba(31,77,72,.92),rgba(74,115,92,.88));box-shadow:0 14px 34px rgba(20,50,48,.24);color:#fff7d6;text-align:center;opacity:0;transition:opacity .28s ease,transform .28s ease;pointer-events:none}#regionDiscovery.show{opacity:1;transform:translate(-50%,0)}#regionDiscovery b{display:block;font:900 18px/1.15 Georgia,serif;letter-spacing:.11em}#regionDiscovery span{display:block;margin-top:5px;font:800 8px/1 Inter,system-ui,sans-serif;letter-spacing:.17em;color:#cfe8d5}
 @media(max-width:760px){#regionHud{min-width:0}#directorState{display:none}#regionDiscovery{top:22%;padding:9px 16px}#regionDiscovery b{font-size:15px}}
+/* ===== V8.3 白模地图评审 HUD：减少遮挡，只保留战斗决策信息 ===== */
+#xpRail{height:4px;background:rgba(28,37,40,.28)}#xpRail span{top:7px;font-size:8px}
+.hero-cluster{left:calc(14px + env(safe-area-inset-left));top:calc(14px + env(safe-area-inset-top));gap:0;filter:none}.hero-medallion{display:none}.hero-bars{width:178px;padding:7px 9px 8px;border:1px solid rgba(61,78,81,.24);border-radius:7px;background:rgba(238,241,236,.78);box-shadow:0 5px 16px rgba(35,48,51,.10);backdrop-filter:blur(6px)}.hero-name{margin:0 0 4px}.hero-name b{font-size:12px}.hero-name span{font-size:8px}.hp-track{height:14px;padding:2px;clip-path:none;border-radius:3px}.hp-track i{clip-path:none;border-radius:2px}.dash-caption{display:none}
+.time-cluster{top:calc(13px + env(safe-area-inset-top));min-width:176px}.time-cluster:before{display:none}#time{font-size:20px;color:#263f43;text-shadow:0 1px 4px rgba(255,255,255,.7)}#wave{margin-top:3px;font-size:8px;color:#405e61;text-shadow:none}.realm-progress,.signature-badge{display:none}#regionHud{margin-top:4px;min-width:0;gap:5px;color:#314f52;text-shadow:none}#regionSigil{width:18px;height:18px;font-size:9px;background:rgba(238,241,236,.84);box-shadow:none}#regionName{font-size:9px}#directorState{font-size:6px;color:#536c6e}
+.hud-tools{right:calc(12px + env(safe-area-inset-right));top:calc(12px + env(safe-area-inset-top));gap:5px}.resource-pill{height:30px;min-width:52px;padding:0 8px;clip-path:none;border-radius:6px;background:rgba(238,241,236,.80);box-shadow:0 4px 12px rgba(35,48,51,.09)}.round-tool{width:30px;height:30px;box-shadow:none;background:rgba(238,241,236,.80)}#cameraBtn{display:none}
+.weapon-dock{bottom:calc(10px + env(safe-area-inset-bottom))}.dock-ornament{display:none}#weaponBar{gap:4px;padding:5px 6px;border:1px solid rgba(64,80,82,.18);border-radius:7px;background:rgba(238,241,236,.82);box-shadow:0 5px 16px rgba(34,48,50,.10)}.weapon-slot{width:46px;height:46px;clip-path:none;border-radius:5px}.weapon-glyph,.weapon-glyph svg{width:27px;height:27px}
+#regionDiscovery{top:78px;padding:7px 13px;border-radius:6px;background:rgba(47,67,69,.88);box-shadow:0 7px 20px rgba(28,42,44,.16)}#regionDiscovery b{font:800 13px/1.1 Inter,system-ui,sans-serif;letter-spacing:.08em}#regionDiscovery span{margin-top:3px;font-size:6px}#eventBanner{top:112px;padding:6px 13px;border-radius:6px;font-size:9px;background:rgba(238,241,236,.88)}
+@media(max-width:760px){.hero-bars{width:145px;padding:6px}.time-cluster{top:52px}.hud-tools .resource-pill:nth-child(2){display:none}.weapon-slot{width:42px;height:42px}#regionDiscovery{top:105px}}
 </style>
 </head>
 <body>
@@ -575,7 +583,7 @@ html,body{background:#a8cada;color:#304845;font-family:Inter,system-ui,-apple-sy
 </div>
 <div id="toast"></div>
 <div id="breakthrough" class="overlay"><div class="modal breakthrough-modal"><h2 class="modal-title">境界突破</h2><div id="breakthroughRoute" class="breakthrough-route"></div><p id="breakthroughSub" class="modal-sub">首领已倒，三道基选择显化。</p><div id="breakthroughCards" class="cards"></div></div></div>
-<div id="start" class="overlay show"><div class="menu-shell"><div class="title-kicker">FIVE-REGION EXPEDITION · V8.2</div><h1 class="title">曙光问道<span>五 域 远 征 · PATHS RESONATE</span></h1><p class="menu-copy">踏过遗庭、竹林、灵泽、古冢与裂谷。不同区域拥有独立敌群与遭遇节奏；以六大道途构筑剑势，在分批合围中主动选路、破阵与清场。</p><div class="diffs"><button class="diff" data-d="normal">游猎</button><button class="diff sel" data-d="hunt">猎杀</button><button class="diff" data-d="hell">地狱</button></div><button id="startBtn" class="main-btn">踏入五域</button><div class="controls-hint">WASD 移动 · SPACE 闪避 · P 暂停 · 穿越区域会触发独立遭遇</div></div></div>
+<div id="start" class="overlay show"><div class="menu-shell"><div class="title-kicker">PLAYABLE WHITEBOX · V8.3</div><h1 class="title">曙光问道<span>五 域 白 模 · LAYOUT FIRST</span></h1><p class="menu-copy">当前只评审真实三维空间：战斗房间、连接通道、掩体、视线、路径与遭遇节奏。角色锁定为外部青曜 GLB；地图结构通过后再进入材质和场景美术阶段。</p><div class="diffs"><button class="diff" data-d="normal">游猎</button><button class="diff sel" data-d="hunt">猎杀</button><button class="diff" data-d="hell">地狱</button></div><button id="startBtn" class="main-btn">进入白模测试</button><div class="controls-hint">WASD 移动 · SPACE 闪避 · P 暂停 · 测试通道、掩体和跨区路线</div></div></div>
 <div id="levelup" class="overlay"><div class="modal"><h2 class="modal-title">天机悟道</h2><p class="modal-sub">三道天机显化，只可择其一。灵器五炼圆满，可蜕变为本命杀招。</p><div id="cards" class="cards"></div></div></div>
 <div id="chest" class="overlay"><div class="modal treasure-reveal-modal"><h2 class="modal-title">开匣鉴宝</h2><p class="modal-sub">灵光出匣，先观品阶、器类与道韵，再决定如何纳入本局流派。</p><div id="chestContent"></div><button id="chestOk" class="main-btn" style="margin-top:18px">收下</button></div></div>
 
@@ -849,6 +857,43 @@ const ENCOUNTER_TEMPLATES={
  crossfire:{id:'crossfire',name:'远近交错',telegraph:'远程火力正在展开',baseCount:7,stagger:.42,eliteAt:.68},
  vanguard:{id:'vanguard',name:'破阵先锋',telegraph:'重甲先锋压入战场',baseCount:6,stagger:.56,eliteAt:.2}
 };
+const LEVEL_METRICS={playerRadius:.42,enemyRadius:.72,corridorWidth:8,arenaClearance:2.2,worldLimit:43,blockoutUnit:1};
+const MAP_ROOMS=[
+ {id:'ruins',x:0,z:0,w:22,d:22,h:.34,label:'中央教学场'},
+ {id:'bamboo',x:28,z:0,w:26,d:28,h:.42,label:'柱阵走位场'},
+ {id:'marsh',x:-28,z:0,w:26,d:28,h:.28,label:'桥岛控制场'},
+ {id:'sword',x:0,z:-28,w:28,d:26,h:.48,label:'碑阵决斗场'},
+ {id:'ember',x:0,z:28,w:28,d:26,h:.38,label:'峡谷压迫场'}
+];
+const MAP_LINKS=[
+ {id:'ruins-bamboo',a:'ruins',b:'bamboo',x:13,z:0,w:8,d:8},
+ {id:'ruins-marsh',a:'ruins',b:'marsh',x:-13,z:0,w:8,d:8},
+ {id:'ruins-sword',a:'ruins',b:'sword',x:0,z:-13,w:8,d:8},
+ {id:'ruins-ember',a:'ruins',b:'ember',x:0,z:13,w:8,d:8}
+];
+const MAP_BLOCKERS=[
+ {id:'center-nw',region:'ruins',x:-7,z:-7,w:2.4,d:2.4,h:1.1,type:'plinth'},
+ {id:'center-ne',region:'ruins',x:7,z:-7,w:2.4,d:2.4,h:1.1,type:'plinth'},
+ {id:'center-sw',region:'ruins',x:-7,z:7,w:2.4,d:2.4,h:1.1,type:'plinth'},
+ {id:'center-se',region:'ruins',x:7,z:7,w:2.4,d:2.4,h:1.1,type:'plinth'},
+ {id:'bamboo-p1',region:'bamboo',x:22,z:-8,w:1.2,d:5.0,h:3.8,type:'pillar'},
+ {id:'bamboo-p2',region:'bamboo',x:28,z:4.0,w:1.2,d:5.0,h:4.8,type:'pillar'},
+ {id:'bamboo-p3',region:'bamboo',x:34,z:8,w:1.2,d:5.0,h:4.2,type:'pillar'},
+ {id:'bamboo-p4',region:'bamboo',x:35,z:-8,w:1.2,d:4.2,h:3.4,type:'pillar'},
+ {id:'bamboo-p5',region:'bamboo',x:22,z:8,w:1.2,d:4.2,h:3.4,type:'pillar'},
+ {id:'marsh-i1',region:'marsh',x:-23,z:-7,w:4.2,d:3.2,h:.72,type:'island'},
+ {id:'marsh-i2',region:'marsh',x:-31,z:0,w:4.6,d:3.4,h:.92,type:'island'},
+ {id:'marsh-i3',region:'marsh',x:-23,z:8,w:3.8,d:3.2,h:.66,type:'island'},
+ {id:'marsh-i4',region:'marsh',x:-37,z:-8,w:3.2,d:3.0,h:.62,type:'island'},
+ {id:'sword-s1',region:'sword',x:-8,z:-24,w:1.0,d:3.6,h:2.7,type:'stele'},
+ {id:'sword-s2',region:'sword',x:0,z:-33,w:1.0,d:4.0,h:3.4,type:'stele'},
+ {id:'sword-s3',region:'sword',x:8,z:-24,w:1.0,d:3.6,h:2.7,type:'stele'},
+ {id:'sword-s4',region:'sword',x:-8,z:-36,w:1.0,d:3.0,h:2.3,type:'stele'},
+ {id:'sword-s5',region:'sword',x:8,z:-36,w:1.0,d:3.0,h:2.3,type:'stele'},
+ {id:'ember-w1',region:'ember',x:-8,z:23,w:7.0,d:1.4,h:2.8,type:'canyon'},
+ {id:'ember-w2',region:'ember',x:6,z:29,w:8.0,d:1.4,h:3.4,type:'canyon'},
+ {id:'ember-w3',region:'ember',x:-6,z:36,w:8.0,d:1.4,h:3.0,type:'canyon'}
+];
 const ENEMIES={
  ghoul:{hp:34,speed:2.25,dmg:12,xp:5,r:.46,color:0x596849},hound:{hp:27,speed:3.55,dmg:11,xp:7,r:.42,color:0x604044,dash:true},skeleton:{hp:42,speed:1.8,dmg:10,xp:9,r:.45,color:0xd2c7a5,ranged:true},cultist:{hp:48,speed:1.65,dmg:12,xp:11,r:.46,color:0x49354f,ranged:true},brute:{hp:138,speed:1.25,dmg:23,xp:19,r:.68,color:0x654943},bomber:{hp:58,speed:2.7,dmg:28,xp:14,r:.54,color:0x7b382f,bomber:true},wraith:{hp:64,speed:2.55,dmg:15,xp:15,r:.5,color:0x6f8c92,blink:true},shield:{hp:175,speed:1.35,dmg:20,xp:21,r:.62,color:0x4f5963,shield:true},necromancer:{hp:118,speed:1.35,dmg:16,xp:24,r:.58,color:0x40314e,summon:true}
 };
@@ -869,7 +914,7 @@ class Game{
    this.clock=new THREE.Clock();this.phase=GamePhase.MENU;this.diff='hunt';this.keys=new Set();this.touch={x:0,y:0,active:false};this.last=performance.now();this.elapsed=0;this.spawnT=0;this.kills=0;this.souls=0;this.shake=0;this.hitstop=0;this.fovPunch=0;this.enemyId=1;this.lastBossIndex=-1;this.nextElite=34;this.bloodMoon=false;this.bloodMoonUntil=0;this.weaponCooldowns={};this.ravenShots=0;this.lightningKills=0;this.reviveUsed=false;this.runSerial=0;this.lastRuleSecond=-1;this.realmState=this.createRealmState();this.encounter=this.createEncounterState();this.combo=this.createComboState();this.regionState=this.createRegionState();this.director=this.createDirectorState();this.runRecord=this.createRunRecord();this.modalState={active:null,queue:[],serial:0};this.activeHooks=this.createActiveHooks();this.ruleEvent={type:'',enemy:null,boss:null,bossIndex:-1,damage:0,source:'',tags:null,raw:0,prevented:false};this.modifierContext={active:false,source:'',tags:null,enemy:null,weaponId:'',dash:false,moving:false};this.castEvent={weaponId:'',tags:null,tagMask:0,active:true};this.pendingBossReward=false;this.pendingLevelUp=false;this.resonance=this.createResonanceState();
   this.weaponVisuals=[];this.transientVisuals=new Set();this.trailPool={items:[],geometry:null,material:null,next:0};this.sparkPool={items:[],geometry:null,material:null,mesh:null,helper:new THREE.Object3D(),color:new THREE.Color(),next:0,capacity:512};this.floaterPool={items:[],next:0,capacity:96};this.floatProjector=new THREE.Vector3();this.encounterProjector=new THREE.Vector3();this.codexReturnPhase=null;
    this.enemies=[];this.projectiles=[];this.enemyProjectiles=[];this.pickups=[];this.effects=[];this.hazards=[];this.voids=[];this.relics=[];this.audio=null;this.worldAnim={crystals:[],waters:[],trees:[],banners:[],motes:[],skyIslands:[],regions:[]};this.regionColor=new THREE.Color(REGIONS.ruins.background);this.regionFogColor=new THREE.Color(REGIONS.ruins.fog);this.regionSunColor=new THREE.Color(REGIONS.ruins.accent);this.warmSunColor=new THREE.Color(0xfff1cb);
-   this.qingyaoModel={status:'loading',path:'assets/characters/qingyao/model_v1/qingyao_v1.glb',object:null,error:''};this.mat=this.createMaterials();this.sharedMaterials=new Set(Object.values(this.mat));this.buildLights();this.buildWorld();this.player=this.createHunter();this.scene.add(this.player.group);this.loadQingyaoModel();this.bindUI();this.bindInput();this.bindTestHooks();this.bindV82TestHooks();this.updateWeaponBar();this.animateMenu();this.loop(performance.now());
+   this.qingyaoModel={status:'loading',path:'assets/characters/qingyao/model_v1/qingyao_v1.glb',object:null,error:''};this.mat=this.createMaterials();this.sharedMaterials=new Set(Object.values(this.mat));this.buildLights();this.buildWorld();this.player=this.createHunter();this.scene.add(this.player.group);this.loadQingyaoModel();this.bindUI();this.bindInput();this.bindTestHooks();this.bindV82TestHooks();this.bindV83TestHooks();this.updateWeaponBar();this.animateMenu();this.loop(performance.now());
  }
   createRealmState(){return {currentRealm:'qi',currentIndex:0,pendingBreakthrough:null,completedMilestones:[],selectedFoundations:[],activeRealmRules:[],activeRules:[],breakthroughCount:0,ruleData:{}}}
   createRunRecord(){return {serial:0,status:'IDLE',result:'',startedAt:0,endedAt:0,elapsed:0,levelUps:0,levelUpEvents:[],levelChoices:[],realmChoices:[],bosses:[],bossRewardChoices:[],spiritVeins:[],regions:[],encounters:[],maxCombo:0,kills:0,damageDealt:0,damageTaken:0}}
@@ -959,7 +1004,13 @@ class Game{
   updateEncounterHud(){
   const hud=$('encounterHud'),pointer=$('encounterPointer'),combo=$('comboHud'),a=this.encounter.active;if(a){hud.className='show';$('encounterTitle').textContent=a.inside?'灵脉共鸣中':'灵脉阵眼 · 前往占领';$('encounterTimer').textContent=Math.ceil(a.t)+'s';$('encounterCopy').textContent=a.inside?'守住阵眼，击杀阵中妖物可加速共鸣。':'踏入发光阵眼，维持共鸣并承受围攻。';$('encounterFill').style.width=(a.progress*100).toFixed(1)+'%';this.updateEncounterPointer(a)}else if(this.encounter.boonT>0){pointer.className='';hud.className='show boon';$('encounterTitle').textContent='灵脉剑势';$('encounterTimer').textContent=this.encounter.boonT.toFixed(1)+'s';$('encounterCopy').textContent='伤害、攻速与移动提升，主动扩大猎杀路线。';$('encounterFill').style.width=(this.encounter.boonT/SPIRIT_VEIN.boonDuration*100).toFixed(1)+'%'}else{pointer.className='';hud.className=''}combo.classList.toggle('show',this.combo.value>1);$('comboValue').textContent=this.combo.value
   }
-  regionForPosition(x=this.player.x,z=this.player.z){if(Math.hypot(x,z)<11.5)return'ruins';if(Math.abs(x)>Math.abs(z))return x>0?'bamboo':'marsh';return z<0?'sword':'ember'}
+  pointInRect(x,z,rect,padding=0){return Math.abs(x-rect.x)<=rect.w*.5-padding&&Math.abs(z-rect.z)<=rect.d*.5-padding}
+  isWalkable(x,z,radius=LEVEL_METRICS.playerRadius){return MAP_ROOMS.some(room=>this.pointInRect(x,z,room,radius))||MAP_LINKS.some(link=>this.pointInRect(x,z,link,radius))}
+  isBlocked(x,z,radius=LEVEL_METRICS.playerRadius){return MAP_BLOCKERS.some(block=>Math.abs(x-block.x)<block.w*.5+radius&&Math.abs(z-block.z)<block.d*.5+radius)}
+  canStand(x,z,radius=LEVEL_METRICS.playerRadius){return this.isWalkable(x,z,radius)&&!this.isBlocked(x,z,radius)}
+  nearestOpenPoint(x,z,radius=LEVEL_METRICS.enemyRadius){if(this.canStand(x,z,radius))return{x,z};for(let ring=1;ring<=24;ring++){const rr=ring*.75;for(let i=0;i<16;i++){const a=i/16*TAU,px=x+Math.cos(a)*rr,pz=z+Math.sin(a)*rr;if(this.canStand(px,pz,radius))return{x:px,z:pz}}}return{x:0,z:2}}
+  regionForPosition(x=this.player.x,z=this.player.z){for(const room of MAP_ROOMS)if(this.pointInRect(x,z,room,0))return room.id;if(Math.abs(x)>Math.abs(z))return x>0?'bamboo':'marsh';return z<0?'sword':'ember'}
+  navigationTarget(e){const from=this.regionForPosition(e.x,e.z),to=this.regionForPosition(this.player.x,this.player.z);if(from===to)return{x:this.player.x,z:this.player.z,navigating:false};const gate={bamboo:{inner:{x:10,z:0},outer:{x:17,z:0}},marsh:{inner:{x:-10,z:0},outer:{x:-17,z:0}},sword:{inner:{x:0,z:-10},outer:{x:0,z:-17}},ember:{inner:{x:0,z:10},outer:{x:0,z:17}}};if(from!=='ruins')return{...gate[from].inner,navigating:true};if(to!=='ruins')return{...gate[to].outer,navigating:true};return{x:this.player.x,z:this.player.z,navigating:false}}
   regionEncounterIds(regionId=this.regionState.current){if(regionId==='bamboo')return['pincer','hunt'];if(regionId==='marsh')return['crossfire','hunt'];if(regionId==='sword')return['vanguard','crossfire'];if(regionId==='ember')return['vanguard','pincer'];return['pincer','crossfire']}
   showRegionDiscovery(region){const el=$('regionDiscovery');el.querySelector('b').textContent=region.name;el.querySelector('span').textContent=region.subtitle;el.classList.add('show');clearTimeout(this.regionNoticeTimer);this.regionNoticeTimer=setTimeout(()=>el.classList.remove('show'),2200)}
   enterRegion(id,force=false){if(!REGIONS[id]||(!force&&id===this.regionState.current))return false;const previous=this.regionState.current,region=REGIONS[id];this.regionState.previous=previous;this.regionState.current=id;this.regionState.enteredAt=this.elapsed;this.regionState.transitions++;const discovered=!this.regionState.discovered.includes(id);if(discovered){this.regionState.discovered.push(id);this.souls+=3;this.showRegionDiscovery(region)}else this.toast(region.name);this.runRecord.regions.push({id,name:region.name,enteredAt:+this.elapsed.toFixed(2),discovered,from:previous});this.regionState.uiT=2.2;this.director.timer=Math.min(this.director.timer,discovered?5:8);return true}
@@ -971,6 +1022,8 @@ class Game{
   updateExpeditionDirector(dt){const d=this.director;if(d.phase==='REST'){d.timer-=dt;if(d.timer<=0)this.beginRegionalEncounter();return}if(d.phase==='TELEGRAPH'){d.timer-=dt;if(d.timer<=0){d.phase='ACTIVE';d.staggerT=0}return}if(d.phase!=='ACTIVE'||!d.active)return;d.staggerT-=dt;if(d.queue.length&&d.staggerT<=0){this.spawnEncounterUnit(d.queue.shift());d.staggerT=d.active.template.stagger*(1.12-d.pressure*.24)}const living=d.active.enemyIds.some(id=>this.enemies.some(e=>e.id===id&&!e.dead));if(!d.queue.length&&d.active.enemyIds.length&&!living)this.completeRegionalEncounter()}
   directorLabel(){const d=this.director;if(d.phase==='TELEGRAPH')return'妖气汇聚 · '+d.active?.template.name;if(d.phase==='ACTIVE')return d.active?.template.name+' · '+d.queue.length+' 后援';return'秘境安定 · '+Math.ceil(Math.max(0,d.timer))+'s'}
   bindV82TestHooks(){window.__V82_TEST__={game:this,setPosition:(x,z)=>{this.player.x=x;this.player.z=z;this.player.group.position.set(x,0,z);this.updateRegions(.25);this.updateUI();return this.regionState.current},enterRegion:id=>{const changed=this.enterRegion(id,true);this.updateUI();return changed},forceEncounter:id=>this.beginRegionalEncounter(id),tickDirector:(seconds,step=.1)=>{for(let t=0;t<seconds;t+=step)this.updateExpeditionDirector(step);return this.inspectExpedition()},clearEncounter:()=>{for(const e of this.enemies)if(e.encounterId)e.dead=true;this.updateExpeditionDirector(.1);return this.inspectExpedition()},inspectExpedition:()=>this.inspectExpedition(),reset:()=>this.start()}}
+  bindV83TestHooks(){window.__V83_TEST__={game:this,inspectMap:()=>this.inspectWhitebox(),inspectModel:()=>({status:this.qingyaoModel.status,path:this.qingyaoModel.path,meshes:this.qingyaoModel.meshes||0,vertices:this.qingyaoModel.vertices||0,triangles:this.qingyaoModel.triangles||0,legacyVisible:this.player.visual.visible,externalVisible:this.player.externalModelRoot.visible}),canStand:(x,z,r=this.player.r)=>this.canStand(x,z,r),place:(x,z)=>{if(!this.canStand(x,z,this.player.r))return false;this.player.x=x;this.player.z=z;this.player.group.position.set(x,0,z);this.updateRegions(.1);return true},nearestOpen:(x,z)=>this.nearestOpenPoint(x,z,this.player.r),reset:()=>this.start()}}
+  inspectWhitebox(){return {mode:this.whitebox?.mode||'MISSING',root:this.whitebox?.root?.name||'',rooms:MAP_ROOMS.map(room=>({...room})),links:MAP_LINKS.map(link=>({...link})),metrics:{...LEVEL_METRICS},blocks:this.whitebox?.blocks?.length||0,covers:MAP_BLOCKERS.length,legacyWorld:{trees:this.worldAnim.trees.length,waters:this.worldAnim.waters.length,regions:this.worldAnim.regions.length,crystals:this.worldAnim.crystals.length}}}
   inspectExpedition(){return {region:JSON.parse(JSON.stringify(this.regionState)),director:{phase:this.director.phase,timer:this.director.timer,pressure:this.director.pressure,completed:this.director.completed,totalSpawned:this.director.totalSpawned,queue:this.director.queue.length,active:this.director.active&&{record:{...this.director.active.record},enemyIds:[...this.director.active.enemyIds]}},records:{regions:JSON.parse(JSON.stringify(this.runRecord.regions)),encounters:JSON.parse(JSON.stringify(this.runRecord.encounters))},enemyStates:this.enemies.filter(e=>!e.boss&&!e.dead).map(e=>({id:e.id,kind:e.kind,aiState:e.aiState,encounterId:e.encounterId||0}))}}
   bindTestHooks(){const query=new URLSearchParams(location.search),test=query.get('test');window.__V68_TEST__={game:this,triggerBreakthrough:(toIndex=1)=>{const to=REALMS[toIndex];this.realmState.pendingBreakthrough={fromId:this.currentRealm().id,toId:to.id,bossIndex:to.milestone?.bossIndex??-1,bossName:to.bossGate||'测试节点'};this.requestModal('BREAKTHROUGH');},setRealm:id=>{const r=this.realmData(id);this.realmState.currentRealm=r.id;this.realmState.currentIndex=r.index;this.updateUI()},selectChoice:id=>this.selectBreakthrough(id),simulateBossKill:(index,reward=true)=>{this.pendingBossReward=reward;this.handleBossMilestone({bossIndex:index,name:BOSSES[index]?.name||'测试首领'})},queueLevel:()=>this.requestModal('LEVEL'),queueChest:()=>this.requestModal('CHEST',{bossChest:false}),spawnBossForTest:(index=0)=>{const e=this.createBoss(index);return {id:e.id,name:e.name,phase:e.phase}},sampleBossPhase:(id,ratio)=>{const e=this.enemies.find(x=>x.boss&&x.id===id);if(!e)return null;e.hp=e.maxHp*ratio;const dx=this.player.x-e.x,dz=this.player.z-e.z,d=Math.hypot(dx,dz)||1;this.updateBoss(e,.016,dx,dz,d);return {id:e.id,name:e.name,phase:e.phase,lastPhase:e.lastPhase,phaseTransitions:[...(e.phaseTransitions||[])],scale:e.group.scale.x}},forceWeaponEvolution:id=>{this.player.weapons[id]={level:4,cd:0,evolved:false};const w=this.upgradeWeapon(id);this.updateWeaponBar();return w},sampleMotion:kind=>{const p=this.player;p.dashT=0;p.attackT=0;p.hitT=0;const moving=kind==='MOVE';if(kind==='CAST')p.attackT=.18;if(kind==='HIT')p.hitT=.22;if(kind==='DASH')p.dashT=.20;this.updateHunterAnimation(.016,moving,1,0);return {state:p.motionState,rotation:{x:p.externalModelRoot.rotation.x,y:p.externalModelRoot.rotation.y,z:p.externalModelRoot.rotation.z},scale:{x:p.externalModelRoot.scale.x,y:p.externalModelRoot.scale.y,z:p.externalModelRoot.scale.z}}},spawnSpiritVeinForTest:()=>{const a=this.spawnSpiritVein(true);return a&&{id:a.id,x:a.x,z:a.z,t:a.t,progress:a.progress}},captureSpiritVeinForTest:()=>{if(!this.encounter.active)this.spawnSpiritVein(true);this.encounter.active.progress=1;this.resolveSpiritVein(true);return {boonT:this.encounter.boonT,captures:this.encounter.captures,records:this.runRecord.spiritVeins.length}},failSpiritVeinForTest:()=>{if(!this.encounter.active)this.spawnSpiritVein(true);this.resolveSpiritVein(false);return {failures:this.encounter.failures,records:this.runRecord.spiritVeins.length}},inspectEncounter:()=>({active:this.encounter.active&&{id:this.encounter.active.id,x:this.encounter.active.x,z:this.encounter.active.z,t:this.encounter.active.t,progress:this.encounter.active.progress,inside:this.encounter.active.inside},boonT:this.encounter.boonT,captures:this.encounter.captures,failures:this.encounter.failures,combo:{...this.combo},records:JSON.parse(JSON.stringify(this.runRecord.spiritVeins))}),inspect:()=>({phase:this.phase,motionState:this.player.motionState,realmState:JSON.parse(JSON.stringify(this.realmState)),modal:this.modalState,hookCounts:Object.fromEntries(Object.entries(this.activeHooks).map(([k,v])=>[k,v.length])),signatureWeapon:this.player.signatureWeapon||null,weapons:Object.fromEntries(Object.entries(this.player.weapons).map(([id,w])=>[id,{level:w.level,evolved:Boolean(w.evolved),signature:this.player.signatureWeapon===id}])),bosses:this.enemies.filter(e=>e.boss&&!e.dead).map(e=>({id:e.id,name:e.name,phase:e.phase,lastPhase:e.lastPhase,phaseTransitions:[...(e.phaseTransitions||[])],scale:e.group.scale.x}))}),reset:()=>this.start()};if(test==='realm')setTimeout(()=>this.start(),30)}
  seeded(seed){let t=seed>>>0;return()=>{t+=0x6D2B79F5;let x=Math.imul(t^(t>>>15),1|t);x^=x+Math.imul(x^(x>>>7),61|x);return((x^(x>>>14))>>>0)/4294967296}}
@@ -999,9 +1052,8 @@ class Game{
  }
  createMaterials(){
   const std=(color,rough=.72,metal=.02,em=0,ei=0)=>new THREE.MeshStandardMaterial({color,roughness:rough,metalness:metal,emissive:em,emissiveIntensity:ei,flatShading:true});
-  const groundTex=this.makeGroundTexture();
   return {
-    ground:new THREE.MeshStandardMaterial({color:0x8aac72,roughness:.98,metalness:0,map:groundTex,flatShading:true}),
+    ground:new THREE.MeshStandardMaterial({color:0x475055,roughness:1,metalness:0,flatShading:true}),
     stone:std(0xd9d2b8,.88),stone2:std(0xbeb99f,.92),iron:std(0x4e5a5d,.5,.52),bone:std(0xe2d7b8,.82),
     skin:std(0x8fa879,.84),cloth:std(0x365d67,.86),cloak:std(0x477f87,.84),silver:std(0xcbd6d6,.38,.65),
     blue:std(0x7ed6e2,.4,.04,0x3eb7c6,.55),gold:std(0xd6a64c,.42,.55,0x80570d,.18),red:std(0xb84b55,.66,.06,0x5b151a,.10),
@@ -1015,7 +1067,8 @@ class Game{
     grass:std(0x5f984f,.98),grassLight:std(0x86b85f,.98),leaf:std(0x5d9d58,.92),leafLight:std(0x7ebc64,.9),
     ruinWhite:std(0xe7e0c5,.88),ruinShade:std(0xc6c1a9,.92),sand:std(0xcbb77c,.95),crystal:std(0x69d6df,.32,.08,0x23a7b5,1.15),
     water:new THREE.MeshStandardMaterial({color:0x6fc4cf,roughness:.22,metalness:.04,transparent:true,opacity:.67,side:THREE.DoubleSide}),
-    flowerPink:std(0xe9859c,.76),flowerYellow:std(0xf3cd60,.72),flowerBlue:std(0x75aee8,.76)
+    flowerPink:std(0xe9859c,.76),flowerYellow:std(0xf3cd60,.72),flowerBlue:std(0x75aee8,.76),
+    wbFloor:std(0xc9ced0,.96),wbFloorCool:std(0xbfc8cb,.96),wbFloorWarm:std(0xd0c7bd,.96),wbWall:std(0xe4e6e3,.92),wbShade:std(0x9da7aa,.98),wbEdge:std(0x59666b,.9),wbAccent:std(0x4f8f91,.7,.03)
   };
  }
  buildLights(){
@@ -1027,51 +1080,21 @@ class Game{
   const warm=new THREE.PointLight(0xffcf77,2.2,15,2);warm.position.set(0,4,-5);this.scene.add(warm);
  }
  buildWorld(){
-  const floor=new THREE.Mesh(new THREE.PlaneGeometry(140,140),this.mat.ground);floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;this.scene.add(floor);
-  const rng=this.seeded(4137);
-
-  this.buildSky();
-  this.buildSunlitRuins();
-
-  // 两条弯曲石径，把空旷地面切成有方向的“游戏世界”。
-  this.buildPath(-2,-44,5,45,112,.62,rng);
-  this.buildPath(-43,9,42,-15,94,.5,rng);
-
-  // 草、花、岩石全部用 InstancedMesh，细节增加但 draw call 保持低。
-  this.buildInstancedNature(rng);
-  this.buildBoundaryMountains(rng);
-  this.buildWindMotes(rng);
-  this.buildRegionalLandmarks(rng);
-
-  // 树林：避开中心战斗区，形成远近景层次。
-  for(let i=0;i<26;i++){
-    let x=(rng()-.5)*84,z=(rng()-.5)*84;
-    if(Math.hypot(x,z)<11||Math.abs(x)<6&&z>-30&&z<30){i--;continue}
-    const tree=this.createFantasyTree(x,z,rng());this.scene.add(tree);this.worldAnim.trees.push(tree);
+   this.buildSky();this.buildWhiteboxMap();
   }
-
-  // 散落白石遗迹与小型地标。
-  for(let i=0;i<22;i++){
-    let x=(rng()-.5)*80,z=(rng()-.5)*80;if(Math.hypot(x,z)<10){i--;continue}
-    this.scene.add(this.createRuinMarker(x,z,rng()));
+  buildWhiteboxMap(){
+   const root=new THREE.Group();root.name='V83_WHITEBOX_MAP';root.userData.mode='WHITEBOX';const cube=new THREE.BoxGeometry(1,1,1),blocks=[];
+   const addBlock=(id,x,y,z,w,h,d,material=this.mat.wbWall,kind='structure')=>{const mesh=new THREE.Mesh(cube,material);mesh.name=id;mesh.position.set(x,y,z);mesh.scale.set(w,h,d);mesh.castShadow=true;mesh.receiveShadow=true;mesh.userData={id,kind,whitebox:true};root.add(mesh);blocks.push(mesh);return mesh};
+   const voidFloor=addBlock('void-floor',0,-.7,0,110,.8,110,this.mat.ground,'void');voidFloor.castShadow=false;
+   const floorMaterial=id=>id==='marsh'?this.mat.wbFloorCool:id==='ember'?this.mat.wbFloorWarm:this.mat.wbFloor;
+   for(const room of MAP_ROOMS){addBlock('floor-'+room.id,room.x,-room.h*.5,room.z,room.w,room.h,room.d,floorMaterial(room.id),'floor');const hw=room.w*.5,hd=room.d*.5,corner=4.2,rail=.42;for(const sx of [-1,1])for(const sz of [-1,1]){addBlock(`edge-${room.id}-${sx}-${sz}-x`,room.x+sx*(hw-corner*.5),.34,room.z+sz*(hd-rail*.5),corner,.68,rail,this.mat.wbEdge,'edge');addBlock(`edge-${room.id}-${sx}-${sz}-z`,room.x+sx*(hw-rail*.5),.34,room.z+sz*(hd-corner*.5),rail,.68,corner,this.mat.wbEdge,'edge')}}
+   for(const link of MAP_LINKS){addBlock('link-'+link.id,link.x,-.16,link.z,link.w,.32,link.d,this.mat.wbFloor,'link');const horizontal=link.w>link.d;if(horizontal){addBlock('rail-'+link.id+'-n',link.x,.28,link.z-link.d*.5+.18,link.w,.56,.36,this.mat.wbShade,'rail');addBlock('rail-'+link.id+'-s',link.x,.28,link.z+link.d*.5-.18,link.w,.56,.36,this.mat.wbShade,'rail')}else{addBlock('rail-'+link.id+'-w',link.x-link.w*.5+.18,.28,link.z,.36,.56,link.d,this.mat.wbShade,'rail');addBlock('rail-'+link.id+'-e',link.x+link.w*.5-.18,.28,link.z,.36,.56,link.d,this.mat.wbShade,'rail')}}
+   for(const block of MAP_BLOCKERS){const mat=block.type==='canyon'?this.mat.wbShade:block.type==='pillar'?this.mat.wbWall:block.type==='stele'?this.mat.wbEdge:this.mat.wbWall;addBlock(block.id,block.x,block.h*.5,block.z,block.w,block.h,block.d,mat,'cover')}
+   // 各战区只用体块说明玩法：柱阵、桥岛、碑阵、峡谷，不做表面装饰。
+   for(const [id,x,z,rot] of [['bamboo',15,0,Math.PI/2],['marsh',-15,0,-Math.PI/2],['sword',0,-15,0],['ember',0,15,Math.PI]]){const gate=new THREE.Group();gate.name='gate-'+id;gate.position.set(x,0,z);gate.rotation.y=rot;const left=addBlock('gate-'+id+'-l',0,1.55,0,0,0,0,this.mat.wbWall,'gateway'),right=addBlock('gate-'+id+'-r',0,1.55,0,0,0,0,this.mat.wbWall,'gateway'),top=addBlock('gate-'+id+'-top',0,3.0,0,0,0,0,this.mat.wbAccent,'gateway');root.remove(left,right,top);left.position.set(-2.7,1.55,0);left.scale.set(.62,3.1,.62);right.position.set(2.7,1.55,0);right.scale.set(.62,3.1,.62);top.position.set(0,3.0,0);top.scale.set(6,.42,.72);gate.add(left,right,top);root.add(gate)}
+   const grid=new THREE.GridHelper(92,46,0x66777a,0x7f8b8d);grid.position.y=.015;for(const mat of (Array.isArray(grid.material)?grid.material:[grid.material])){mat.transparent=true;mat.opacity=.16;mat.depthWrite=false}root.add(grid);
+   this.scene.add(root);this.whitebox={root,blocks,cube,rooms:MAP_ROOMS,links:MAP_LINKS,colliders:MAP_BLOCKERS,mode:'WHITEBOX'};
   }
-
-  // 两处浅水池，帮助画面出现材质变化。
-  this.createPond(-18,15,4.6,3.2);
-  this.createPond(21,-22,5.2,3.5);
-
-  // 青蓝魔法水晶：与玩家配色呼应。
-  for(let i=0;i<12;i++){
-    const a=i/12*TAU+rng()*.22,r=14+rng()*25,x=Math.cos(a)*r,z=Math.sin(a)*r;
-    if(Math.hypot(x,z)<9)continue;
-    const crystal=this.createCrystalCluster(x,z,rng());this.scene.add(crystal);this.worldAnim.crystals.push(crystal);
-  }
-
-  // 少量旗帜，为废墟增加“曾有人生活过”的感觉。
-  for(const [x,z,rot] of [[-7,-5,.3],[7,-4,-.25],[-5,7,.15],[8,8,-.2]]){
-    const b=this.createBanner(x,z,rot);this.scene.add(b);this.worldAnim.banners.push(b);
-  }
- }
  buildBoundaryMountains(rng){
   const mountainMat=new THREE.MeshStandardMaterial({color:0x78917d,roughness:1,metalness:0,flatShading:true}),snowMat=new THREE.MeshStandardMaterial({color:0xdde5d2,roughness:.94,flatShading:true});
   const count=30,geo=new THREE.ConeGeometry(1,1,7),mountains=new THREE.InstancedMesh(geo,mountainMat,count),snow=new THREE.InstancedMesh(geo,snowMat,count),dummy=new THREE.Object3D();
@@ -1271,7 +1294,7 @@ class Game{
   const mat=(color,rough=.72,metal=.03,em=0,ei=0)=>new THREE.MeshStandardMaterial({color,roughness:rough,metalness:metal,emissive:em,emissiveIntensity:ei,flatShading:true});
   const M={cream:mat(0xf0e8cf,.86),cream2:mat(0xd9d3bc,.90),teal:mat(0x3e8588,.70),teal2:mat(0x62b4b4,.68),deep:mat(0x28585d,.80),gold:mat(0xd1a249,.38,.52,0x6f4b0b,.10),leather:mat(0x6e4e37,.82),dark:mat(0x3d413f,.88),skin:mat(0xd8a27d,.88),steel:mat(0xc9d7d5,.34,.68),gem:mat(0x8de0df,.28,.12,0x36b9bb,1.4),hair:mat(0x4fa2a0,.73)};
   const externalModelRoot=new THREE.Group();externalModelRoot.name='qingyaoExternalModel';externalModelRoot.visible=false;group.add(externalModelRoot);
-  const visual=new THREE.Group();visual.name='heroVisual';group.add(visual);const body=new THREE.Group();body.name='bodyPivot';visual.add(body);
+  const visual=new THREE.Group();visual.name='legacyHeroFallback';visual.visible=false;group.add(visual);const body=new THREE.Group();body.name='bodyPivot';visual.add(body);
 
   // Stylized proportions: larger head/weapon, compact torso, wide silhouette.
   const pelvis=new THREE.Mesh(new THREE.CylinderGeometry(.29,.35,.26,7),M.leather);pelvis.position.y=.70;body.add(pelvis);
@@ -1317,9 +1340,9 @@ class Game{
   group.scale.setScalar(1.18);
   return {group,visual,externalModelRoot,externalModel:null,body,headPivot,bow,armL:LA.shoulder,armR:RA.shoulder,elbowL:LA.elbow,elbowR:RA.elbow,legL:LL.hip,legR:RL.hip,kneeL:LL.knee,kneeR:RL.knee,capeRoot,capePanels,scarfRoot,scarf1,scarf2,x:0,z:2,r:.42,baseScale:1.18,hp:120,maxHp:120,speed:5.0,armor:0,regen:0,crit:.05,dodge:0,damageMul:1,haste:1,area:1,magnet:2.8,growth:1,level:1,xp:0,xpNeed:22,signatureWeapon:null,motionState:'IDLE',weapons:{bolt:{level:1,cd:0,evolved:false}},passives:{},ifr:0,dashCd:0,dashT:0,dashDir:new THREE.Vector2(),invuln:0,animTime:0,moveBlend:0,stepTimer:0,attackT:0,hitT:0};
  }
- async loadQingyaoModel(){
-  const state=this.qingyaoModel;
-  if(!window.THREE?.GLTFLoader){state.status='error';state.error='GLTFLoader not available';return}
+  async loadQingyaoModel(){
+   const state=this.qingyaoModel;
+   this.player.visual.visible=false;this.player.externalModelRoot.visible=false;if(!window.THREE?.GLTFLoader){state.status='error';state.error='GLTFLoader not available';this.toast('青曜 GLB 加载器缺失');return}
   try{
    const loader=new THREE.GLTFLoader();
    const gltf=await new Promise((resolve,reject)=>loader.load(state.path,resolve,undefined,reject));
@@ -1329,14 +1352,15 @@ class Game{
    model.scale.setScalar(desiredWorldHeight/(rawHeight*groupScale));
    const scaledBox=new THREE.Box3().setFromObject(model);
    model.position.y=-scaledBox.min.y+0.02/groupScale;
-   model.traverse(node=>{if(!node.isMesh)return;node.castShadow=true;node.receiveShadow=true;node.frustumCulled=true});
-   this.player.externalModelRoot.add(model);this.player.externalModelRoot.visible=true;this.player.externalModel=model;this.player.visual.visible=false;
-   state.status='ready';state.object=model;state.height=rawHeight;state.triangles=225303;state.error='';
-  }catch(error){state.status='error';state.error=String(error?.message||error)}
- }
+    let meshes=0,vertices=0,triangles=0;model.traverse(node=>{if(!node.isMesh)return;meshes++;const geo=node.geometry,pos=geo?.attributes?.position,index=geo?.index;vertices+=pos?.count||0;triangles+=index?index.count/3:(pos?.count||0)/3;node.castShadow=true;node.receiveShadow=true;node.frustumCulled=true});
+    this.player.externalModelRoot.add(model);this.player.externalModelRoot.visible=true;this.player.externalModel=model;this.player.visual.visible=false;
+    state.status='ready';state.object=model;state.height=rawHeight;state.meshes=meshes;state.vertices=Math.round(vertices);state.triangles=Math.round(triangles);state.error='';
+   }catch(error){state.status='error';state.error=String(error?.message||error);this.player.visual.visible=false;this.player.externalModelRoot.visible=false;this.toast('青曜模型加载失败 · 未启用旧角色')}
+  }
  shadow(r,opacity=.28){const m=this.mat.shadow.clone();m.opacity=opacity;const s=new THREE.Mesh(new THREE.CircleGeometry(r,24),m);s.rotation.x=-Math.PI/2;s.position.y=.01;return s}
  createEnemy(kind,elite=false,x=null,z=null){
    const d=ENEMIES[kind],scale=1+Math.floor(this.elapsed/60)*.19,df=DIFF[this.diff],a=Math.random()*TAU,r=rand(17,24);const e={id:this.enemyId++,kind,x:x??this.player.x+Math.cos(a)*r,z:z??this.player.z+Math.sin(a)*r,r:d.r,hp:d.hp*scale*df.hp,maxHp:d.hp*scale*df.hp,speed:d.speed,dmg:d.dmg*(1+(scale-1)*.5)*df.dmg,xp:d.xp,elite,boss:false,dead:false,hitCd:0,skill:rand(.8,2.5),fuse:0,blink:0,shield:d.shield?d.hp*.65*scale:0,affix:null,aiState:'SPAWN',aiClock:rand(.7,1.8),flankSide:Math.random()<.5?-1:1,chargeT:0,chargeA:0,encounterId:0};
+   const open=this.nearestOpenPoint(e.x,e.z,Math.min(e.r,.62));e.x=open.x;e.z=open.z;
   if(elite){e.hp*=2.55;e.maxHp=e.hp;e.dmg*=1.25;e.r*=1.15;e.xp*=3;e.affix=pick(['迅捷','吸血','爆裂','巨像']);if(e.affix==='迅捷')e.speed*=1.32;if(e.affix==='巨像'){e.hp*=1.5;e.maxHp=e.hp;e.r*=1.2}}
   e.group=this.buildEnemyModel(e);e.group.position.set(e.x,0,e.z);this.scene.add(e.group);this.enemies.push(e);return e;
  }
@@ -1376,7 +1400,7 @@ class Game{
   const cfg=BOSSES[index],a=Math.random()*TAU,r=20;
   const e={id:this.enemyId++,kind:'boss',boss:true,bossIndex:index,name:cfg.name,title:cfg.title,x:this.player.x+Math.cos(a)*r,z:this.player.z+Math.sin(a)*r,
     r:cfg.r,hp:cfg.hp*DIFF[this.diff].hp,maxHp:0,speed:cfg.speed,dmg:cfg.dmg*DIFF[this.diff].dmg,xp:cfg.xp,elite:false,dead:false,hitCd:0,skill:2.2,skill2:4.5,phase:1,lastPhase:1,phaseTransitions:[],phasePulse:0,chargeT:0,chargeA:0};
-  e.maxHp=e.hp;e.runRecord={index,name:e.name,spawnTime:this.elapsed,defeatedAt:null,phaseTransitions:[]};this.runRecord.bosses.push(e.runRecord);e.group=this.buildBossModel(e);e.group.position.set(e.x,0,e.z);this.scene.add(e.group);this.enemies.push(e);
+   const open=this.nearestOpenPoint(e.x,e.z,Math.min(e.r,.86));e.x=open.x;e.z=open.z;e.maxHp=e.hp;e.runRecord={index,name:e.name,spawnTime:this.elapsed,defeatedAt:null,phaseTransitions:[]};this.runRecord.bosses.push(e.runRecord);e.group=this.buildBossModel(e);e.group.position.set(e.x,0,e.z);this.scene.add(e.group);this.enemies.push(e);
   this.banner('☯ '+e.title+' · '+e.name+' 降临');this.addShake(.48);this.ring(e.x,e.z,2.8,cfg.color,.5);return e;
  }
  buildBossModel(e){
@@ -1521,8 +1545,8 @@ class Game{
  loop(t){requestAnimationFrame(x=>this.loop(x));const realDt=Math.min(.033,(t-this.last)/1000||0);this.last=t;const dt=this.hitstop>0?realDt*.05:realDt;if(this.hitstop>0)this.hitstop=Math.max(0,this.hitstop-realDt);if(this.phase===GamePhase.PLAY)this.update(dt,realDt);else this.updateIdle(realDt);this.render(realDt)}
  updateIdle(dt){this.updateWorldVisuals(dt);this.updateHunterAnimation(dt,false,0,0);this.player.group.rotation.y+=dt*.08}
    update(dt,realDt){this.elapsed+=dt;this.updateWorldVisuals(realDt);const second=Math.floor(this.elapsed);if(second!==this.lastRuleSecond){this.lastRuleSecond=second;this.emitCombatEvent('onSecond',{second})}this.player.ifr=Math.max(0,this.player.ifr-dt);this.player.dashCd=Math.max(0,this.player.dashCd-dt);this.updatePlayer(dt);this.updateRegions(dt);this.updateSpiritVein(dt,realDt);this.updateCombo(dt);this.spawnDirector(dt);this.updateWeapons(dt);this.updateEnemies(dt);this.updateProjectiles(dt);this.updateEnemyProjectiles(dt);this.updatePickups(dt);this.updateHazards(dt);this.updateResonances(dt);this.updateSparkPool(realDt);this.updateFloaters(realDt);this.updateEffects(dt,realDt);this.checkEvents();if(this.player.regen)this.player.hp=Math.min(this.player.maxHp,this.player.hp+this.player.regen*dt)}
- updatePlayer(dt){
-  let dx=0,dz=0;
+  updatePlayer(dt){
+   const previousX=this.player.x,previousZ=this.player.z;let dx=0,dz=0;
   if(this.keys.has('w')||this.keys.has('arrowup'))dz-=1;
   if(this.keys.has('s')||this.keys.has('arrowdown'))dz+=1;
   if(this.keys.has('a')||this.keys.has('arrowleft'))dx-=1;
@@ -1537,7 +1561,7 @@ class Game{
    }else{
      this.player.x+=dx/m*moveSpeed*dt;this.player.z+=dz/m*moveSpeed*dt;
   }
-  this.player.x=clamp(this.player.x,-43,43);this.player.z=clamp(this.player.z,-43,43);
+   const targetX=clamp(this.player.x,-LEVEL_METRICS.worldLimit,LEVEL_METRICS.worldLimit),targetZ=clamp(this.player.z,-LEVEL_METRICS.worldLimit,LEVEL_METRICS.worldLimit);this.player.x=previousX;this.player.z=previousZ;if(this.canStand(targetX,previousZ,this.player.r))this.player.x=targetX;if(this.canStand(this.player.x,targetZ,this.player.r))this.player.z=targetZ;
   this.player.group.position.x=this.player.x;this.player.group.position.z=this.player.z;
   if(Math.abs(dx)+Math.abs(dz)>.05){const rot=Math.atan2(dx,dz);this.player.group.rotation.y=this.dampAngle(this.player.group.rotation.y,rot,11.5,dt)}
   this.updateHunterAnimation(dt,moving,dx/m,dz/m);
@@ -1674,17 +1698,18 @@ class Game{
   this.projectiles=this.projectiles.filter(p=>{if(p.t>0)return true;this.disposeLeafRuntime(p.mesh);return false})
  }
  updateEnemies(dt){
-   for(const e of this.enemies){if(e.dead)continue;e.hitCd=Math.max(0,e.hitCd-dt);if(!e.boss){e.skill-=dt;e.aiClock-=dt;if(e.aiClock<=0){e.aiClock=rand(1.1,2.6);e.flankSide*=-1}}const dx=this.player.x-e.x,dz=this.player.z-e.z,d=Math.hypot(dx,dz)||.001,slow=e.slow>0?.55:1;if(e.slow>0)e.slow-=dt;
+   for(const e of this.enemies){if(e.dead)continue;const oldX=e.x,oldZ=e.z;e.hitCd=Math.max(0,e.hitCd-dt);if(!e.boss){e.skill-=dt;e.aiClock-=dt;if(e.aiClock<=0){e.aiClock=rand(1.1,2.6);e.flankSide*=-1}}const nav=this.navigationTarget(e),dx=nav.x-e.x,dz=nav.z-e.z,d=Math.hypot(dx,dz)||.001,pdx=this.player.x-e.x,pdz=this.player.z-e.z,pd=Math.hypot(pdx,pdz)||.001,slow=e.slow>0?.55:1;if(e.slow>0)e.slow-=dt;
    if(e.boss){this.updateBoss(e,dt,dx,dz,d);continue}
+    if(nav.navigating){e.aiState='NAVIGATE';e.x+=dx/d*e.speed*slow*dt;e.z+=dz/d*e.speed*slow*dt;if(!this.canStand(e.x,e.z,Math.min(e.r,.62))){const open=this.nearestOpenPoint(oldX,oldZ,Math.min(e.r,.62));e.x=open.x;e.z=open.z}e.group.position.set(e.x,0,e.z);e.group.rotation.y=Math.atan2(dx,dz);continue}
     if(e.kind==='skeleton'||e.kind==='cultist'){const keep=e.kind==='skeleton'?5.5:4.8,strafe=e.speed*.54*e.flankSide;if(d>keep+.7){e.aiState='APPROACH';e.x+=dx/d*e.speed*slow*dt;e.z+=dz/d*e.speed*slow*dt}else if(d<keep-.8){e.aiState='RETREAT';e.x-=dx/d*e.speed*.68*slow*dt;e.z-=dz/d*e.speed*.68*slow*dt}else{e.aiState='HARASS';e.x+=(-dz/d)*strafe*slow*dt;e.z+=(dx/d)*strafe*slow*dt}if(e.skill<=0&&d<8){e.skill=e.kind==='skeleton'?2.1:2.5;this.enemyShot(e,e.kind==='skeleton'?0xd8c797:0xa36ad1,e.kind==='skeleton'?7.6:6.5,e.dmg)}}
     else if(e.kind==='hound'){if(e.dashing>0){e.aiState='DASH';e.dashing-=dt;e.x+=Math.sin(e.dashA)*7.8*dt;e.z+=Math.cos(e.dashA)*7.8*dt}else{e.aiState='STALK';e.x+=dx/d*e.speed*slow*dt;e.z+=dz/d*e.speed*slow*dt;if(e.skill<=0&&d<7){e.skill=3.2;e.dashing=.52;e.dashA=Math.atan2(dx,dz);this.telegraph(this.player.x,this.player.z,.8,0xff8a61,.38)}}}
     else if(e.kind==='brute'){if(e.chargeT>0){e.aiState='CHARGE';e.chargeT-=dt;e.x+=Math.sin(e.chargeA)*6.9*slow*dt;e.z+=Math.cos(e.chargeA)*6.9*slow*dt}else{e.aiState=d<5?'WINDUP':'APPROACH';e.x+=dx/d*e.speed*slow*dt;e.z+=dz/d*e.speed*slow*dt;if(e.skill<=0&&d<6.2){e.skill=4.4;e.chargeT=.58;e.chargeA=Math.atan2(dx,dz);this.telegraph(this.player.x,this.player.z,1.05,0xe6a15e,.52)}}}
     else if(e.kind==='shield'){const guarded=this.enemies.find(o=>!o.dead&&!o.boss&&o.id!==e.id&&(o.kind==='skeleton'||o.kind==='cultist'||o.kind==='necromancer')&&Math.hypot(o.x-e.x,o.z-e.z)<6);if(guarded){e.aiState='GUARD';const gx=guarded.x+dx/d*1.4,gz=guarded.z+dz/d*1.4,gdx=gx-e.x,gdz=gz-e.z,gd=Math.hypot(gdx,gdz)||1;e.x+=gdx/gd*e.speed*slow*dt;e.z+=gdz/gd*e.speed*slow*dt}else{e.aiState='APPROACH';e.x+=dx/d*e.speed*slow*dt;e.z+=dz/d*e.speed*slow*dt}}
     else if(e.kind==='bomber'){e.aiState=e.fuse>0?'FUSE':'APPROACH';e.x+=dx/d*e.speed*slow*dt;e.z+=dz/d*e.speed*slow*dt;if(d<1.8&&e.fuse<=0){e.fuse=1.15;if(e.fuseMesh)gsap.to(e.fuseMesh.scale,{x:2.2,y:2.2,z:2.2,duration:.25,yoyo:true,repeat:3})}if(e.fuse>0){e.fuse-=dt;if(e.fuse<=0){if(d<2.4)this.hurt(e.dmg);this.ring(e.x,e.z,2.4,0xff5d4d,.3);this.kill(e,true);continue}}}
-   else if(e.kind==='wraith'){e.x+=dx/d*e.speed*slow*dt;e.z+=dz/d*e.speed*slow*dt;if(e.skill<=0&&d>3&&d<8){e.skill=3.6;this.telegraph(this.player.x,this.player.z,.72,0x88d9df,.35);setTimeout(()=>{if(!e.dead&&this.phase===GamePhase.PLAY){e.x=this.player.x+rand(-1.2,1.2);e.z=this.player.z+rand(-1.2,1.2);e.group.position.set(e.x,0,e.z)}},340)}}
+   else if(e.kind==='wraith'){e.x+=dx/d*e.speed*slow*dt;e.z+=dz/d*e.speed*slow*dt;if(e.skill<=0&&d>3&&d<8){e.skill=3.6;this.telegraph(this.player.x,this.player.z,.72,0x88d9df,.35);setTimeout(()=>{if(!e.dead&&this.phase===GamePhase.PLAY){const open=this.nearestOpenPoint(this.player.x+rand(-1.2,1.2),this.player.z+rand(-1.2,1.2),e.r);e.x=open.x;e.z=open.z;e.group.position.set(e.x,0,e.z)}},340)}}
    else if(e.kind==='necromancer'){const keep=5.8;if(d>keep)e.x+=dx/d*e.speed*dt;else if(d<keep-1)e.x-=dx/d*e.speed*.5*dt;if(e.skill<=0){e.skill=4.8;for(let i=0;i<3;i++)this.createEnemy(pick(['ghoul','hound']),false,e.x+rand(-1,1),e.z+rand(-1,1));this.ring(e.x,e.z,1.7,0xa26adb,.34)}}
     else{e.aiState='APPROACH';e.x+=dx/d*e.speed*slow*dt;e.z+=dz/d*e.speed*slow*dt}
-   e.group.position.set(e.x,0,e.z);e.group.rotation.y=Math.atan2(dx,dz);if(e.elite&&e.affix==='吸血'&&d<2.1)e.hp=Math.min(e.maxHp,e.hp+2.2*dt);if(d<e.r+this.player.r+.05&&e.hitCd<=0){e.hitCd=.62;this.hurt(e.dmg)}
+   if(!this.canStand(e.x,e.z,Math.min(e.r,.62))){e.x=oldX;e.z=oldZ}e.group.position.set(e.x,0,e.z);e.group.rotation.y=Math.atan2(pdx,pdz);if(e.elite&&e.affix==='吸血'&&pd<2.1)e.hp=Math.min(e.maxHp,e.hp+2.2*dt);if(pd<e.r+this.player.r+.05&&e.hitCd<=0){e.hitCd=.62;this.hurt(e.dmg)}
   }
   this.enemies=this.enemies.filter(e=>{if(!e.dead)return true;this.disposeRuntimeObject(e.group);return false})
  }

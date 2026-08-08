@@ -38,6 +38,8 @@ def main() -> int:
             assert "tools/validate_v8_run_record.py" in paths
             assert "tools/review_v8_evidence.py" in paths
             assert "tools/check_code_volume.py" in paths
+            assert "docs/V8_3_WHITEBOX_MAP.md" in paths
+            assert manifest["version"] == "V8.3 playable whitebox map"
             assert names == paths | {"PACKAGE_MANIFEST.json"}
             assert archive.read("index.html")
             assert archive.read("assets/characters/qingyao/model_v1/qingyao_v1.glb")[:4] == b"glTF"
