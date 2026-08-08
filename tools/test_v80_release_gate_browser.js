@@ -15,6 +15,13 @@ async (page) => {
       card?.click();
     };
     const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+    const captureExportName = () => {
+      let name = '';
+      const originalClick = HTMLAnchorElement.prototype.click;
+      HTMLAnchorElement.prototype.click = function() { name = this.download; };
+      try { g.exportRunRecord(); } finally { HTMLAnchorElement.prototype.click = originalClick; }
+      return name;
+    };
 
     t.reset();
     check(g.phase === 'PLAY', 'reset did not enter PLAY');
@@ -82,6 +89,7 @@ async (page) => {
     check(g.realmState.breakthroughCount === 5, 'full run did not complete five realm breakthroughs');
     check(g.realmState.activeRealmRules.length === 5, 'full run did not retain five realm choices');
     check(g.runRecord.damageDealt > 0 && g.runRecord.damageTaken > 0, 'full run damage ledger is incomplete');
+    check(captureExportName() === `shuguang-wendao-run-${g.runRecord.serial}-boss_cleared.json`, 'complete-run export filename is wrong');
 
     g.closeModal('RUN_COMPLETE');
     check(g.phase === 'MENU', 'closing settlement did not return to menu');
@@ -99,6 +107,7 @@ async (page) => {
     check(g.runRecord.status === 'DEAD' && g.runRecord.result === 'PLAYER_DEAD', 'death run was not recorded');
     check(g.runRecord.damageTaken > 0 && g.runRecord.endedAt > 0, 'death damage ledger is incomplete');
     check(typeof g.exportRunRecord === 'function' && document.querySelector('#runExportDeath'), 'death export entry is missing');
+    check(captureExportName() === `shuguang-wendao-run-${g.runRecord.serial}-dead.json`, 'death export filename is wrong');
     g.start();
     check(g.phase === 'PLAY' && g.runRecord.status === 'RUNNING', 'restart after death did not reset the run');
     check(consoleErrors.length === 0, `browser console errors: ${consoleErrors.join(' | ')}`);
