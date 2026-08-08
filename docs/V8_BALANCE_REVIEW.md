@@ -41,4 +41,6 @@ python tools/validate_v8_run_record.py PATH\TO\shuguang-wendao-run-*.json --requ
 python tools/review_v8_evidence.py evidence\v8-balance --require-both --output evidence\v8-balance\review.json
 ```
 
+目录扫描只接收 `shuguang-wendao-run-*.json`，不会把上一次生成的 `review.json` 当成本局记录。
+
 只有同时存在至少一份 `BOSS_CLEARED` 和一份 `DEAD`，且所有记录字段通过校验时，才会输出 `READY_FOR_FIRST_BALANCE_REVIEW`。这一步仍然只是允许开始比较数据，不代表平衡完成。

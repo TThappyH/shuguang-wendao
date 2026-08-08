@@ -6,7 +6,7 @@ import json
 import tempfile
 from pathlib import Path
 
-from review_v8_evidence import review
+from review_v8_evidence import record_paths, review
 
 
 def base_record(status: str, result: str, defeated: int, breakthroughs: int, damage_taken: float) -> dict:
@@ -44,10 +44,12 @@ def base_record(status: str, result: str, defeated: int, breakthroughs: int, dam
 def main() -> int:
     with tempfile.TemporaryDirectory(prefix="shuguang-v8-evidence-") as temp:
         root = Path(temp)
-        complete = root / "complete.json"
-        death = root / "death.json"
+        complete = root / "shuguang-wendao-run-1-boss_cleared.json"
+        death = root / "shuguang-wendao-run-2-dead.json"
         complete.write_text(json.dumps(base_record("BOSS_CLEARED", "BOSS_CLEARED", 6, 5, 240)), encoding="utf-8")
         death.write_text(json.dumps(base_record("DEAD", "PLAYER_DEAD", 2, 0, 120)), encoding="utf-8")
+        (root / "review.json").write_text("{}", encoding="utf-8")
+        assert record_paths([root]) == sorted([complete, death])
         result = review([complete, death])
         assert result["passed"]
         assert result["decision"] == "READY_FOR_FIRST_BALANCE_REVIEW"

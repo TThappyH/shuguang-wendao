@@ -14,7 +14,7 @@ def record_paths(inputs: list[Path]) -> list[Path]:
     found: set[Path] = set()
     for item in inputs:
         if item.is_dir():
-            found.update(path for path in item.rglob("*.json") if path.is_file())
+            found.update(path for path in item.rglob("shuguang-wendao-run-*.json") if path.is_file())
         elif item.is_file():
             found.add(item)
     return sorted(found)
