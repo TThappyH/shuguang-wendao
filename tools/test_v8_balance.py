@@ -15,6 +15,7 @@ def complete_fixture() -> dict:
             "result": "BOSS_CLEARED",
             "elapsed": 900,
             "levelUps": 8,
+            "levelUpEvents": [{"level": i + 2, "openedAt": i * 90} for i in range(8)],
             "levelChoices": [{"id": "bolt"}],
             "realmChoices": [{"ruleId": str(i)} for i in range(5)],
             "bosses": [
@@ -33,6 +34,11 @@ def main() -> int:
     assert good["passed"] and good["status"] == "COMPLETE_RUN_EVIDENCE"
     assert good["balance_decision"] == "DATA_READY_FOR_HUMAN_REVIEW"
     assert good["metrics"]["bosses_defeated"] == 6
+    assert good["metrics"]["level_up_events"] == 8
+    insufficient = complete_fixture()
+    insufficient["runRecord"]["levelChoices"] = []
+    insufficient_result = analyze(insufficient)
+    assert insufficient_result["passed"] and insufficient_result["status"] == "PARTIAL_RUN_EVIDENCE"
     partial = complete_fixture()
     partial["runRecord"]["status"] = "DEAD"
     partial["runRecord"]["damageTaken"] = 0

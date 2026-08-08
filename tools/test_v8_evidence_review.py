@@ -22,6 +22,7 @@ def base_record(status: str, result: str, defeated: int, breakthroughs: int, dam
             "result": result,
             "elapsed": 900,
             "levelUps": 4,
+            "levelUpEvents": [{"level": i + 2, "openedAt": i * 120} for i in range(4)],
             "levelChoices": [{"id": "might"}],
             "realmChoices": [{"ruleId": str(i)} for i in range(breakthroughs)],
             "bosses": [

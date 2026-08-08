@@ -72,11 +72,16 @@ def analyze(payload: dict[str, Any]) -> dict[str, Any]:
     realm_choices = run.get("realmChoices") if isinstance(run.get("realmChoices"), list) else []
     active_rules = realm.get("activeRealmRules") if isinstance(realm.get("activeRealmRules"), list) else []
     status = run.get("status", "UNKNOWN")
+    level_ups = number(run.get("levelUps"))
     complete_evidence = (
         status == "BOSS_CLEARED"
         and len(defeated) == EXPECTED_BOSSES
         and number(realm.get("breakthroughCount")) == EXPECTED_BREAKTHROUGHS
         and len(realm_choices) >= EXPECTED_BREAKTHROUGHS
+        and elapsed > 0
+        and level_ups > 0
+        and len(level_up_events) >= level_ups
+        and len(level_choices) > 0
         and damage_dealt > 0
         and damage_taken > 0
     )
@@ -89,6 +94,8 @@ def analyze(payload: dict[str, Any]) -> dict[str, Any]:
         warnings.append("damageTaken 为 0；走位/受伤压力数据不足。")
     if not level_choices:
         warnings.append("没有升级选择记录；构筑成长数据不足。")
+    if level_ups > len(level_up_events):
+        warnings.append("levelUpEvents 少于 levelUps；升级事件账本不完整。")
     if elapsed <= 0:
         warnings.append("elapsed 为 0；时间曲线数据不足。")
 

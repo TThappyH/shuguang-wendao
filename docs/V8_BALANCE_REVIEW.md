@@ -15,7 +15,8 @@ python tools/validate_v8_run_record.py PATH\TO\shuguang-wendao-run-*.json --requ
 - 记录版本与字段完整。
 - 6 个 Boss 是否都有生成/击败时间。
 - 5 次境界突破与道途选择是否存在。
-- 升级选择、击杀、造成伤害、承受伤害是否存在。
+- 升级事件与实际升级选择、击杀、造成伤害、承受伤害是否存在。
+- 完整通关样本是否有有效用时与至少一次真实升级选择。
 - 是否达到 `DATA_READY_FOR_HUMAN_REVIEW`。
 
 ## 第一轮只记录，不立即改数值
