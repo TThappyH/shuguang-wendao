@@ -48,6 +48,15 @@ V8 不是把版本号改成 8，而是形成一条可完整跑通、可复盘、
 - 记录升级选择、道途组成、Boss 时间、伤害/受伤和结算结果
 - 先有数据，再调整数值；不以单次顺利运行宣称平衡完成
 
+### 自动化验收入口
+
+```powershell
+python tools/build_runtime_v6_7.py --check
+python tools/test_v80_release_gate.py
+```
+
+`test_v80_release_gate.py` 会通过真实 HTTP 入口冷启动页面，等待 Three.js / GLTFLoader / GSAP 与青曜 GLB 就绪，检查移动、攻击、暂停、宝录、升级、五次境界突破、六个 Boss、奖励弹层、完整结算以及浏览器 Console Errors。
+
 ## 推进顺序
 
 1. 固化 V6.8 境界/规则基线。
