@@ -8,12 +8,12 @@
 
 | 文件 | 用途 | 原始规格 | SHA256 |
 |---|---|---|---|
-| `qingyao_idle_v1.mp4` | Idle V1 绿幕视频 | H.264, 1280×720, 24fps, 约 6.04s | `c542926ea469a817561d67c88284fc7056bea90b773013de7da831b5b85dc302` |
-| `qingyao_idle_ref_a.png` | 待机参考帧 A | PNG, 1792×1008 | `d5f9aa0fe9d3d71daed782cf32c2f21e94ccfaacb1f3579bfda19b3766b23088` |
-| `qingyao_idle_ref_b.png` | 待机参考帧 B | PNG, 1792×1008 | `7c41acdf071db65e9049d1265c0a2b6f92048152a6eb2b04ff896abbcf4d0fb9` |
-| `qingyao_idle_ref_c.png` | 待机参考帧 C | PNG, 1792×1008 | `cd3f4336e008ecc9466d08b23cece048ecbc0e1d590f911ea6c7553db72c715d` |
+| `qingyao_idle_v1.mp4` | Idle V1 绿幕视频 | H.264, 1280×720, 24fps, 约 6.04s | `1707b3cf0fa35d939dcb32c3fd8b401d0c9a9b1ec25af5b82dd156c9aa8ef0fa` |
+| `qingyao_idle_ref_a.png` | 待机参考帧 A (final base) | PNG, 1792×1008 | `43c91dff1a45247da0844eaa416d66e430376f9f38393c5e88553e4ebb872d7a` |
+| `qingyao_idle_ref_b.png` | 待机参考帧 B | PNG, 1792×1008 | `dfd0028ce102b82fa1f966a680105b8015a5075c51c59f909d4528048a4e6957` |
+| `qingyao_idle_ref_c.png` | 待机参考帧 C | PNG, 1792×1008 | `a30b998a99488e18b676b65478c3f3d9dc7030dada243be4885249cced63c54e` |
 
-说明：上传的四张 PNG 中有两张内容完全相同（SHA256 相同），因此正式归档只保留 3 张唯一参考帧，避免仓库重复资产。
+说明：本包为最新生成的 Idle V1 绿幕素材（Grok Imagine 最终版本）。原始候选中有重复帧已去重，正式归档 3 张唯一高分辨率参考帧 + 1 个 6s 循环视频。
 
 ## 冻结口径
 
@@ -28,4 +28,15 @@
 
 ## Git 约束
 
-本资产分支独立于主线功能开发，不直接改 `main`，不自动合并。
+- 仅在 `art/qingyao-idle-v1` 分支更新
+- 禁止修改 `main`
+- 禁止自动合并
+- 不改游戏代码
+
+## 视频元数据
+
+- 1280×720
+- H.264
+- 24 fps
+- duration ≈ 6.041667 s
+- 无重新编码，原始二进制归档
