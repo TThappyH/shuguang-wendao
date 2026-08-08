@@ -45,6 +45,7 @@ async (page) => {
     g.addXP(1);
     check(g.phase === 'LEVEL', 'real XP threshold did not open level-up modal');
     check(g.runRecord.levelUps === 1, 'level-up was not recorded');
+    check(g.runRecord.levelUpEvents?.length === 1, 'level-up event ledger is missing');
     g.takeChoice({kind: 'passive', id: 'might'}, 1);
     check(g.phase === 'PLAY' && g.runRecord.levelChoices.length > 0, 'level choice did not return to play or record');
     g.hurt(8);

@@ -68,6 +68,7 @@ def analyze(payload: dict[str, Any]) -> dict[str, Any]:
     damage_taken = number(run.get("damageTaken"))
     kills = number(run.get("kills"))
     level_choices = run.get("levelChoices") if isinstance(run.get("levelChoices"), list) else []
+    level_up_events = run.get("levelUpEvents") if isinstance(run.get("levelUpEvents"), list) else []
     realm_choices = run.get("realmChoices") if isinstance(run.get("realmChoices"), list) else []
     active_rules = realm.get("activeRealmRules") if isinstance(realm.get("activeRealmRules"), list) else []
     status = run.get("status", "UNKNOWN")
@@ -107,6 +108,7 @@ def analyze(payload: dict[str, Any]) -> dict[str, Any]:
             "realm_choices": len(realm_choices),
             "active_rules": len(active_rules),
             "level_ups": run.get("levelUps", 0),
+            "level_up_events": len(level_up_events),
             "level_choices": len(level_choices),
             "kills": kills,
             "damage_dealt": damage_dealt,

@@ -24,6 +24,7 @@ python tools/validate_v8_run_record.py PATH\TO\shuguang-wendao-run-*.json --requ
 
 - 用时与每个 Boss 的战斗时长。
 - 升级选择与道途组成。
+- 升级事件数量与实际升级选择分开统计，避免把未选择的弹层事件算成构筑选择。
 - `damage_per_minute`。
 - `damage_taken_per_minute`。
 - `damage_per_kill`。
