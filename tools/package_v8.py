@@ -86,7 +86,7 @@ def make_manifest(records: list[dict[str, object]]) -> dict[str, object]:
     return {
         "schema": PACKAGE_SCHEMA,
         "product": "曙光问道",
-        "version": "V8 foundation",
+        "version": "V8.1 spirit vein encounters",
         "branch": git_value("branch", "--show-current"),
         "git_head": git_value("rev-parse", "HEAD"),
         "entry": "index.html",
@@ -146,7 +146,7 @@ def main() -> int:
         run_build_check()
     records = collect_records(package_files())
     manifest = make_manifest(records)
-    output = args.output or (ROOT / "releases" / f"v8-foundation-{manifest['git_head'][:12]}.zip")
+    output = args.output or (ROOT / "releases" / f"v8.1-spirit-vein-{manifest['git_head'][:12]}.zip")
     write_fixed_zip(output, records, manifest)
     print(json.dumps(verify_package(output), ensure_ascii=False))
     return 0

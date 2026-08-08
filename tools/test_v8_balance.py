@@ -23,6 +23,8 @@ def complete_fixture() -> dict:
                 for i in range(6)
             ],
             "bossRewardChoices": [{"bossIndex": i, "reward": f"reward-{i}", "rewardKey": f"key-{i}", "selectedAt": i * 100 + 20} for i in range(6)],
+            "spiritVeins": [{"id": 1, "status": "CAPTURED", "spawnedAt": 36, "resolvedAt": 46, "captureProgress": 1, "killsInZone": 7}],
+            "maxCombo": 18,
             "kills": 120,
             "damageDealt": 12000,
             "damageTaken": 300,

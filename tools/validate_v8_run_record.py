@@ -25,6 +25,8 @@ REQUIRED_RUN_FIELDS = {
     "realmChoices",
     "bosses",
     "bossRewardChoices",
+    "spiritVeins",
+    "maxCombo",
     "kills",
     "damageDealt",
     "damageTaken",
@@ -72,6 +74,8 @@ def analyze(payload: dict[str, Any]) -> dict[str, Any]:
     level_up_events = run.get("levelUpEvents") if isinstance(run.get("levelUpEvents"), list) else []
     realm_choices = run.get("realmChoices") if isinstance(run.get("realmChoices"), list) else []
     boss_reward_choices = run.get("bossRewardChoices") if isinstance(run.get("bossRewardChoices"), list) else []
+    spirit_veins = run.get("spiritVeins") if isinstance(run.get("spiritVeins"), list) else []
+    spirit_veins_captured = [v for v in spirit_veins if isinstance(v, dict) and v.get("status") == "CAPTURED"]
     active_rules = realm.get("activeRealmRules") if isinstance(realm.get("activeRealmRules"), list) else []
     status = run.get("status", "UNKNOWN")
     level_ups = number(run.get("levelUps"))
@@ -85,6 +89,8 @@ def analyze(payload: dict[str, Any]) -> dict[str, Any]:
         and len(level_up_events) >= level_ups
         and len(level_choices) > 0
         and len(boss_reward_choices) >= EXPECTED_BOSSES
+        and len(spirit_veins) > 0
+        and number(run.get("maxCombo")) > 0
         and damage_dealt > 0
         and damage_taken > 0
     )
@@ -101,6 +107,10 @@ def analyze(payload: dict[str, Any]) -> dict[str, Any]:
         warnings.append("levelUpEvents 少于 levelUps；升级事件账本不完整。")
     if status == "BOSS_CLEARED" and len(boss_reward_choices) < EXPECTED_BOSSES:
         warnings.append("Boss 奖励选择少于 6 次；首领机缘取舍数据不足。")
+    if not spirit_veins:
+        warnings.append("没有灵脉争夺记录；战场目标与路线选择数据不足。")
+    elif not spirit_veins_captured:
+        warnings.append("灵脉争夺均未完成；需要检查目标风险与收益是否失衡。")
     if elapsed <= 0:
         warnings.append("elapsed 为 0；时间曲线数据不足。")
 
@@ -117,6 +127,10 @@ def analyze(payload: dict[str, Any]) -> dict[str, Any]:
             "bosses_defeated": len(defeated),
             "boss_durations": boss_durations,
             "boss_reward_choices": len(boss_reward_choices),
+            "spirit_veins": len(spirit_veins),
+            "spirit_veins_captured": len(spirit_veins_captured),
+            "spirit_vein_capture_rate": round(len(spirit_veins_captured) / max(len(spirit_veins), 1), 3),
+            "max_combo": run.get("maxCombo", 0),
             "breakthroughs": realm.get("breakthroughCount", 0),
             "realm_choices": len(realm_choices),
             "active_rules": len(active_rules),
