@@ -65,7 +65,7 @@ python tools/package_v8.py
 python tools/test_v8_package.py
 ```
 
-默认产物为 `releases/v8-foundation-<git-head>.zip`。包内包含 `index.html`、已校验的 `runtime/v6.7`、旧版青曜 GLB、运行源码和 V8 审核文档；`PACKAGE_MANIFEST.json` 记录入口、分支、HEAD、文件大小与哈希。包仍需通过 HTTP 静态服务启动，并需要联网加载 CDN 上的 Three.js / GSAP。
+默认产物为 `releases/v8-foundation-<git-head>.zip`。包内包含 `index.html`、已校验的 `runtime/v6.7`、旧版青曜 GLB、运行源码、V8 审核文档以及运行记录校验/双样本复盘工具；`PACKAGE_MANIFEST.json` 记录入口、分支、HEAD、文件大小与哈希。包仍需通过 HTTP 静态服务启动，并需要联网加载 CDN 上的 Three.js / GSAP。
 
 ## 推进顺序
 
