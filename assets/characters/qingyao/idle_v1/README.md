@@ -9,11 +9,11 @@
 | 文件 | 用途 | 原始规格 | SHA256 |
 |---|---|---|---|
 | `qingyao_idle_v1.mp4` | Idle V1 绿幕视频 | H.264, 1280×720, 24fps, 约 6.04s | `1707b3cf0fa35d939dcb32c3fd8b401d0c9a9b1ec25af5b82dd156c9aa8ef0fa` |
-| `qingyao_idle_ref_a.png` | 待机参考帧 A (final base) | PNG, 1792×1008 | `43c91dff1a45247da0844eaa416d66e430376f9f38393c5e88553e4ebb872d7a` |
-| `qingyao_idle_ref_b.png` | 待机参考帧 B | PNG, 1792×1008 | `dfd0028ce102b82fa1f966a680105b8015a5075c51c59f909d4528048a4e6957` |
-| `qingyao_idle_ref_c.png` | 待机参考帧 C | PNG, 1792×1008 | `a30b998a99488e18b676b65478c3f3d9dc7030dada243be4885249cced63c54e` |
+| `qingyao_idle_ref_a.png` | 待机参考帧 A (final base) | PNG, 1792×1008 | `2a4e9017ea213ed2b24070ae938b383e887bfa819cb29a5e9db59d3f68463df1` |
+| `qingyao_idle_ref_b.png` | 待机参考帧 B | PNG, 1792×1008 | `2243621a578313470f76566d561a242c0f4fb72014fc6f029459812644036fbe` |
+| `qingyao_idle_ref_c.png` | 待机参考帧 C | PNG, 1792×1008 | `d2ba18691a0889f6c826c8761d31bb484384440a798b51b08892cb97a46d7205` |
 
-说明：本包为最新生成的 Idle V1 绿幕素材（Grok Imagine 最终版本）。原始候选中有重复帧已去重，正式归档 3 张唯一高分辨率参考帧 + 1 个 6s 循环视频。
+说明：最新 Grok Imagine 生成的 Idle V1 绿幕素材，3 张唯一高分辨率参考帧 + 1 个 6s 循环视频。无重复。
 
 ## 冻结口径
 
