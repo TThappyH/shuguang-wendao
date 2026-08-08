@@ -62,6 +62,7 @@ def package_files() -> list[str]:
         "runtime-source/v6.7.html",
         "docs/V8_RELEASE_GATE.md",
         "docs/V8_BALANCE_REVIEW.md",
+        "docs/V8_HUMAN_TEST.md",
         "assets/characters/qingyao/model_v1/qingyao_v1.glb",
     ]
     files.extend(runtime_files())

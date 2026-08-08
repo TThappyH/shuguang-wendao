@@ -1,0 +1,48 @@
+# V8 人工单局验收
+
+这一步由玩家实际游玩完成；自动化门禁不替代人工体验。
+
+## 1. 启动
+
+在仓库根目录运行：
+
+```powershell
+python -m http.server 8000
+```
+
+打开 `http://127.0.0.1:8000/`。
+
+## 2. 通关样本
+
+完成一局完整流程：
+
+- 移动、攻击和闪避都实际使用。
+- 至少做几次升级选择。
+- 打开一次乾坤宝录，再继续战斗。
+- 观察五次境界突破、六个 Boss 和奖励弹层。
+- 在最终结算页点击「导出本局记录」。
+
+把导出的 `shuguang-wendao-run-*-boss_cleared.json` 放入：
+
+```text
+E:\shuguang-wendao-v68\evidence\v8-balance
+```
+
+## 3. 死亡样本
+
+重新开始一局，按正常方式游玩到角色死亡，在死亡页点击「导出本局记录」，把 `*-dead.json` 也放入同一目录。
+
+## 4. 开始首轮平衡审查
+
+```powershell
+python tools/review_v8_evidence.py evidence\v8-balance --require-both --output evidence\v8-balance\review.json
+```
+
+输出 `READY_FOR_FIRST_BALANCE_REVIEW` 后，才开始比较：
+
+- 每个 Boss 的战斗用时
+- 升级与道途选择
+- 每分钟造成伤害 / 承受伤害
+- 击杀效率与死亡发生位置
+
+先记录，再调敌人血量、接触伤害、生成节奏或 Boss 冷却。
