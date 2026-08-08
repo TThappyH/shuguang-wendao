@@ -13,6 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 BASE_COMMANDS = [
+    ("code-volume", ["tools/check_code_volume.py"]),
     ("runtime-build", ["tools/build_runtime_v6_7.py", "--check"]),
     ("v68-realm", ["tools/test_v68_realm.py"]),
     ("v70-weapon", ["tools/test_v70_weapon.py"]),
@@ -21,6 +22,7 @@ BASE_COMMANDS = [
     ("v73-run-closure", ["tools/test_v73_run_closure.py"]),
     ("v80-release-gate", ["tools/test_v80_release_gate.py"]),
     ("v81-spirit-vein", ["tools/test_v81_spirit_vein.py"]),
+    ("v82-five-region", ["tools/test_v82_regions.py"]),
     ("v8-resonance-paths", ["tools/test_v8_resonance_paths.py"]),
     ("v8-balance-contract", ["tools/test_v8_balance.py"]),
     ("v8-evidence-contract", ["tools/test_v8_evidence_review.py"]),
@@ -33,7 +35,7 @@ PROFILE_COMMANDS = [
 ]
 RETRYABLE_BROWSER_GATES = {
     "v68-realm", "v70-weapon", "v71-motion", "v72-boss", "v73-run-closure",
-    "v80-release-gate", "v81-spirit-vein", "v8-resonance-paths", "high-density-profile", "realm-rule-profile",
+    "v80-release-gate", "v81-spirit-vein", "v82-five-region", "v8-resonance-paths", "high-density-profile", "realm-rule-profile",
 }
 
 

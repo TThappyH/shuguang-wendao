@@ -36,6 +36,8 @@ def base_record(status: str, result: str, defeated: int, breakthroughs: int, dam
             ],
             "bossRewardChoices": [{"bossIndex": i, "reward": f"reward-{i}", "rewardKey": f"key-{i}", "selectedAt": i * 100 + 20} for i in range(defeated)],
             "spiritVeins": [{"id": 1, "status": "CAPTURED", "spawnedAt": 36, "resolvedAt": 46, "captureProgress": 1, "killsInZone": 7}],
+            "regions": [{"id": id, "discovered": True, "enteredAt": i * 40} for i, id in enumerate(["ruins", "marsh", "ember"])],
+            "encounters": [{"id": 1, "region": "marsh", "status": "CLEARED", "startedAt": 80, "completedAt": 102, "spawned": 7, "defeated": 7}],
             "maxCombo": 16,
             "kills": 80,
             "damageDealt": 9000,

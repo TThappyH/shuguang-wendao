@@ -39,6 +39,10 @@ V8 不是把版本号改成 8，而是形成一条可完整跑通、可复盘、
 - 灵脉阵眼会周期显化，离开阵眼时进度衰减，阵中击杀会加速共鸣
 - 灵脉成功与失败均写入运行记录；成功后提供有限时长的剑势窗口
 - 连斩系统必须在超时后清零，并记录本局最高连斩
+- 五个区域必须能通过真实玩家坐标稳定识别，区域切换写入单局记录
+- 遭遇导演必须按休整、预告、分批入场、清场闭环运行，不允许整批瞬间生成
+- 远程、重甲和蛮兽敌人的战术状态必须产生不同的空间压力
+- 生产源码字符数不得低于 200,000，且不计生成块、二进制资产、证据、压缩包和缓存
 
 ### 3. 视觉与角色
 
@@ -58,7 +62,7 @@ V8 不是把版本号改成 8，而是形成一条可完整跑通、可复盘、
 python tools/test_v8_all.py --output evidence\v8-release-gate.json
 ```
 
-`test_v8_all.py` 会依次运行构建、V6.8～V7.3 回归、V8 单局门禁、V8.1 灵脉争夺、六大道途 HUD/宝录门禁、复盘契约和发布包契约。需要额外性能采样时运行 `python tools/test_v8_all.py --with-profiles`。人工测试步骤见 [`docs/V8_HUMAN_TEST.md`](V8_HUMAN_TEST.md)，在通关或死亡结算页点击“导出本局记录”即可得到 JSON 复盘文件。
+`test_v8_all.py` 会依次运行代码量、构建、V6.8～V7.3 回归、V8 单局门禁、V8.1 灵脉争夺、V8.2 五域/遭遇导演、六大道途 HUD/宝录、复盘契约和发布包契约。需要额外性能采样时运行 `python tools/test_v8_all.py --with-profiles`。人工测试步骤见 [`docs/V8_HUMAN_TEST.md`](V8_HUMAN_TEST.md)，在通关或死亡结算页点击“导出本局记录”即可得到 JSON 复盘文件。
 
 ### 本地发布包
 
@@ -69,7 +73,7 @@ python tools/package_v8.py
 python tools/test_v8_package.py
 ```
 
-默认产物为 `releases/v8-foundation-<git-head>.zip`。包内包含 `index.html`、已校验的 `runtime/v6.7`、旧版青曜 GLB、运行源码、V8 审核文档以及运行记录校验/双样本复盘工具；`PACKAGE_MANIFEST.json` 记录入口、分支、HEAD、文件大小与哈希。包仍需通过 HTTP 静态服务启动，并需要联网加载 CDN 上的 Three.js / GSAP。
+默认产物为 `releases/v8.2-five-region-<git-head>.zip`。包内包含 `index.html`、已校验的 `runtime/v6.7`、旧版青曜 GLB、运行源码、V8 审核文档、代码量门禁以及运行记录校验/双样本复盘工具；`PACKAGE_MANIFEST.json` 记录入口、分支、HEAD、文件大小与哈希。包仍需通过 HTTP 静态服务启动，并需要联网加载 CDN 上的 Three.js / GSAP。
 
 ## 推进顺序
 

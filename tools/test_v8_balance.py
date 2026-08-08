@@ -24,6 +24,8 @@ def complete_fixture() -> dict:
             ],
             "bossRewardChoices": [{"bossIndex": i, "reward": f"reward-{i}", "rewardKey": f"key-{i}", "selectedAt": i * 100 + 20} for i in range(6)],
             "spiritVeins": [{"id": 1, "status": "CAPTURED", "spawnedAt": 36, "resolvedAt": 46, "captureProgress": 1, "killsInZone": 7}],
+            "regions": [{"id": id, "discovered": True, "enteredAt": i * 40} for i, id in enumerate(["ruins", "bamboo", "sword"])],
+            "encounters": [{"id": 1, "region": "bamboo", "status": "CLEARED", "startedAt": 50, "completedAt": 72, "spawned": 7, "defeated": 7}],
             "maxCombo": 18,
             "kills": 120,
             "damageDealt": 12000,
@@ -39,6 +41,8 @@ def main() -> int:
     assert good["metrics"]["bosses_defeated"] == 6
     assert good["metrics"]["level_up_events"] == 8
     assert good["metrics"]["boss_reward_choices"] == 6
+    assert good["metrics"]["regions_discovered"] == 3
+    assert good["metrics"]["encounters_cleared"] == 1
     insufficient = complete_fixture()
     insufficient["runRecord"]["levelChoices"] = []
     insufficient_result = analyze(insufficient)

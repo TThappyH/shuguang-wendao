@@ -26,6 +26,8 @@ REQUIRED_RUN_FIELDS = {
     "bosses",
     "bossRewardChoices",
     "spiritVeins",
+    "regions",
+    "encounters",
     "maxCombo",
     "kills",
     "damageDealt",
@@ -76,6 +78,10 @@ def analyze(payload: dict[str, Any]) -> dict[str, Any]:
     boss_reward_choices = run.get("bossRewardChoices") if isinstance(run.get("bossRewardChoices"), list) else []
     spirit_veins = run.get("spiritVeins") if isinstance(run.get("spiritVeins"), list) else []
     spirit_veins_captured = [v for v in spirit_veins if isinstance(v, dict) and v.get("status") == "CAPTURED"]
+    regions = run.get("regions") if isinstance(run.get("regions"), list) else []
+    encounters = run.get("encounters") if isinstance(run.get("encounters"), list) else []
+    regions_discovered = {r.get("id") for r in regions if isinstance(r, dict) and r.get("discovered")}
+    encounters_cleared = [e for e in encounters if isinstance(e, dict) and e.get("status") == "CLEARED"]
     active_rules = realm.get("activeRealmRules") if isinstance(realm.get("activeRealmRules"), list) else []
     status = run.get("status", "UNKNOWN")
     level_ups = number(run.get("levelUps"))
@@ -90,6 +96,8 @@ def analyze(payload: dict[str, Any]) -> dict[str, Any]:
         and len(level_choices) > 0
         and len(boss_reward_choices) >= EXPECTED_BOSSES
         and len(spirit_veins) > 0
+        and len(regions_discovered) >= 3
+        and len(encounters_cleared) > 0
         and number(run.get("maxCombo")) > 0
         and damage_dealt > 0
         and damage_taken > 0
@@ -111,6 +119,12 @@ def analyze(payload: dict[str, Any]) -> dict[str, Any]:
         warnings.append("没有灵脉争夺记录；战场目标与路线选择数据不足。")
     elif not spirit_veins_captured:
         warnings.append("灵脉争夺均未完成；需要检查目标风险与收益是否失衡。")
+    if len(regions_discovered) < 3:
+        warnings.append("探索区域少于 3 个；五域路线选择数据不足。")
+    if not encounters:
+        warnings.append("没有遭遇导演记录；分批战斗压力数据不足。")
+    elif not encounters_cleared:
+        warnings.append("没有完成的区域遭遇；需要检查遭遇强度或记录闭环。")
     if elapsed <= 0:
         warnings.append("elapsed 为 0；时间曲线数据不足。")
 
@@ -130,6 +144,11 @@ def analyze(payload: dict[str, Any]) -> dict[str, Any]:
             "spirit_veins": len(spirit_veins),
             "spirit_veins_captured": len(spirit_veins_captured),
             "spirit_vein_capture_rate": round(len(spirit_veins_captured) / max(len(spirit_veins), 1), 3),
+            "regions_entered": len(regions),
+            "regions_discovered": len(regions_discovered),
+            "encounters": len(encounters),
+            "encounters_cleared": len(encounters_cleared),
+            "encounter_clear_rate": round(len(encounters_cleared) / max(len(encounters), 1), 3),
             "max_combo": run.get("maxCombo", 0),
             "breakthroughs": realm.get("breakthroughCount", 0),
             "realm_choices": len(realm_choices),

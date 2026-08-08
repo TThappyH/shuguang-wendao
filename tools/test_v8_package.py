@@ -37,6 +37,7 @@ def main() -> int:
             assert "assets/characters/qingyao/model_v1/qingyao_v1.glb" in paths
             assert "tools/validate_v8_run_record.py" in paths
             assert "tools/review_v8_evidence.py" in paths
+            assert "tools/check_code_volume.py" in paths
             assert names == paths | {"PACKAGE_MANIFEST.json"}
             assert archive.read("index.html")
             assert archive.read("assets/characters/qingyao/model_v1/qingyao_v1.glb")[:4] == b"glTF"

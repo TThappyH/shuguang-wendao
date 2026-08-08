@@ -63,8 +63,10 @@ def package_files() -> list[str]:
         "docs/V8_RELEASE_GATE.md",
         "docs/V8_BALANCE_REVIEW.md",
         "docs/V8_HUMAN_TEST.md",
+        "docs/V8_2_GITHUB_RESEARCH.md",
         "tools/validate_v8_run_record.py",
         "tools/review_v8_evidence.py",
+        "tools/check_code_volume.py",
         "assets/characters/qingyao/model_v1/qingyao_v1.glb",
     ]
     files.extend(runtime_files())
@@ -86,7 +88,7 @@ def make_manifest(records: list[dict[str, object]]) -> dict[str, object]:
     return {
         "schema": PACKAGE_SCHEMA,
         "product": "曙光问道",
-        "version": "V8.1 spirit vein encounters",
+        "version": "V8.2 five-region expedition",
         "branch": git_value("branch", "--show-current"),
         "git_head": git_value("rev-parse", "HEAD"),
         "entry": "index.html",
@@ -146,7 +148,7 @@ def main() -> int:
         run_build_check()
     records = collect_records(package_files())
     manifest = make_manifest(records)
-    output = args.output or (ROOT / "releases" / f"v8.1-spirit-vein-{manifest['git_head'][:12]}.zip")
+    output = args.output or (ROOT / "releases" / f"v8.2-five-region-{manifest['git_head'][:12]}.zip")
     write_fixed_zip(output, records, manifest)
     print(json.dumps(verify_package(output), ensure_ascii=False))
     return 0
