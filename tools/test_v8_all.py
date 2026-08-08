@@ -32,7 +32,7 @@ PROFILE_COMMANDS = [
 ]
 RETRYABLE_BROWSER_GATES = {
     "v68-realm", "v70-weapon", "v71-motion", "v72-boss", "v73-run-closure",
-    "v80-release-gate", "v8-resonance-paths",
+    "v80-release-gate", "v8-resonance-paths", "high-density-profile", "realm-rule-profile",
 }
 
 
