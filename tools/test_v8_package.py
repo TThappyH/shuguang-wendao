@@ -35,9 +35,12 @@ def main() -> int:
             assert "index.html" in paths
             assert "runtime/v6.7/manifest.json" in paths
             assert "assets/characters/qingyao/model_v1/qingyao_v1.glb" in paths
+            assert "tools/validate_v8_run_record.py" in paths
+            assert "tools/review_v8_evidence.py" in paths
             assert names == paths | {"PACKAGE_MANIFEST.json"}
             assert archive.read("index.html")
             assert archive.read("assets/characters/qingyao/model_v1/qingyao_v1.glb")[:4] == b"glTF"
+            assert b"DATA_READY_FOR_HUMAN_REVIEW" in archive.read("tools/validate_v8_run_record.py")
     print("PASS: V8 release package contents and readback")
     return 0
 

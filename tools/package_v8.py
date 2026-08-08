@@ -63,6 +63,8 @@ def package_files() -> list[str]:
         "docs/V8_RELEASE_GATE.md",
         "docs/V8_BALANCE_REVIEW.md",
         "docs/V8_HUMAN_TEST.md",
+        "tools/validate_v8_run_record.py",
+        "tools/review_v8_evidence.py",
         "assets/characters/qingyao/model_v1/qingyao_v1.glb",
     ]
     files.extend(runtime_files())
