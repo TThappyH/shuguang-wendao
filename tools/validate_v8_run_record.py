@@ -24,6 +24,7 @@ REQUIRED_RUN_FIELDS = {
     "levelChoices",
     "realmChoices",
     "bosses",
+    "bossRewardChoices",
     "kills",
     "damageDealt",
     "damageTaken",
@@ -70,6 +71,7 @@ def analyze(payload: dict[str, Any]) -> dict[str, Any]:
     level_choices = run.get("levelChoices") if isinstance(run.get("levelChoices"), list) else []
     level_up_events = run.get("levelUpEvents") if isinstance(run.get("levelUpEvents"), list) else []
     realm_choices = run.get("realmChoices") if isinstance(run.get("realmChoices"), list) else []
+    boss_reward_choices = run.get("bossRewardChoices") if isinstance(run.get("bossRewardChoices"), list) else []
     active_rules = realm.get("activeRealmRules") if isinstance(realm.get("activeRealmRules"), list) else []
     status = run.get("status", "UNKNOWN")
     level_ups = number(run.get("levelUps"))
@@ -82,6 +84,7 @@ def analyze(payload: dict[str, Any]) -> dict[str, Any]:
         and level_ups > 0
         and len(level_up_events) >= level_ups
         and len(level_choices) > 0
+        and len(boss_reward_choices) >= EXPECTED_BOSSES
         and damage_dealt > 0
         and damage_taken > 0
     )
@@ -96,6 +99,8 @@ def analyze(payload: dict[str, Any]) -> dict[str, Any]:
         warnings.append("没有升级选择记录；构筑成长数据不足。")
     if level_ups > len(level_up_events):
         warnings.append("levelUpEvents 少于 levelUps；升级事件账本不完整。")
+    if status == "BOSS_CLEARED" and len(boss_reward_choices) < EXPECTED_BOSSES:
+        warnings.append("Boss 奖励选择少于 6 次；首领机缘取舍数据不足。")
     if elapsed <= 0:
         warnings.append("elapsed 为 0；时间曲线数据不足。")
 
@@ -111,6 +116,7 @@ def analyze(payload: dict[str, Any]) -> dict[str, Any]:
             "bosses_recorded": len(bosses),
             "bosses_defeated": len(defeated),
             "boss_durations": boss_durations,
+            "boss_reward_choices": len(boss_reward_choices),
             "breakthroughs": realm.get("breakthroughCount", 0),
             "realm_choices": len(realm_choices),
             "active_rules": len(active_rules),

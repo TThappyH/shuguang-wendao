@@ -74,7 +74,9 @@ async (page) => {
       check(g.phase === 'BREAKTHROUGH', `boss ${bossIndex} did not open breakthrough`);
       chooseFirstBreakthrough();
       check(g.phase === 'CHEST' && g.modalState.active?.type === 'BOSS_REWARD', `boss ${bossIndex} reward modal missing`);
-      g.closeModal('BOSS_REWARD');
+      check(g.pendingChestOptions?.length === 2, `boss ${bossIndex} did not expose two reward choices`);
+      check(g.selectChestReward(0) === true, `boss ${bossIndex} reward choice was not selectable`);
+      check(g.confirmChestReward() === true, `boss ${bossIndex} reward choice was not confirmed`);
       check(g.phase === 'PLAY', `boss ${bossIndex} reward did not return to play`);
       realmSnapshots.push({bossIndex, realm: g.realmState.currentRealm, rules: g.realmState.activeRealmRules.length});
       g.updateEnemies(.016);
@@ -86,12 +88,15 @@ async (page) => {
     g.hitEnemy(finalEnemy, 10, 0xffffff, 'gate');
     g.kill(finalEnemy, true, 'gate');
     check(g.phase === 'CHEST' && g.modalState.active?.type === 'BOSS_REWARD', 'final boss reward modal missing');
-    g.closeModal('BOSS_REWARD');
+    check(g.pendingChestOptions?.length === 2, 'final boss did not expose two reward choices');
+    check(g.selectChestReward(0) === true, 'final boss reward choice was not selectable');
+    check(g.confirmChestReward() === true, 'final boss reward choice was not confirmed');
     check(g.phase === 'RUN_COMPLETE', 'final boss reward did not open complete-run settlement');
     check(document.querySelector('#runComplete')?.classList.contains('show'), 'complete-run settlement overlay is hidden');
     check(g.runRecord.status === 'BOSS_CLEARED', 'run record is not BOSS_CLEARED');
     check(g.runRecord.bosses.length === 6, 'run record does not contain six bosses');
     check(g.runRecord.bosses.every(b => b.defeatedAt !== null), 'not all six bosses have defeat timestamps');
+    check(g.runRecord.bossRewardChoices.length === 6, 'boss reward choices were not recorded');
     check(g.realmState.breakthroughCount === 5, 'full run did not complete five realm breakthroughs');
     check(g.realmState.activeRealmRules.length === 5, 'full run did not retain five realm choices');
     check(g.runRecord.damageDealt > 0 && g.runRecord.damageTaken > 0, 'full run damage ledger is incomplete');

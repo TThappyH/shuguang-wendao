@@ -58,7 +58,9 @@ async (page) => {
       s = state();
       check(s.realmState.currentIndex === bossIndex + 1, `boss ${bossIndex} advanced wrong realm`);
       check(s.phase === 'CHEST' && s.modal.active?.type === 'BOSS_REWARD', `boss ${bossIndex} reward did not queue after breakthrough`);
-      g.closeModal('BOSS_REWARD');
+      check(g.pendingChestOptions?.length === 2, `boss ${bossIndex} did not offer two reward choices`);
+      check(g.selectChestReward(0) === true, `boss ${bossIndex} reward choice was not selectable`);
+      check(g.confirmChestReward() === true, `boss ${bossIndex} reward choice was not confirmed`);
       check(state().phase === 'PLAY', `boss ${bossIndex} reward did not return to PLAY`);
     }
 

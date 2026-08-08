@@ -430,7 +430,16 @@ html,body{background:#a8cada;color:#304845;font-family:Inter,system-ui,-apple-sy
 .reveal-lore{max-width:500px;margin:7px auto 0;font:13px/1.75 "STKaiti","KaiTi",serif;color:#758078}
 .reveal-tags{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;margin-top:9px}.reveal-tags i{font-style:normal;font-size:8px;padding:3px 7px;border-radius:999px;border:1px solid color-mix(in srgb,var(--tier) 28%,transparent);color:var(--tier-ink)}
 .reveal-seal{position:absolute;right:22px;top:17px;width:44px;height:44px;display:grid;place-items:center;border:2px solid #b44d46;color:#b44d46;font:700 18px "STKaiti","KaiTi",serif;transform:rotate(8deg);opacity:.78}
-#chestOk{background:linear-gradient(#f0db9d,#d9b868)!important;color:#5f4926!important;border-color:#b89247!important;box-shadow:0 7px 18px rgba(111,80,35,.13)!important}
+ #chestOk{background:linear-gradient(#f0db9d,#d9b868)!important;color:#5f4926!important;border-color:#b89247!important;box-shadow:0 7px 18px rgba(111,80,35,.13)!important}
+ .chest-choice-caption{margin:13px 0 6px;color:#8b6b35;font:700 13px "STKaiti","KaiTi",serif;letter-spacing:.08em}
+ .chest-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:11px}
+ .chest-option{min-height:255px;padding:14px 12px 13px;border:1px solid color-mix(in srgb,var(--tier) 38%,transparent);border-radius:12px;background:linear-gradient(160deg,rgba(255,252,235,.92),var(--tier-paper));color:var(--tier-ink);display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:transform .16s,border-color .16s,box-shadow .16s,background .16s}
+ .chest-option:hover{transform:translateY(-3px);box-shadow:0 12px 22px color-mix(in srgb,var(--tier) 18%,transparent)}
+ .chest-option.selected{border-width:2px;border-color:var(--tier);box-shadow:0 0 0 3px color-mix(in srgb,var(--tier) 18%,transparent),0 14px 24px color-mix(in srgb,var(--tier) 18%,transparent);background:linear-gradient(160deg,#fffdf0,var(--tier-paper))}
+ .chest-option-art{width:72px;height:72px;margin:3px 0 2px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#fffced 0 35%,var(--tier-paper) 37% 61%,transparent 62%),conic-gradient(from 0deg,transparent,var(--tier),transparent,var(--tier),transparent)}
+ .chest-option-art svg{width:38px;height:38px;fill:none;stroke:var(--tier-ink);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+ .chest-option .reveal-tier{font-size:8px}.chest-option b{font:700 17px "STKaiti","KaiTi",serif}.chest-option small{font-size:8px;color:#71847a}.chest-option em{font-style:normal;font-size:10px;line-height:1.55;color:#355c54}.chest-option i{font-style:normal;font-size:8px;line-height:1.45;color:#8b6b35}
+ .chest-choice-hint{margin:11px 0 0;color:#7a887e;font-size:10px;letter-spacing:.08em}
 
 /* 升级牌：品阶语言替换“普通/史诗”的西幻感 */
 .card .rarity{font-weight:900}.card.common .rarity{color:#598c76}.card.rare .rarity{color:#4c82a4}.card.epic .rarity{color:#a47533}.card.legendary .rarity{color:#b94d49}
@@ -495,8 +504,8 @@ html,body{background:#a8cada;color:#304845;font-family:Inter,system-ui,-apple-sy
  .treasure-grid{grid-template-columns:repeat(3,minmax(56px,1fr))}
  .treasure-summary span:nth-child(4){display:none}
  .codex-foot{display:none}
- .treasure-reveal-modal{padding:20px 14px 22px!important}
- .reveal-ring{width:96px;height:96px}.reveal-ring svg{width:48px;height:48px}.reveal-name{font-size:25px!important}
+  .treasure-reveal-modal{padding:20px 14px 22px!important}
+  .reveal-ring{width:96px;height:96px}.reveal-ring svg{width:48px;height:48px}.reveal-name{font-size:25px!important}.chest-options{grid-template-columns:1fr}.chest-option{min-height:0;padding:11px}.chest-option-art{width:58px;height:58px}
 }
 
 </style>
@@ -831,10 +840,10 @@ class Game{
   this.qingyaoModel={status:'loading',path:'assets/characters/qingyao/model_v1/qingyao_v1.glb',object:null,error:''};this.mat=this.createMaterials();this.sharedMaterials=new Set(Object.values(this.mat));this.buildLights();this.buildWorld();this.player=this.createHunter();this.scene.add(this.player.group);this.loadQingyaoModel();this.bindUI();this.bindInput();this.bindTestHooks();this.updateWeaponBar();this.animateMenu();this.loop(performance.now());
  }
   createRealmState(){return {currentRealm:'qi',currentIndex:0,pendingBreakthrough:null,completedMilestones:[],selectedFoundations:[],activeRealmRules:[],activeRules:[],breakthroughCount:0,ruleData:{}}}
- createRunRecord(){return {serial:0,status:'IDLE',result:'',startedAt:0,endedAt:0,elapsed:0,levelUps:0,levelUpEvents:[],levelChoices:[],realmChoices:[],bosses:[],kills:0,damageDealt:0,damageTaken:0}}
+ createRunRecord(){return {serial:0,status:'IDLE',result:'',startedAt:0,endedAt:0,elapsed:0,levelUps:0,levelUpEvents:[],levelChoices:[],realmChoices:[],bosses:[],bossRewardChoices:[],kills:0,damageDealt:0,damageTaken:0}}
  createActiveHooks(){const h={};for(const name of RULE_HOOKS)h[name]=[];return h}
  resetRealmState(){this.realmState=this.createRealmState();this.activeHooks=this.createActiveHooks()}
-  resetModalState(){['breakthrough','levelup','chest','pause','death','runComplete'].forEach(id=>$(id)?.classList.remove('show'));this.modalState={active:null,queue:[],serial:0};this.pendingBossReward=false;this.pendingLevelUp=false}
+   resetModalState(){['breakthrough','levelup','chest','pause','death','runComplete'].forEach(id=>$(id)?.classList.remove('show'));this.modalState={active:null,queue:[],serial:0};this.pendingBossReward=false;this.pendingLevelUp=false;this.pendingChestOptions=null;this.pendingChestChoice=-1}
  currentRealm(){return REALMS[this.realmState.currentIndex]||REALMS[0]}
  nextRealm(){return REALMS[this.realmState.currentIndex+1]||null}
  realmData(id){return REALM_BY_ID[id]||REALMS[0]}
@@ -853,7 +862,7 @@ class Game{
  requestModal(type,payload={}){const priority=MODAL_PRIORITY[type]||0;const active=this.modalState.active;if(active&&active.type===type)return false;const item={type,payload,priority,serial:++this.modalState.serial};if(!active){this.openModal(item);return true}let i=this.modalState.queue.length;while(i>0&&this.modalState.queue[i-1].priority<priority)i--;this.modalState.queue.splice(i,0,item);return false}
   openModal(item){this.modalState.active=item;const type=item.type;if(type==='BREAKTHROUGH'){$('breakthrough').classList.add('show');this.phase=GamePhase.BREAKTHROUGH;this.renderBreakthrough()}else if(type==='LEVEL'){$('levelup').classList.add('show');this.phase=GamePhase.LEVEL;this.renderChoices()}else if(type==='CHEST'||type==='BOSS_REWARD'){$('chest').classList.add('show');this.phase=GamePhase.CHEST;this.renderChestReward(!!item.payload.bossChest)}else if(type==='RUN_COMPLETE'){$('runComplete').classList.add('show');this.phase=GamePhase.RUN_COMPLETE;this.renderRunSummary()}else if(type==='DEAD'){this.phase=GamePhase.DEAD;$('finalText').innerHTML=item.payload.text||'';$('death').classList.add('show')}}
  drainModalQueue(){if(this.modalState.active||!this.modalState.queue.length)return;this.openModal(this.modalState.queue.shift())}
-  closeModal(type){const active=this.modalState.active;if(!active||active.type!==type)return false;this.modalState.active=null;$(type==='BREAKTHROUGH'?'breakthrough':type==='LEVEL'?'levelup':type==='CHEST'||type==='BOSS_REWARD'?'chest':type==='RUN_COMPLETE'?'runComplete':'death')?.classList.remove('show');if(type==='BREAKTHROUGH')this.finishBreakthrough();if(type==='LEVEL')this.phase=GamePhase.PLAY;if(type==='CHEST'||type==='BOSS_REWARD'){if(this.modalState.queue.length)this.drainModalQueue();else if(type==='BOSS_REWARD'&&this.runRecord.status==='BOSS_CLEARED')this.requestModal('RUN_COMPLETE',{result:'BOSS_CLEARED'});else this.phase=GamePhase.PLAY}if(type==='RUN_COMPLETE'){this.phase=GamePhase.MENU;$('start').classList.add('show')}if(type==='DEAD')this.phase=GamePhase.DEAD;if(!this.modalState.active)this.drainModalQueue();return true}
+   closeModal(type){const active=this.modalState.active;if(!active||active.type!==type)return false;this.modalState.active=null;if(type==='BOSS_REWARD'){this.pendingChestOptions=null;this.pendingChestChoice=-1}$('chestOk').disabled=false;$('chestOk').textContent='收下';$(type==='BREAKTHROUGH'?'breakthrough':type==='LEVEL'?'levelup':type==='CHEST'||type==='BOSS_REWARD'?'chest':type==='RUN_COMPLETE'?'runComplete':'death')?.classList.remove('show');if(type==='BREAKTHROUGH')this.finishBreakthrough();if(type==='LEVEL')this.phase=GamePhase.PLAY;if(type==='CHEST'||type==='BOSS_REWARD'){if(this.modalState.queue.length)this.drainModalQueue();else if(type==='BOSS_REWARD'&&this.runRecord.status==='BOSS_CLEARED')this.requestModal('RUN_COMPLETE',{result:'BOSS_CLEARED'});else this.phase=GamePhase.PLAY}if(type==='RUN_COMPLETE'){this.phase=GamePhase.MENU;$('start').classList.add('show')}if(type==='DEAD')this.phase=GamePhase.DEAD;if(!this.modalState.active)this.drainModalQueue();return true}
  renderBreakthrough(){const pending=this.realmState.pendingBreakthrough;if(!pending)return;const from=this.realmData(pending.fromId),to=this.realmData(pending.toId);$('breakthroughRoute').innerHTML=`<b>${from.name}</b><i>↓</i><b>${to.name}</b>`;$('breakthroughSub').textContent=`${pending.bossName||to.bossGate} 已斩，选择你的「${to.theme}」道基。`;$('breakthroughCards').innerHTML='';for(const id of to.choices){if(this.hasRule(id))continue;const rule=RUN_RULES[id],el=document.createElement('div');el.className='card breakthrough-choice';el.innerHTML=`<span class="choice-kind">REALM RULE · ${to.name}</span><h3>${rule.name}</h3><div class="choice-rule">${rule.description}</div><div class="choice-tags">${rule.tags.map(t=>`<i>${t}</i>`).join('')}</div><div class="choice-lore">“${rule.lore}”</div>`;el.onclick=()=>this.selectBreakthrough(id);$('breakthroughCards').appendChild(el)} }
   selectBreakthrough(id){const pending=this.realmState.pendingBreakthrough,to=pending&&this.realmData(pending.toId);if(!pending||!to||!to.choices.includes(id)||this.hasRule(id))return false;this.realmState.selectedFoundations.push(id);this.runRecord.realmChoices.push({from:pending.fromId,to:pending.toId,ruleId:id});this.addRule(id);this.closeModal('BREAKTHROUGH');return true}
  finishBreakthrough(){const pending=this.realmState.pendingBreakthrough;if(!pending)return;this.realmState.currentRealm=pending.toId;this.realmState.currentIndex=this.realmData(pending.toId).index;this.realmState.completedMilestones.push(pending.bossIndex);this.realmState.pendingBreakthrough=null;this.realmState.breakthroughCount++;this.realmFeedback(this.currentRealm().name,0xd7af58);if(this.pendingBossReward){this.pendingBossReward=false;this.consumeBossChestPickup();this.requestModal('BOSS_REWARD',{bossChest:true})}else this.phase=GamePhase.PLAY}
@@ -1323,7 +1332,7 @@ class Game{
 
   bindUI(){
    document.querySelectorAll('.diff').forEach(b=>b.onclick=()=>{this.diff=b.dataset.d;document.querySelectorAll('.diff').forEach(x=>x.classList.toggle('sel',x===b))});
-   $('startBtn').onclick=()=>this.start();$('restartBtn').onclick=()=>this.start();$('restartPauseBtn').onclick=()=>this.start();$('pauseBtn').onclick=()=>this.togglePause();$('cameraBtn').onclick=()=>this.toggleCamera();$('treasureBtn').onclick=()=>this.toggleTreasureBook();$('treasureClose').onclick=()=>this.toggleTreasureBook(false);$('resumeBtn').onclick=()=>this.togglePause();$('chestOk').onclick=()=>this.closeModal(this.modalState.active?.type||'CHEST');$('runExport').onclick=()=>this.exportRunRecord();$('runExportDeath').onclick=()=>this.exportRunRecord();$('runCompleteOk').onclick=()=>this.closeModal('RUN_COMPLETE');
+   $('startBtn').onclick=()=>this.start();$('restartBtn').onclick=()=>this.start();$('restartPauseBtn').onclick=()=>this.start();$('pauseBtn').onclick=()=>this.togglePause();$('cameraBtn').onclick=()=>this.toggleCamera();$('treasureBtn').onclick=()=>this.toggleTreasureBook();$('treasureClose').onclick=()=>this.toggleTreasureBook(false);$('resumeBtn').onclick=()=>this.togglePause();$('chestOk').onclick=()=>this.confirmChestReward();$('runExport').onclick=()=>this.exportRunRecord();$('runExportDeath').onclick=()=>this.exportRunRecord();$('runCompleteOk').onclick=()=>this.closeModal('RUN_COMPLETE');
  }
  toggleCamera(){this.cameraMode=this.cameraMode==='survivor'?'wide':'survivor';this.banner(this.cameraMode==='survivor'?'标准俯视':'宽视野');this.fovPunch=0;$('cameraBtn').textContent=this.cameraMode==='survivor'?'▣':'⊞'}
  bindInput(){
@@ -1666,49 +1675,37 @@ class Game{
   openChest(bossChest=false){
    if(this.phase!==GamePhase.PLAY)return;this.requestModal(bossChest?'BOSS_REWARD':'CHEST',{bossChest});
   }
-  renderChestReward(bossChest=false){
-  let reward={name:'',tier:'玄阶',type:'机缘',school:'秘境',icon:'seal',desc:'',lore:'天地有隙，机缘自来。',tags:['机缘']};
-  const roll=Math.random();
-
-  if(bossChest||roll<.68){
-    const relic=this.randomRelic(bossChest),newOne=!this.hasRelic(relic.id),resHint=this.resonancePreviewForRelic(relic.id);
-    if(newOne){this.relics.push(relic.id);this.applyRelicEffect(relic.id);this.recomputeResonances(true);reward={...relic,resonanceHint:resHint}}
-    else{
-      this.player.damageMul*=1.065;
-      reward={name:'法宝炼真',tier:relic.tier,type:'本源炼化',school:relic.school,icon:relic.icon,desc:'重复法宝化归本源：本局总伤害 +6.5%。',lore:'器可重复，道不可重复。炼其形，留其意。',tags:['炼化','伤害','本源'],resonanceHint:'重复器物不会增加共鸣层数。'}
-    }
-  }else if(roll<.80){
-    const ids=Object.keys(this.player.weapons),id=pick(ids),w=this.player.weapons[id];
-    if(w.level<5){
-      this.upgradeWeapon(id);const evolved=this.isWeaponEvolved(w);reward={name:'器灵淬炼 · '+WEAPONS[id].name,tier:evolved?'天阶':'地阶',type:'灵器机缘',school:'器 · 淬炼',icon:'sword',
-       desc:'当前灵器提升至 '+(evolved?'本命进化 · '+WEAPONS[id].evo:'Lv.'+w.level)+'。',lore:'千锤不是为了更重，而是为了让器知道自己为何而生。',tags:['灵器','淬炼',evolved?'本命':'成长']};this.updateWeaponBar()
-    }else{
-      this.player.damageMul*=1.08;reward={name:'剑意灌体',tier:'地阶',type:'道意灌顶',school:'金 · 剑意',icon:'swordheart',desc:'灵器已达圆满，机缘转化为总伤害 +8%。',lore:'器已圆满，余下的锋芒便只能落在人身上。',tags:['伤害','灌顶']}
-    }
-  }else if(roll<.90){
-    const gain=14;this.player.maxHp+=gain;this.player.hp=Math.min(this.player.maxHp,this.player.hp+gain+24);
-    reward={name:'筑基丹',tier:'地阶',type:'上品灵丹',school:'丹 · 炼体',icon:'cauldron',desc:'气血上限 +14，并恢复生命。',lore:'丹纹三转，入口如火，落腹如春。',tags:['气血','灵丹','炼体']}
-  }else{
-    const gain=bossChest?48:30;this.souls+=gain;
-    reward={name:'上品灵石匣',tier:'玄阶',type:'修行资粮',school:'灵 · 财',icon:'orb',desc:'获得 '+gain+' 枚灵石。',lore:'修仙路远，灵石总是不嫌多。',tags:['灵石','资粮']}
+  makeChestReward(bossChest=false,excludedIds=new Set()){
+   let reward={name:'',tier:'玄阶',type:'机缘',school:'秘境',icon:'seal',desc:'',lore:'天地有隙，机缘自来。',tags:['机缘']},commit=()=>{},key='resource';
+   const roll=Math.random();
+   if(bossChest||roll<.68){
+    const relic=this.randomRelic(bossChest,excludedIds),newOne=!this.hasRelic(relic.id),resHint=this.resonancePreviewForRelic(relic.id);key='relic:'+relic.id;
+    if(newOne){reward={...relic,resonanceHint:resHint};commit=()=>{if(!this.hasRelic(relic.id)){this.relics.push(relic.id);this.applyRelicEffect(relic.id);this.recomputeResonances(true);this.updateRelics()}}}
+    else{reward={name:'法宝炼真',tier:relic.tier,type:'本源炼化',school:relic.school,icon:relic.icon,desc:'重复法宝化归本源：本局总伤害 +6.5%。',lore:'器可重复，道不可重复。炼其形，留其意。',tags:['炼化','伤害','本源'],resonanceHint:'重复器物不会增加共鸣层数。'};commit=()=>{this.player.damageMul*=1.065}}
+   }else if(roll<.80){
+    const ids=Object.keys(this.player.weapons),id=pick(ids),w=this.player.weapons[id]||{level:0},nextLevel=Math.min(5,w.level+1);key='weapon:'+id;
+    if(w.level<5){const evolved=nextLevel>=5;reward={name:'器灵淬炼 · '+WEAPONS[id].name,tier:evolved?'天阶':'地阶',type:'灵器机缘',school:'器 · 淬炼',icon:'sword',desc:'当前灵器提升至 '+(evolved?'本命进化 · '+WEAPONS[id].evo:'Lv.'+nextLevel)+'。',lore:'千锤不是为了更重，而是为了让器知道自己为何而生。',tags:['灵器','淬炼',evolved?'本命':'成长']};commit=()=>{this.upgradeWeapon(id);this.updateWeaponBar()}}
+    else{reward={name:'剑意灌体',tier:'地阶',type:'道意灌顶',school:'金 · 剑意',icon:'swordheart',desc:'灵器已达圆满，机缘转化为总伤害 +8%。',lore:'器已圆满，余下的锋芒便只能落在人身上。',tags:['伤害','灌顶']};commit=()=>{this.player.damageMul*=1.08}}
+   }else if(roll<.90){
+    const gain=14;reward={name:'筑基丹',tier:'地阶',type:'上品灵丹',school:'丹 · 炼体',icon:'cauldron',desc:'气血上限 +14，并恢复生命。',lore:'丹纹三转，入口如火，落腹如春。',tags:['气血','灵丹','炼体']};commit=()=>{this.player.maxHp+=gain;this.player.hp=Math.min(this.player.maxHp,this.player.hp+gain+24)}}
+   else{const gain=bossChest?48:30;reward={name:'上品灵石匣',tier:'玄阶',type:'修行资粮',school:'灵 · 财',icon:'orb',desc:'获得 '+gain+' 枚灵石。',lore:'修仙路远，灵石总是不嫌多。',tags:['灵石','资粮']};commit=()=>{this.souls+=gain}}
+   return {reward,commit,key}
   }
-
-  this.updateRelics();
-  const ti=TIER_INFO[reward.tier]||TIER_INFO['玄阶'],klass=tierClass(reward.tier);
-  $('chestContent').innerHTML=`<div class="treasure-reveal ${klass}" style="--tier:${ti.color};--tier-ink:${ti.ink};--tier-paper:${ti.paper}">
-    <div class="reveal-seal">${reward.tier.slice(0,1)}</div>
-    <div class="reveal-ring">${itemGlyph(reward.icon)}</div>
-    <div class="reveal-tier">${reward.tier}</div>
-    <h3 class="reveal-name">${reward.name}</h3>
-    <div class="reveal-meta">${reward.type}　·　${reward.school}</div>
-    <div class="reveal-effect">${reward.desc}</div>
-    <div class="reveal-lore">“${reward.lore}”</div>
-    <div class="reveal-tags">${(reward.tags||[]).map(t=>`<i>${t}</i>`).join('')}</div>
-    ${reward.resonanceHint?`<div class="reveal-resonance"><b>道韵联动</b><br>${reward.resonanceHint}</div>`:''}
-  </div>`;
-  gsap.from('.reveal-ring',{scale:.52,rotation:-16,opacity:0,duration:.48,ease:'back.out(1.8)'});
-  gsap.from('.treasure-reveal>*:not(.reveal-ring)',{y:10,opacity:0,duration:.32,stagger:.035,delay:.08,ease:'power2.out'});
-   this.ring(this.player.x,this.player.z,reward.tier==='仙阶'?3.2:2.2,reward.tier==='仙阶'?0xe96f61:reward.tier==='天阶'?0xe5bd59:0x75c8ae,.42)
+  renderChestReward(bossChest=false){
+   if(bossChest){
+    const first=this.makeChestReward(true),excluded=new Set(first.key.startsWith('relic:')?[first.key.slice(6)]:[]),second=this.makeChestReward(true,excluded);
+    this.pendingChestOptions=[first,second];this.pendingChestChoice=-1;this.renderChestOptions();return
+   }
+   this.pendingChestOptions=null;this.pendingChestChoice=-1;const picked=this.makeChestReward(false);picked.commit();this.renderChestReveal(picked.reward)
+  }
+  renderChestOptions(){
+   const options=this.pendingChestOptions||[];$('chestContent').innerHTML=`<div class="chest-choice-caption">首领遗泽：两件机缘，只取其一</div><div class="chest-options">${options.map((item,index)=>{const r=item.reward,ti=TIER_INFO[r.tier]||TIER_INFO['玄阶'];return `<button class="chest-option" data-index="${index}" style="--tier:${ti.color};--tier-ink:${ti.ink};--tier-paper:${ti.paper}"><span class="reveal-tier">${r.tier}</span><span class="chest-option-art">${itemGlyph(r.icon)}</span><b>${r.name}</b><small>${r.type} · ${r.school}</small><em>${r.desc}</em>${r.resonanceHint?`<i>${r.resonanceHint}</i>`:''}</button>`}).join('')}</div><div id="chestChoiceHint" class="chest-choice-hint">请选择一件机缘</div>`;
+   $('chestOk').disabled=true;$('chestOk').textContent='请选择机缘';document.querySelectorAll('.chest-option').forEach(el=>el.onclick=()=>this.selectChestReward(+el.dataset.index));gsap.from('.chest-option',{y:18,opacity:0,duration:.32,stagger:.07,ease:'power2.out'})
+  }
+  selectChestReward(index){if(!this.pendingChestOptions?.[index])return false;this.pendingChestChoice=index;document.querySelectorAll('.chest-option').forEach((el,i)=>el.classList.toggle('selected',i===index));$('chestChoiceHint').textContent='已选择：'+this.pendingChestOptions[index].reward.name;$('chestOk').disabled=false;$('chestOk').textContent='收下所选';return true}
+  confirmChestReward(){const active=this.modalState.active;if(!active)return false;if(active.type==='BOSS_REWARD'&&this.pendingChestOptions){const selected=this.pendingChestOptions[this.pendingChestChoice];if(!selected){this.toast('先选择一件首领机缘');return false}selected.commit();const boss=this.runRecord.bosses[this.runRecord.bosses.length-1];this.runRecord.bossRewardChoices.push({bossIndex:boss?.index??-1,reward:selected.reward.name,rewardKey:selected.key,selectedAt:this.elapsed});this.banner('✦ 收下 · '+selected.reward.name);this.closeModal('BOSS_REWARD');return true}return this.closeModal(active.type==='CHEST'?'CHEST':'BOSS_REWARD')}
+  renderChestReveal(reward){
+   const ti=TIER_INFO[reward.tier]||TIER_INFO['玄阶'],klass=tierClass(reward.tier);$('chestOk').disabled=false;$('chestOk').textContent='收下';$('chestContent').innerHTML=`<div class="treasure-reveal ${klass}" style="--tier:${ti.color};--tier-ink:${ti.ink};--tier-paper:${ti.paper}"><div class="reveal-seal">${reward.tier.slice(0,1)}</div><div class="reveal-ring">${itemGlyph(reward.icon)}</div><div class="reveal-tier">${reward.tier}</div><h3 class="reveal-name">${reward.name}</h3><div class="reveal-meta">${reward.type}　·　${reward.school}</div><div class="reveal-effect">${reward.desc}</div><div class="reveal-lore">“${reward.lore}”</div><div class="reveal-tags">${(reward.tags||[]).map(t=>`<i>${t}</i>`).join('')}</div>${reward.resonanceHint?`<div class="reveal-resonance"><b>道韵联动</b><br>${reward.resonanceHint}</div>`:''}</div>`;gsap.from('.reveal-ring',{scale:.52,rotation:-16,opacity:0,duration:.48,ease:'back.out(1.8)'});gsap.from('.treasure-reveal>*:not(.reveal-ring)',{y:10,opacity:0,duration:.32,stagger:.035,delay:.08,ease:'power2.out'});this.ring(this.player.x,this.player.z,reward.tier==='仙阶'?3.2:2.2,reward.tier==='仙阶'?0xe96f61:reward.tier==='天阶'?0xe5bd59:0x75c8ae,.42)
   }
   renderRunSummary(){const r=this.runRecord,card=(label,value)=>`<div style="padding:10px 12px;background:rgba(255,250,226,.72);border:1px solid rgba(65,88,83,.13);border-radius:8px"><small style="display:block;color:#71817e;font-size:10px">${label}</small><b style="display:block;margin-top:4px;color:#315b57;font-size:16px">${value}</b></div>`;$('runSummary').innerHTML=card('结算','完整通关')+card('用时',fmtTime(r.elapsed))+card('等级',this.player.level)+card('击杀',r.kills)+card('伤害',Math.round(r.damageDealt))+card('受伤',Math.round(r.damageTaken))+card('道途',this.realmState.activeRealmRules.length+' 条')+card('境界',this.realmState.breakthroughCount+' 次')+card('Boss',r.bosses.filter(b=>b.defeatedAt!==null).length+' / '+BOSSES.length)}
   exportRunRecord(){const snapshot={schema:'shuguang-wendao.run.v1',exportedAt:new Date().toISOString(),difficulty:this.diff,player:{level:this.player.level,hp:this.player.hp,maxHp:this.player.maxHp,signatureWeapon:this.player.signatureWeapon,weapons:this.player.weapons,passives:this.player.passives,relics:this.relics},realmState:this.realmState,runRecord:this.runRecord};const blob=new Blob([JSON.stringify(snapshot,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`shuguang-wendao-run-${this.runRecord.serial}-${this.runRecord.status.toLowerCase()}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);this.toast('本局记录已导出')}
@@ -1726,12 +1723,13 @@ class Game{
   if(id==='lotus'){const old=this.player.maxHp;this.player.maxHp*=1.12;this.player.hp+=this.player.maxHp-old;this.player.regen+=.8}
   if(id==='daoheart')this.player.growth*=1.20;
  }
- randomRelic(boss=false){
-  const available=RELICS.filter(r=>!this.relics.includes(r.id));if(!available.length)return pick(RELICS);
-  const weights=boss?{'玄阶':7,'地阶':22,'天阶':43,'仙阶':28}:{'玄阶':48,'地阶':31,'天阶':17,'仙阶':4};
-  let total=available.reduce((s,r)=>s+(weights[r.tier]||1),0),roll=Math.random()*total;
-  for(const r of available){roll-=weights[r.tier]||1;if(roll<=0)return r}return available[0]
- }
+  randomRelic(boss=false,excludedIds=new Set()){
+   const owned=RELICS.filter(r=>!this.relics.includes(r.id)),filtered=owned.filter(r=>!excludedIds.has(r.id)),available=filtered.length?filtered:owned;
+   if(!available.length)return pick(RELICS);
+   const weights=boss?{'玄阶':7,'地阶':22,'天阶':43,'仙阶':28}:{'玄阶':48,'地阶':31,'天阶':17,'仙阶':4};
+   let total=available.reduce((s,r)=>s+(weights[r.tier]||1),0),roll=Math.random()*total;
+   for(const r of available){roll-=weights[r.tier]||1;if(roll<=0)return r}return available[0]
+  }
  hasRelic(id){return this.relics.includes(id)}
 
  createResonanceState(){

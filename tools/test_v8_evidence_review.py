@@ -34,6 +34,7 @@ def base_record(status: str, result: str, defeated: int, breakthroughs: int, dam
                 }
                 for i in range(6)
             ],
+            "bossRewardChoices": [{"bossIndex": i, "reward": f"reward-{i}", "rewardKey": f"key-{i}", "selectedAt": i * 100 + 20} for i in range(defeated)],
             "kills": 80,
             "damageDealt": 9000,
             "damageTaken": damage_taken,

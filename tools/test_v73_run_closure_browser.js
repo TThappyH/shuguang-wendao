@@ -28,7 +28,9 @@ async (page) => {
     check(g.runRecord.status === 'BOSS_CLEARED', 'final boss did not close the run record');
     check(g.modalState.active?.type === 'BOSS_REWARD', 'final boss reward modal did not open');
 
-    g.closeModal('BOSS_REWARD');
+    check(g.pendingChestOptions?.length === 2, 'final boss reward choices are missing');
+    check(g.selectChestReward(0) === true, 'final boss reward was not selectable');
+    check(g.confirmChestReward() === true, 'final boss reward was not confirmed');
     check(g.phase === 'RUN_COMPLETE', 'run completion modal did not open after reward');
     check(document.querySelector('#runComplete')?.classList.contains('show'), 'run completion overlay is hidden');
     check(document.querySelector('#runSummary')?.textContent.includes('完整通关'), 'run summary did not render');
