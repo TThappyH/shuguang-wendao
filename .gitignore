@@ -2,3 +2,5 @@
 Thumbs.db
 *.log
 releases/v8-foundation-*.zip
+godot/.godot/
+godot/**/*.import

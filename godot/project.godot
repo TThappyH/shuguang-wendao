@@ -1,0 +1,47 @@
+; Engine configuration file.
+; Generated for the Shuguang Wendao Godot vertical slice.
+
+config_version=5
+
+[application]
+
+config/name="曙光问道 · 青曜五域"
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+boot_splash/bg_color=Color(0.035, 0.086, 0.094, 1)
+boot_splash/show_image=false
+
+[display]
+
+window/size/viewport_width=1600
+window/size/viewport_height=900
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
+window/handheld/orientation=1
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=false
+lights_and_shadows/directional_shadow/size=4096
+environment/defaults/default_clear_color=Color(0.57, 0.72, 0.73, 1)
+
+[input]
+
+move_left={"deadzone":0.2,"events":[Object(InputEventKey,"physical_keycode":65),Object(InputEventKey,"physical_keycode":4194311)]}
+move_right={"deadzone":0.2,"events":[Object(InputEventKey,"physical_keycode":68),Object(InputEventKey,"physical_keycode":4194313)]}
+move_up={"deadzone":0.2,"events":[Object(InputEventKey,"physical_keycode":87),Object(InputEventKey,"physical_keycode":4194320)]}
+move_down={"deadzone":0.2,"events":[Object(InputEventKey,"physical_keycode":83),Object(InputEventKey,"physical_keycode":4194322)]}
+dash={"deadzone":0.2,"events":[Object(InputEventKey,"physical_keycode":32)]}
+restart={"deadzone":0.2,"events":[Object(InputEventKey,"physical_keycode":82)]}
+toggle_debug={"deadzone":0.2,"events":[Object(InputEventKey,"physical_keycode":4194331)]}
+
+[layer_names]
+
+3d_physics/layer_1="World"
+3d_physics/layer_2="Player"
+3d_physics/layer_3="Enemy"
+3d_physics/layer_4="Sword"
+
