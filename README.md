@@ -2,9 +2,9 @@
 
 一个正在迭代中的 **东方玄幻 / 修仙题材 Survivors-like 浏览器肉鸽**。
 
-当前版本：**V6.7 · 法宝共鸣**
+当前版本：**V8 Foundation · 单局闭环基线**
 
-当前开发分支：`dev/v6.7-treasure-resonance`
+当前开发分支：`dev/v8-foundation`
 
 ## 核心定位
 
@@ -23,6 +23,15 @@
 不走暗黑黑紫路线，也不依靠 Glow 掩盖造型问题。
 
 ## 当前版本内容
+
+V8 Foundation 在现有 V6.7 运行快照上补齐了可复盘的单局骨架：
+
+- 境界突破与规则选择：炼气 → 筑基 → 金丹 → 元婴 → 化神 → 炼虚
+- 灵器进化与本命法宝路线
+- 青曜外部 GLB 角色资产与战斗状态表现
+- 6 个 Boss 的三阶段推进与阶段记录
+- 单局升级、道途、Boss、伤害、受伤和结算记录
+- 通关 / 死亡后的 JSON 记录导出与本地发布包校验
 
 - 明亮东方幻想场景
 - 高位俯视 Survivors 视角
@@ -46,7 +55,7 @@
 python -m http.server 8000
 ```
 
-当前 `index.html` 会加载 `runtime/v6.7/` 下的压缩版本快照。游戏本体仍通过 CDN 加载 Three.js 与 GSAP，因此需要联网。
+当前 `index.html` 会加载 `runtime/v6.7/` 下的压缩版本快照；V8 Foundation 的新增逻辑已固化在该运行快照中。游戏本体仍通过 CDN 加载 Three.js 与 GSAP，因此需要联网。
 
 ## 版本路线
 
@@ -74,7 +83,7 @@ python -m http.server 8000
 
 > Issue → `dev/...` 开发分支 → 实现与检查 → Pull Request → 合并 `main` → `releases/` 保留版本快照
 
-当前开发任务是 Issue #1：V6.7 法宝共鸣。
+当前开发任务是 V8 Foundation：先完成单局闭环、记录导出与发布包门禁，再进行人工长流程验收和数值平衡。
 
 ## 开发原则
 

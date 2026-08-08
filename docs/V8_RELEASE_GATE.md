@@ -57,6 +57,17 @@ python tools/test_v80_release_gate.py
 
 `test_v80_release_gate.py` 会通过真实 HTTP 入口冷启动页面，等待 Three.js / GLTFLoader / GSAP 与青曜 GLB 就绪，检查移动、攻击、暂停、宝录、升级、五次境界突破、六个 Boss、奖励弹层、完整结算、记录导出入口以及浏览器 Console Errors。人工测试在通关或死亡结算页点击“导出本局记录”，即可得到 JSON 复盘文件。
 
+### 本地发布包
+
+V8 可玩快照使用固定清单打包，并在写入后逐项做 ZIP 读回与 SHA-256 校验：
+
+```powershell
+python tools/package_v8.py
+python tools/test_v8_package.py
+```
+
+默认产物为 `releases/v8-foundation-<git-head>.zip`。包内包含 `index.html`、已校验的 `runtime/v6.7`、旧版青曜 GLB、运行源码和 V8 审核文档；`PACKAGE_MANIFEST.json` 记录入口、分支、HEAD、文件大小与哈希。包仍需通过 HTTP 静态服务启动，并需要联网加载 CDN 上的 Three.js / GSAP。
+
 ## 推进顺序
 
 1. 固化 V6.8 境界/规则基线。
@@ -70,4 +81,4 @@ python tools/test_v80_release_gate.py
 
 - 完整单局长流程的人类验收记录
 - 六大道途与完整 Boss/秘境组合的数值平衡
-- V8 发布包与最终发布门禁
+- 最终发布门禁（发布包脚本与读回校验已补齐）
