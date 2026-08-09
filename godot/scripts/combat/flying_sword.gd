@@ -182,6 +182,7 @@ func _build_sword_visual() -> void:
 	if rodin_sword != null:
 		rodin_sword.name = "QingyaoFlyingSwordV1"
 		_blade_root.add_child(rodin_sword)
+		RodinAssetRegistry.configure_runtime_geometry(rodin_sword, MODEL_ASSET_SLOT)
 		return
 	_build_fallback_sword_visual()
 

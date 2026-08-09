@@ -30,6 +30,7 @@ func _load_model() -> void:
 	model_root.name = "QingyaoGLB"
 	add_child(model_root)
 	_collect_mesh_metrics(model_root)
+	RodinAssetRegistry.configure_runtime_geometry(model_root, MODEL_ASSET_SLOT)
 	_fit_to_gameplay_scale()
 	loaded = true
 
@@ -64,7 +65,6 @@ func _collect_mesh_metrics(root: Node) -> void:
 			source_vertices += vertices.size()
 			var indices: PackedInt32Array = arrays[Mesh.ARRAY_INDEX]
 			source_triangles += indices.size() / 3 if not indices.is_empty() else vertices.size() / 3
-		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 
 func _fit_to_gameplay_scale() -> void:
 	var bounds := _calculate_bounds(model_root)

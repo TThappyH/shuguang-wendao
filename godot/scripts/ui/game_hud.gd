@@ -95,6 +95,7 @@ func refresh() -> void:
 	_refresh_debug()
 
 func snapshot() -> Dictionary:
+	var performance: Dictionary = game.performance_monitor.snapshot() if is_instance_valid(game.performance_monitor) else {}
 	return {
 		"structured_controls": true,
 		"health_panel": is_instance_valid(_health_panel),
@@ -102,7 +103,8 @@ func snapshot() -> Dictionary:
 		"sword_cards": _sword_cards.size(),
 		"minimum_combat_font_size": 12,
 		"event_driven": true,
-		"debug_visible": debug_visible
+		"debug_visible": debug_visible,
+		"performance": performance
 	}
 
 func _process(delta: float) -> void:

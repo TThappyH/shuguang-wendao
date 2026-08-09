@@ -85,10 +85,7 @@ func _build_external_map() -> bool:
 		return false
 	map_root.name = "QingyunIslandExternalMap"
 	map_root.position.y = EXTERNAL_MAP_Y_OFFSET
-	for child: Node in map_root.find_children("*", "MeshInstance3D", true, false):
-		var mesh_instance := child as MeshInstance3D
-		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-		mesh_instance.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_DISABLED
+	RodinAssetRegistry.configure_runtime_geometry(map_root, MAP_ASSET_SLOT)
 	_world_root.add_child(map_root)
 	external_map_loaded = true
 	return true

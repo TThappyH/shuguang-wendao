@@ -29,7 +29,7 @@ window/handheld/orientation=1
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/default_filters/use_nearest_mipmap_filter=false
-lights_and_shadows/directional_shadow/size=4096
+lights_and_shadows/directional_shadow/size=2048
 environment/defaults/default_clear_color=Color(0.57, 0.72, 0.73, 1)
 
 [input]

@@ -1,0 +1,9 @@
+{
+  "source": "E:\\shuguang-wendao-v68\\godot\\assets\\maps\\qingyun_island\\qingyun_island_v1.glb",
+  "output": "E:\\shuguang-wendao-v68\\godot\\assets\\maps\\qingyun_island\\qingyun_island_gameplay_lod.glb",
+  "target_triangles": 250000,
+  "source_triangles": 999992,
+  "output_triangles": 250000,
+  "ratio": 0.25000200001600015,
+  "mesh_count": 1
+}

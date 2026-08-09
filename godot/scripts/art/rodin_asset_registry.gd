@@ -51,6 +51,24 @@ static func instantiate(slot_id: StringName) -> Node3D:
 static func budget_for(slot_id: StringName) -> Dictionary:
 	return slot(slot_id).get("budget", {}) as Dictionary
 
+static func runtime_policy(slot_id: StringName) -> Dictionary:
+	return slot(slot_id).get("runtime", {}) as Dictionary
+
+static func configure_runtime_geometry(root: Node, slot_id: StringName) -> int:
+	var policy := runtime_policy(slot_id)
+	var cast_shadow := bool(policy.get("cast_shadow", false))
+	var mesh_count := 0
+	for child: Node in root.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := child as MeshInstance3D
+		mesh_instance.cast_shadow = (
+			GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+			if cast_shadow
+			else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		)
+		mesh_instance.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
+		mesh_count += 1
+	return mesh_count
+
 static func geometry_report(slot_id: StringName) -> Dictionary:
 	var report := {
 		"slot": String(slot_id),

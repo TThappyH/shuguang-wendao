@@ -4,6 +4,7 @@ const SwordManagerScript := preload("res://scripts/combat/sword_manager.gd")
 const DirectorScript := preload("res://scripts/enemies/encounter_director.gd")
 const ProgressionScript := preload("res://scripts/progression/run_progression.gd")
 const FeedbackScript := preload("res://scripts/effects/combat_feedback.gd")
+const PerformanceMonitorScript := preload("res://scripts/core/runtime_performance_monitor.gd")
 
 @onready var level: LevelBuilder = $World
 @onready var player: PlayerController = $Actors/Player
@@ -14,6 +15,7 @@ var sword_manager: SwordManager
 var director: EncounterDirector
 var progression: RunProgression
 var feedback: CombatFeedback
+var performance_monitor: RuntimePerformanceMonitor
 var debug_mode := false
 var run_over := false
 var run_seed := 9271
@@ -43,6 +45,10 @@ func _create_runtime_systems() -> void:
 	progression.name = "RunProgression"
 	add_child(progression)
 	progression.configure(player, sword_manager, director, run_seed)
+	performance_monitor = PerformanceMonitorScript.new()
+	performance_monitor.name = "RuntimePerformanceMonitor"
+	add_child(performance_monitor)
+	performance_monitor.sustained_low_fps.connect(_on_sustained_low_fps)
 
 func _connect_runtime_signals() -> void:
 	director.enemy_count_changed.connect(_on_runtime_changed)
@@ -74,7 +80,9 @@ func _process(_delta: float) -> void:
 			director.set_debug_count(3)
 		if Input.is_key_pressed(KEY_8):
 			director.set_debug_count(8)
-	hud.refresh()
+
+func _on_sustained_low_fps(sample: Dictionary) -> void:
+	push_warning("SUSTAINED_LOW_FPS=" + JSON.stringify(sample))
 
 func _reset_runtime() -> void:
 	get_tree().paused = false
@@ -153,5 +161,6 @@ func debug_snapshot() -> Dictionary:
 		"camera": camera_rig.snapshot(),
 		"hud": hud.snapshot(),
 		"feedback_pool_size": feedback._pool.size(),
+		"performance": performance_monitor.snapshot(),
 		"rodin_assets": RodinAssetRegistry.audit_slots()
 	}
