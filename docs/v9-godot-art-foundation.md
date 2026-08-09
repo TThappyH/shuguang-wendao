@@ -4,6 +4,8 @@
 
 ## 这轮完成的内容
 
+- V9.1 使用 `cd5cef59-84a0-4bd2-a373-7ab78901bbc5.zip` 内的完整 PBR 浮岛场景替换程序化五域视觉地图。
+- 新地图保留角色、三飞剑、敌人、HUD 和区域运行数据；移动边界改为适配浮岛外轮廓的圆形边界。
 - 将 V8.3 五域白模的房间、连接通道、阻挡体和区域坐标迁移到 Godot 4.7.1。
 - 使用已通过视觉 Gate 的青曜 GLB，不再生成积木人替代角色。
 - 以真实 `MeshInstance3D`、`StaticBody3D`、`CharacterBody3D`、`WorldEnvironment` 建立场景。
@@ -42,7 +44,9 @@
 & 'E:\tools\Godot-4.7.1\Godot_v4.7.1-stable_win64_console.exe' --headless --path 'E:\shuguang-wendao-v68\godot' --quit-after 6
 ```
 
-本机已核验：Godot 4.7.1 官方便携版 SHA-256 为 `c7a289051eaefb460b0106b60e9cd5bee0ef55fd102dcb2bed1eb356cf3d90a1`；青曜 GLB SHA-256 为 `905D96A72101D7EF24B7E2D67C327D8C5A4825B5BE3B9F6F26899E99161D5CC0`。
+本机已核验：Godot 4.7.1 官方便携版 SHA-256 为 `c7a289051eaefb460b0106b60e9cd5bee0ef55fd102dcb2bed1eb356cf3d90a1`；当前青曜 GLB SHA-256 为 `CAD02281087C3C4AE3210A7CF42E3D83F7D04CCB6A7702A6A8C12BE6F3932D2C`。
+
+外部地图包 SHA-256：`958AF1F348596ECEE11ED04337BD97DFD84803A0EC4A41408F12AB287C16931D`。Godot 地图 GLB 为 1 个 PBR 网格、896,791 个导入顶点、999,992 个三角面。
 
 ## 暂留项
 

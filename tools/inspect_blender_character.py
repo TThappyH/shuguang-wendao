@@ -45,6 +45,15 @@ def inspect(path: Path) -> dict:
         dimensions = [maximum[index] - minimum[index] for index in range(3)]
     else:
         minimum = maximum = dimensions = [0.0, 0.0, 0.0]
+    vertex_heights = sorted(
+        (obj.matrix_world @ vertex.co).z
+        for obj in meshes
+        for vertex in obj.data.vertices
+    )
+    height_quantiles = {
+        str(percentile): vertex_heights[min(len(vertex_heights) - 1, int((len(vertex_heights) - 1) * percentile / 100.0))]
+        for percentile in (10, 25, 50, 75, 90, 95, 99)
+    } if vertex_heights else {}
     return {
         "path": str(path),
         "objects": len(bpy.context.scene.objects),
@@ -67,6 +76,7 @@ def inspect(path: Path) -> dict:
         "bounds_min": minimum,
         "bounds_max": maximum,
         "dimensions": dimensions,
+        "height_quantiles": height_quantiles,
         "object_names": [obj.name for obj in bpy.context.scene.objects],
         "uv_layers": {obj.name: [layer.name for layer in obj.data.uv_layers] for obj in meshes},
         "color_attributes": {obj.name: [layer.name for layer in obj.data.color_attributes] for obj in meshes},

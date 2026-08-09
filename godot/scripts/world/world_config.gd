@@ -3,6 +3,8 @@ extends RefCounted
 
 const PLAYER_RADIUS := 0.42
 const WORLD_LIMIT := 43.0
+const EXTERNAL_MAP_ENABLED := true
+const EXTERNAL_MAP_RADIUS := 36.5
 
 const REGIONS := {
 	"ruins": {"name": "晨曦遗庭", "short": "庭", "center": Vector2(0, 0), "size": Vector2(22, 22), "floor": Color("b8c9be"), "accent": Color("66cbbc")},
@@ -55,6 +57,8 @@ static func region_for_position(world_position: Vector3) -> String:
 
 static func is_walkable(world_position: Vector3, radius: float = PLAYER_RADIUS) -> bool:
 	var point := Vector2(world_position.x, world_position.z)
+	if EXTERNAL_MAP_ENABLED:
+		return point.length() <= EXTERNAL_MAP_RADIUS - radius
 	for id: String in REGIONS:
 		var region: Dictionary = REGIONS[id]
 		if _point_in_rect(point, region.center, region.size, radius):
@@ -65,6 +69,8 @@ static func is_walkable(world_position: Vector3, radius: float = PLAYER_RADIUS) 
 	return false
 
 static func navigation_target(from_position: Vector3, to_position: Vector3) -> Vector3:
+	if EXTERNAL_MAP_ENABLED:
+		return to_position
 	var from_region := region_for_position(from_position)
 	var to_region := region_for_position(to_position)
 	if from_region == to_region:
@@ -89,4 +95,3 @@ static func _hits_blocker(point: Vector2, radius: float) -> bool:
 		if _point_in_rect(point, blocker.p, blocker.s + Vector2.ONE * radius * 2.0, 0.0):
 			return true
 	return false
-

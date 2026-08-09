@@ -3,6 +3,8 @@ extends Node3D
 
 const WATER_SHADER := preload("res://shaders/spirit_water.gdshader")
 const SIGIL_SHADER := preload("res://shaders/spirit_sigil.gdshader")
+const EXTERNAL_MAP_PATH := "res://assets/maps/qingyun_island/qingyun_island_v1.glb"
+const EXTERNAL_MAP_Y_OFFSET := -44.35
 
 var _world_root: Node3D
 var _blockers: Array[StaticBody3D] = []
@@ -11,27 +13,52 @@ var _region_markers: Dictionary = {}
 func _ready() -> void:
 	_build_environment()
 	_world_root = Node3D.new()
-	_world_root.name = "FiveRealmArt"
+	_world_root.name = "QingyunIslandWorld"
 	add_child(_world_root)
-	_build_backdrop()
-	_build_floor_graph()
-	_build_central_courtyard()
-	_build_bamboo_realm()
-	_build_marsh_realm()
-	_build_sword_realm()
-	_build_ember_realm()
-	_build_gate_arches()
+	if not _build_external_map():
+		_world_root.name = "FiveRealmArtFallback"
+		_build_backdrop()
+		_build_floor_graph()
+		_build_central_courtyard()
+		_build_bamboo_realm()
+		_build_marsh_realm()
+		_build_sword_realm()
+		_build_ember_realm()
+		_build_gate_arches()
 
 func can_stand(position: Vector3, radius := WorldConfig.PLAYER_RADIUS) -> bool:
 	return WorldConfig.is_walkable(position, radius)
 
+func _build_external_map() -> bool:
+	var resource := load(EXTERNAL_MAP_PATH)
+	if not resource is PackedScene:
+		push_error("External map failed to import: %s" % EXTERNAL_MAP_PATH)
+		return false
+	var map_root := (resource as PackedScene).instantiate() as Node3D
+	if map_root == null:
+		push_error("External map root is not Node3D")
+		return false
+	map_root.name = "QingyunIslandExternalMap"
+	map_root.position.y = EXTERNAL_MAP_Y_OFFSET
+	for child: Node in map_root.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := child as MeshInstance3D
+		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		mesh_instance.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_DISABLED
+	_world_root.add_child(map_root)
+	return true
+
 func _build_environment() -> void:
-	var environment_node := WorldEnvironment.new()
-	environment_node.name = "XianxiaAtmosphere"
 	var environment := Environment.new()
-	environment.background_mode = Environment.BG_COLOR
-	environment.background_color = Color("91b6b9")
-	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	var sky_material := ProceduralSkyMaterial.new()
+	sky_material.sky_top_color = Color("517f96")
+	sky_material.sky_horizon_color = Color("c0d8ce")
+	sky_material.ground_bottom_color = Color("35565d")
+	sky_material.ground_horizon_color = Color("9fbeb6")
+	var sky := Sky.new()
+	sky.sky_material = sky_material
+	environment.background_mode = Environment.BG_SKY
+	environment.sky = sky
+	environment.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
 	environment.ambient_light_color = Color("bfded7")
 	environment.ambient_light_energy = 0.22
 	environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
@@ -46,6 +73,7 @@ func _build_environment() -> void:
 	environment.glow_intensity = 0.55
 	environment.glow_strength = 0.72
 	var world := WorldEnvironment.new()
+	world.name = "XianxiaAtmosphere"
 	world.environment = environment
 	add_child(world)
 	var sun := DirectionalLight3D.new()
