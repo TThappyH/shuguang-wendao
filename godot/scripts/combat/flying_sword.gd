@@ -4,6 +4,7 @@ extends Node3D
 signal shot_fired
 signal hit_registered(enemy: Node, hit_count: int)
 signal multi_hit_completed(hit_count: int)
+signal impact(world_position: Vector3, hit_count: int, damage: float)
 
 enum SwordState { FORMATION, ACQUIRE, ANTICIPATE, LAUNCH, TRAVEL, IMPACT, RETURN, REFORM }
 
@@ -16,6 +17,7 @@ var damage := 34.0
 var attack_range := 15.5
 var penetration_distance := 8.0
 var max_hits := 2
+var reform_cooldown := 0.72
 var cooldown := 0.0
 var state_time := 0.0
 var travel_direction := Vector3.ZERO
@@ -67,7 +69,7 @@ func _physics_process(delta: float) -> void:
 		SwordState.REFORM:
 			_update_formation(delta)
 			if state_time >= 0.14:
-				cooldown = 0.72 + formation_index * 0.08
+				cooldown = reform_cooldown + formation_index * 0.08
 				_set_state(SwordState.FORMATION)
 
 func _set_state(next_state: SwordState) -> void:
@@ -90,28 +92,42 @@ func _update_formation(delta: float, expansion := 1.0) -> void:
 	rotation.z = sin(Time.get_ticks_msec() * 0.004 + formation_index) * 0.08
 
 func _update_travel(delta: float) -> void:
+	var previous_position := global_position
 	global_position += travel_direction * speed * delta
 	look_at(global_position + travel_direction, Vector3.UP)
 	rotation.x += PI * 0.5
-	_check_enemy_hits()
+	_check_enemy_hits(previous_position, global_position)
 	if not hit_targets.is_empty() and global_position.distance_to(first_hit_position) >= penetration_distance:
 		_set_state(SwordState.RETURN)
 	elif global_position.distance_to(player.global_position) > attack_range + penetration_distance:
 		_set_state(SwordState.RETURN)
 
-func _check_enemy_hits() -> void:
+func _check_enemy_hits(segment_start: Vector3, segment_end: Vector3) -> void:
+	if hit_targets.size() >= max_hits:
+		_set_state(SwordState.RETURN)
+		return
 	for enemy: Node in get_tree().get_nodes_in_group("enemies"):
 		if not is_instance_valid(enemy) or enemy in hit_targets or not enemy.has_method("take_damage"):
 			continue
-		if global_position.distance_to((enemy as Node3D).global_position + Vector3.UP * 0.7) > 0.82:
+		var enemy_center := (enemy as Node3D).global_position + Vector3.UP * 0.7
+		if segment_distance_squared(enemy_center, segment_start, segment_end) > 0.82 * 0.82:
 			continue
 		hit_targets.append(enemy)
 		if hit_targets.size() == 1:
 			first_hit_position = global_position
 		enemy.take_damage(damage, travel_direction)
 		hit_registered.emit(enemy, hit_targets.size())
+		impact.emit(enemy_center, hit_targets.size(), damage)
 		_set_state(SwordState.IMPACT)
 		return
+
+static func segment_distance_squared(point: Vector3, segment_start: Vector3, segment_end: Vector3) -> float:
+	var segment := segment_end - segment_start
+	var length_squared := segment.length_squared()
+	if length_squared <= 0.000001:
+		return point.distance_squared_to(segment_start)
+	var ratio := clampf((point - segment_start).dot(segment) / length_squared, 0.0, 1.0)
+	return point.distance_squared_to(segment_start + segment * ratio)
 
 func _update_return(delta: float) -> void:
 	var destination := _formation_position()
@@ -132,6 +148,18 @@ func _nearest_target() -> Node3D:
 			best_distance = distance
 			result = enemy as Node3D
 	return result
+
+func reset_runtime() -> void:
+	target = null
+	hit_targets.clear()
+	_trail_points.clear()
+	travel_direction = Vector3.ZERO
+	first_hit_position = Vector3.ZERO
+	cooldown = float(formation_index) * 0.26
+	state = SwordState.FORMATION
+	state_time = 0.0
+	if is_instance_valid(player):
+		global_position = _formation_position()
 
 func _build_sword_visual() -> void:
 	_blade_root = Node3D.new()
@@ -168,4 +196,3 @@ func _build_sword_visual() -> void:
 	grip.position.z = 0.58
 	grip.rotation.x = PI * 0.5
 	_blade_root.add_child(grip)
-

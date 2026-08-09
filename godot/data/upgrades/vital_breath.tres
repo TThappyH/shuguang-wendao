@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/upgrade_definition.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"vital_breath"
+title = "养元"
+description = "最大气血 +18，并回复等量气血"
+target = &"player"
+stat = &"max_hp"
+amount = 18.0
+max_stacks = 4
+draft_weight = 0.88
+accent = Color(0.88, 0.48, 0.4, 1)

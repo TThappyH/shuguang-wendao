@@ -1,10 +1,10 @@
 # 曙光问道
 
-一个正在迭代中的 **东方玄幻 / 修仙题材 Survivors-like 浏览器肉鸽**。
+一个正在迭代中的 **东方玄幻 / 修仙题材 Godot 3D 动作肉鸽**。
 
-当前版本：**V8.3 · 可玩白模地图**
+当前版本：**V10 · Core Gameplay Framework**
 
-当前开发分支：`dev/v8.3-whitebox-map-framework`
+当前开发分支：`dev/v10-core-gameplay-framework`
 
 ## 核心定位
 
@@ -61,7 +61,29 @@ V8 Foundation 在现有 V6.7 运行快照上补齐了可复盘的单局骨架：
 - 法宝品阶：玄 / 地 / 天 / 仙
 - 境界显示：炼气 → 筑基 → 金丹 → 元婴 → 化神 → 炼虚 → 合体 → 大乘
 
-## 运行
+## Godot 版本运行
+
+直接双击：
+
+```text
+E:\shuguang-wendao-v68\godot\run_game.bat
+```
+
+或执行：
+
+```powershell
+E:\shuguang-wendao-v68\godot\run_game.ps1
+```
+
+质量门禁：
+
+```powershell
+E:\shuguang-wendao-v68\tools\run_v10_quality_gate.ps1
+```
+
+当前 Godot 框架包含分阶段 Encounter Director、三类敌人数据、飞剑穿透修复、局内三选一成长、固定反馈池、运行调试面板与 Rodin 资产槽位。详见 [`docs/V10_CORE_GAMEPLAY_FRAMEWORK.md`](docs/V10_CORE_GAMEPLAY_FRAMEWORK.md)。
+
+## 历史网页版本运行
 
 通过任意静态 HTTP 服务打开仓库根目录的 `index.html`，例如 GitHub Pages、VS Code Live Server 或：
 
@@ -97,7 +119,7 @@ python -m http.server 8000
 
 > Issue → `dev/...` 开发分支 → 实现与检查 → Pull Request → 合并 `main` → `releases/` 保留版本快照
 
-当前开发任务是 V8.3：先由玩家验收白模空间、通道、掩体、跨区路线和战场遮挡，再开始地图材质与场景美术。
+当前开发任务是 V10：由玩家验收核心走位、穿透效率、局内升级和遭遇节奏；角色、敌人和地图正式美术通过 Rodin → Blender → Godot 管线迭代。
 
 ## 开发原则
 

@@ -1,7 +1,8 @@
 class_name QingyaoVisual
 extends Node3D
 
-const MODEL_PATH := "res://assets/characters/qingyao/qingyao_v1.glb"
+const MODEL_ASSET_SLOT: StringName = &"qingyao_player"
+const MODEL_FALLBACK_PATH := "res://assets/characters/qingyao/qingyao_v1.glb"
 const TARGET_HEIGHT := 2.18
 
 var model_root: Node3D
@@ -9,15 +10,19 @@ var loaded := false
 var source_mesh_count := 0
 var source_vertices := 0
 var source_triangles := 0
+var loaded_asset_path := ""
 
 func _ready() -> void:
 	name = "QingyaoVisual"
 	_load_model()
 
 func _load_model() -> void:
-	var resource := load(MODEL_PATH)
+	loaded_asset_path = RodinAssetRegistry.asset_path(MODEL_ASSET_SLOT)
+	if loaded_asset_path.is_empty():
+		loaded_asset_path = MODEL_FALLBACK_PATH
+	var resource := load(loaded_asset_path)
 	if not resource is PackedScene:
-		push_error("Qingyao GLB did not import as PackedScene: %s" % MODEL_PATH)
+		push_error("Qingyao GLB did not import as PackedScene: %s" % loaded_asset_path)
 		return
 	model_root = (resource as PackedScene).instantiate()
 	model_root.name = "QingyaoGLB"
@@ -25,6 +30,16 @@ func _load_model() -> void:
 	_collect_mesh_metrics(model_root)
 	_fit_to_gameplay_scale()
 	loaded = true
+
+func snapshot() -> Dictionary:
+	return {
+		"loaded": loaded,
+		"asset_slot": String(MODEL_ASSET_SLOT),
+		"asset_path": loaded_asset_path,
+		"meshes": source_mesh_count,
+		"vertices": source_vertices,
+		"triangles": source_triangles
+	}
 
 func _collect_mesh_metrics(root: Node) -> void:
 	for child: Node in root.find_children("*", "MeshInstance3D", true, false):

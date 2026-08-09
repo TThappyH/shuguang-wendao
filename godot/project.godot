@@ -11,6 +11,10 @@ config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/bg_color=Color(0.035, 0.086, 0.094, 1)
 boot_splash/show_image=false
 
+[autoload]
+
+GameEvents="*res://scripts/core/game_events.gd"
+
 [display]
 
 window/size/viewport_width=1600
@@ -44,4 +48,3 @@ toggle_debug={"deadzone":0.2,"events":[Object(InputEventKey,"physical_keycode":4
 3d_physics/layer_2="Player"
 3d_physics/layer_3="Enemy"
 3d_physics/layer_4="Sword"
-

@@ -3,6 +3,8 @@ extends CharacterBody3D
 
 signal health_changed(current: float, maximum: float)
 signal distance_changed(total_distance: float)
+signal damage_taken(amount: float)
+signal dash_started(direction: Vector3)
 signal died
 
 @export var level_path: NodePath
@@ -23,6 +25,9 @@ var _move_blend := 0.0
 var _level: Node
 var _visual_root: Node3D
 var _visual: QingyaoVisual
+var _base_move_speed := 5.4
+var _base_dash_cooldown := 1.05
+var _base_max_hp := 120.0
 
 func _ready() -> void:
 	add_to_group("player")
@@ -36,6 +41,9 @@ func _ready() -> void:
 	_visual = QingyaoVisual.new()
 	_visual_root.add_child(_visual)
 	health_changed.emit(hp, max_hp)
+	_base_move_speed = move_speed
+	_base_dash_cooldown = dash_cooldown
+	_base_max_hp = max_hp
 
 func _setup_collision() -> void:
 	var capsule := CapsuleShape3D.new()
@@ -53,6 +61,7 @@ func _physics_process(delta: float) -> void:
 		_dash_time = dash_duration
 		_dash_cooldown_left = dash_cooldown
 		_dash_direction = move_direction.normalized()
+		dash_started.emit(_dash_direction)
 	var desired := move_direction.normalized() * move_speed
 	if _dash_time > 0.0:
 		_dash_time -= delta
@@ -63,7 +72,7 @@ func _physics_process(delta: float) -> void:
 	var before := global_position
 	move_and_slide()
 	global_position.y = 0.08
-	if not _level.can_stand(global_position, 0.42):
+	if is_instance_valid(_level) and _level.has_method("can_stand") and not _level.can_stand(global_position, 0.42):
 		global_position = before
 		velocity = Vector3.ZERO
 	var travelled := before.distance_to(global_position)
@@ -91,17 +100,41 @@ func take_contact_damage(amount: float) -> bool:
 	contact_immunity = 0.62
 	hp = maxf(0.0, hp - amount)
 	health_changed.emit(hp, max_hp)
+	damage_taken.emit(amount)
+	GameEvents.player_damaged.emit(amount, hp)
 	if hp <= 0.0:
 		died.emit()
 	return true
 
 func reset_runtime() -> void:
+	move_speed = _base_move_speed
+	dash_cooldown = _base_dash_cooldown
+	max_hp = _base_max_hp
 	hp = max_hp
 	total_distance = 0.0
 	contact_immunity = 0.0
 	global_position = Vector3(0, 0.08, 2)
 	velocity = Vector3.ZERO
+	_dash_time = 0.0
+	_dash_cooldown_left = 0.0
 	health_changed.emit(hp, max_hp)
+	distance_changed.emit(total_distance)
+
+func apply_upgrade(stat: StringName, amount: float) -> void:
+	match stat:
+		&"max_hp":
+			max_hp += amount
+			hp = minf(max_hp, hp + amount)
+			health_changed.emit(hp, max_hp)
+		&"move_speed_multiplier":
+			move_speed *= 1.0 + amount
+		&"dash_cooldown_reduction":
+			dash_cooldown = maxf(_base_dash_cooldown * 0.52, dash_cooldown * (1.0 - amount))
+		_:
+			push_warning("Unknown player upgrade stat: %s" % stat)
+
+func is_dashing() -> bool:
+	return _dash_time > 0.0
 
 func dash_ratio() -> float:
-	return clampf(1.0 - _dash_cooldown_left / dash_cooldown, 0.0, 1.0)
+	return clampf(1.0 - _dash_cooldown_left / maxf(dash_cooldown, 0.001), 0.0, 1.0)

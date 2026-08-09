@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "pipeline": "Rodin Creator Web -> RodinBridge -> Blender -> GLB -> Godot",
+  "api_used": false,
+  "assets": {
+    "qingyao_player": {
+      "role": "playable_character",
+      "path": "res://assets/characters/qingyao/qingyao_v1.glb",
+      "required": true,
+      "prototype_exempt": true,
+      "budget": {"target_triangles": 50000, "hard_max_triangles": 70000, "max_materials": 6, "max_texture_size": 2048}
+    },
+    "qingyun_island": {
+      "role": "level_chunk",
+      "path": "res://assets/maps/qingyun_island/qingyun_island_v1.glb",
+      "required": true,
+      "prototype_exempt": true,
+      "budget": {"target_triangles": 180000, "hard_max_triangles": 300000, "max_materials": 12, "max_texture_size": 2048}
+    },
+    "enemy_stalker": {
+      "role": "enemy_character",
+      "path": "",
+      "required": false,
+      "prototype_exempt": false,
+      "budget": {"target_triangles": 18000, "hard_max_triangles": 30000, "max_materials": 4, "max_texture_size": 2048}
+    },
+    "enemy_skirmisher": {
+      "role": "enemy_character",
+      "path": "",
+      "required": false,
+      "prototype_exempt": false,
+      "budget": {"target_triangles": 16000, "hard_max_triangles": 26000, "max_materials": 4, "max_texture_size": 2048}
+    },
+    "enemy_bulwark": {
+      "role": "enemy_character",
+      "path": "",
+      "required": false,
+      "prototype_exempt": false,
+      "budget": {"target_triangles": 24000, "hard_max_triangles": 38000, "max_materials": 4, "max_texture_size": 2048}
+    }
+  }
+}

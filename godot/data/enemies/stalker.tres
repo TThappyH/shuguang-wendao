@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EnemyArchetypeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_archetype_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"stalker"
+display_name = "逐影"
+design_note = "基础直追单位，用于建立稳定的排线压力。"
+model_slot = &"enemy_stalker"
+behavior = &"direct"
+max_hp = 64.0
+move_speed = 2.35
+acceleration = 5.5
+contact_damage = 8.0
+contact_cooldown = 0.68
+contact_range = 1.05
+radius = 0.48
+visual_scale = 1.0
+essence_reward = 1
+spawn_weight = 1.0
+unlock_intensity = 0.0

@@ -3,12 +3,15 @@ extends Node3D
 
 const WATER_SHADER := preload("res://shaders/spirit_water.gdshader")
 const SIGIL_SHADER := preload("res://shaders/spirit_sigil.gdshader")
-const EXTERNAL_MAP_PATH := "res://assets/maps/qingyun_island/qingyun_island_v1.glb"
+const MAP_ASSET_SLOT: StringName = &"qingyun_island"
+const EXTERNAL_MAP_FALLBACK_PATH := "res://assets/maps/qingyun_island/qingyun_island_v1.glb"
 const EXTERNAL_MAP_Y_OFFSET := -44.35
 
 var _world_root: Node3D
 var _blockers: Array[StaticBody3D] = []
 var _region_markers: Dictionary = {}
+var external_map_loaded := false
+var loaded_asset_path := ""
 
 func _ready() -> void:
 	_build_environment()
@@ -30,9 +33,12 @@ func can_stand(position: Vector3, radius := WorldConfig.PLAYER_RADIUS) -> bool:
 	return WorldConfig.is_walkable(position, radius)
 
 func _build_external_map() -> bool:
-	var resource := load(EXTERNAL_MAP_PATH)
+	loaded_asset_path = RodinAssetRegistry.asset_path(MAP_ASSET_SLOT)
+	if loaded_asset_path.is_empty():
+		loaded_asset_path = EXTERNAL_MAP_FALLBACK_PATH
+	var resource := load(loaded_asset_path)
 	if not resource is PackedScene:
-		push_error("External map failed to import: %s" % EXTERNAL_MAP_PATH)
+		push_error("External map failed to import: %s" % loaded_asset_path)
 		return false
 	var map_root := (resource as PackedScene).instantiate() as Node3D
 	if map_root == null:
@@ -45,7 +51,16 @@ func _build_external_map() -> bool:
 		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 		mesh_instance.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_DISABLED
 	_world_root.add_child(map_root)
+	external_map_loaded = true
 	return true
+
+func snapshot() -> Dictionary:
+	return {
+		"external_map_loaded": external_map_loaded,
+		"asset_slot": String(MAP_ASSET_SLOT),
+		"asset_path": loaded_asset_path,
+		"fallback_blockers": _blockers.size()
+	}
 
 func _build_environment() -> void:
 	var environment := Environment.new()
