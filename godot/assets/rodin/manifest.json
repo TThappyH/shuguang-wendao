@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "pipeline": "Rodin Creator Web -> RodinBridge -> Blender -> GLB -> Godot",
+  "api_used": false,
+  "assets": {
+    "qingyao_player": {
+      "role": "playable_character",
+      "path": "res://assets/characters/qingyao/qingyao_gameplay_lod.glb",
+      "source_path": "res://assets/characters/qingyao/qingyao_v1_rodin_textured.glb",
+      "required": true,
+      "prototype_exempt": false,
+      "runtime": {"cast_shadow": true, "lod": "gameplay", "source_triangles": 999998, "runtime_triangles": 70000},
+      "budget": {"target_triangles": 50000, "hard_max_triangles": 70000, "max_materials": 6, "max_texture_size": 2048}
+    },
+    "qingyun_island": {
+      "role": "level_chunk",
+      "path": "res://assets/maps/qingyun_island/qingyun_island_gameplay_lod.glb",
+      "source_path": "res://assets/maps/qingyun_island/qingyun_island_v1.glb",
+      "required": true,
+      "prototype_exempt": false,
+      "runtime": {"cast_shadow": false, "lod": "gameplay", "source_triangles": 999992, "runtime_triangles": 250000},
+      "budget": {"target_triangles": 180000, "hard_max_triangles": 300000, "max_materials": 12, "max_texture_size": 2048}
+    },
+    "qingyao_flying_sword": {
+      "role": "weapon",
+      "path": "res://assets/weapons/qingyao_flying_sword/qingyao_flying_sword_gameplay_lod.glb",
+      "source_path": "res://assets/weapons/qingyao_flying_sword/qingyao_flying_sword_v1.glb",
+      "required": true,
+      "prototype_exempt": false,
+      "runtime": {"cast_shadow": false, "lod": "gameplay", "source_triangles": 836868, "runtime_triangles": 10000},
+      "budget": {"target_triangles": 6000, "hard_max_triangles": 12000, "max_materials": 3, "max_texture_size": 2048}
+    },
+    "enemy_stalker": {
+      "role": "enemy_character",
+      "path": "",
+      "required": false,
+      "prototype_exempt": false,
+      "budget": {"target_triangles": 18000, "hard_max_triangles": 30000, "max_materials": 4, "max_texture_size": 2048}
+    },
+    "enemy_skirmisher": {
+      "role": "enemy_character",
+      "path": "",
+      "required": false,
+      "prototype_exempt": false,
+      "budget": {"target_triangles": 16000, "hard_max_triangles": 26000, "max_materials": 4, "max_texture_size": 2048}
+    },
+    "enemy_bulwark": {
+      "role": "enemy_character",
+      "path": "",
+      "required": false,
+      "prototype_exempt": false,
+      "budget": {"target_triangles": 24000, "hard_max_triangles": 38000, "max_materials": 4, "max_texture_size": 2048}
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "source": "E:\\shuguang-wendao-v68\\godot\\assets\\characters\\qingyao\\qingyao_v1_rodin_textured.glb",
+  "output": "E:\\shuguang-wendao-v68\\godot\\assets\\characters\\qingyao\\qingyao_gameplay_lod.glb",
+  "target_triangles": 70000,
+  "source_triangles": 999998,
+  "output_triangles": 70000,
+  "ratio": 0.07000014000028,
+  "mesh_count": 1
+}

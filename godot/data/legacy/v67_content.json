@@ -1,0 +1,1604 @@
+{
+  "schema_version": 1,
+  "source": "runtime-source/v6.7.html",
+  "source_sha256": "5bed27214feccc29159b0cbad90ade00e40ef57eba1553ae8f6ca31b66ece7cb",
+  "content": {
+    "difficulty": {
+      "normal": {
+        "hp": 1,
+        "dmg": 1,
+        "spawn": 1,
+        "elite": 0.025
+      },
+      "hunt": {
+        "hp": 1.28,
+        "dmg": 1.14,
+        "spawn": 1.22,
+        "elite": 0.048
+      },
+      "hell": {
+        "hp": 1.72,
+        "dmg": 1.38,
+        "spawn": 1.52,
+        "elite": 0.075
+      }
+    },
+    "game_phases": {
+      "MENU": "MENU",
+      "PLAY": "PLAY",
+      "LEVEL": "LEVEL",
+      "CHEST": "CHEST",
+      "BREAKTHROUGH": "BREAKTHROUGH",
+      "PAUSE": "PAUSE",
+      "CODEX": "CODEX",
+      "RUN_COMPLETE": "RUN_COMPLETE",
+      "DEAD": "DEAD"
+    },
+    "modal_priority": {
+      "DEAD": 100,
+      "RUN_COMPLETE": 90,
+      "BREAKTHROUGH": 80,
+      "BOSS_REWARD": 70,
+      "CHEST": 60,
+      "LEVEL": 50,
+      "CODEX": 20
+    },
+    "realms": [
+      {
+        "id": "qi",
+        "name": "炼气",
+        "index": 0,
+        "milestone": null,
+        "theme": "引气入体",
+        "choices": [],
+        "hudLabel": "炼气",
+        "bossGate": null,
+        "visualTier": 0
+      },
+      {
+        "id": "foundation",
+        "name": "筑基",
+        "index": 1,
+        "milestone": {
+          "type": "bossGate",
+          "bossIndex": 0
+        },
+        "theme": "立道基",
+        "choices": [
+          "swordbone",
+          "thunderbase",
+          "purealtar"
+        ],
+        "hudLabel": "筑基",
+        "bossGate": "青木猿王",
+        "visualTier": 1
+      },
+      {
+        "id": "core",
+        "name": "金丹",
+        "index": 2,
+        "milestone": {
+          "type": "bossGate",
+          "bossIndex": 1
+        },
+        "theme": "结丹成核",
+        "choices": [
+          "swordcore",
+          "thundercore",
+          "mixedcore"
+        ],
+        "hudLabel": "金丹",
+        "bossGate": "赤焰丹炉灵",
+        "visualTier": 2
+      },
+      {
+        "id": "nascent",
+        "name": "元婴",
+        "index": 3,
+        "milestone": {
+          "type": "bossGate",
+          "bossIndex": 2
+        },
+        "theme": "元婴离体",
+        "choices": [
+          "swordbaby",
+          "thunderbaby",
+          "spiritbaby"
+        ],
+        "hudLabel": "元婴",
+        "bossGate": "玄雷道君",
+        "visualTier": 3
+      },
+      {
+        "id": "spirit",
+        "name": "化神",
+        "index": 4,
+        "milestone": {
+          "type": "bossGate",
+          "bossIndex": 3
+        },
+        "theme": "神念外放",
+        "choices": [
+          "sworddomain",
+          "thunderdomain",
+          "destiny"
+        ],
+        "hudLabel": "化神",
+        "bossGate": "金翅鹏王",
+        "visualTier": 4
+      },
+      {
+        "id": "void",
+        "name": "炼虚",
+        "index": 5,
+        "milestone": {
+          "type": "bossGate",
+          "bossIndex": 4
+        },
+        "theme": "虚实相合",
+        "choices": [
+          "taixu",
+          "thunderpool",
+          "voidreturn"
+        ],
+        "hudLabel": "炼虚",
+        "bossGate": "镇岳石尊",
+        "visualTier": 5
+      }
+    ],
+    "rules": {
+      "swordbone": {
+        "id": "swordbone",
+        "name": "剑骨道基",
+        "tags": [
+          "sword",
+          "realm",
+          "offense"
+        ],
+        "description": "每第 5 次有效命中，释放一道穿透剑回响。",
+        "lore": "剑骨初成，先问手中之剑为何出鞘。",
+        "hooks": [
+          "onHit"
+        ]
+      },
+      "thunderbase": {
+        "id": "thunderbase",
+        "name": "九霄雷基",
+        "tags": [
+          "thunder",
+          "realm",
+          "mobility"
+        ],
+        "description": "闪避完成时，雷击附近最多 3 个敌人。",
+        "lore": "一步踏空，九霄便有回应。",
+        "hooks": [
+          "onDash"
+        ]
+      },
+      "purealtar": {
+        "id": "purealtar",
+        "name": "无垢灵台",
+        "tags": [
+          "spirit",
+          "realm",
+          "spell"
+        ],
+        "description": "每 11 秒获得一次灵器减耗窗口，下一次主动灵器冷却大幅缩短。",
+        "lore": "心台无垢，法术才不会被杂念拖慢。",
+        "hooks": [
+          "onSecond",
+          "modifyCooldown"
+        ]
+      },
+      "swordcore": {
+        "id": "swordcore",
+        "name": "剑丹",
+        "tags": [
+          "sword",
+          "realm",
+          "core"
+        ],
+        "description": "剑意每 7 秒凝成一枚旋剑，命中附近威胁后消散。",
+        "lore": "丹田一转，剑意已有自己的方向。",
+        "hooks": [
+          "onSecond"
+        ]
+      },
+      "thundercore": {
+        "id": "thundercore",
+        "name": "雷丹",
+        "tags": [
+          "thunder",
+          "realm",
+          "core"
+        ],
+        "description": "雷伤为目标留下雷印；下一次雷伤引爆并追加链雷。",
+        "lore": "丹成如雷，雷声不会在同一处结束。",
+        "hooks": [
+          "onHit"
+        ]
+      },
+      "mixedcore": {
+        "id": "mixedcore",
+        "name": "混元丹",
+        "tags": [
+          "realm",
+          "hybrid",
+          "core"
+        ],
+        "description": "不同道途连续命中积累混元层数，满 4 层强化下一次主动施法。",
+        "lore": "不拒异道，方能把冲突炼成一枚丹。",
+        "hooks": [
+          "onHit",
+          "onWeaponCast",
+          "modifyDamage"
+        ]
+      },
+      "swordbaby": {
+        "id": "swordbaby",
+        "name": "剑婴",
+        "tags": [
+          "sword",
+          "realm",
+          "nascent"
+        ],
+        "description": "每 8 秒生成一道独立剑影，自动攻击当前另一侧目标。",
+        "lore": "元婴离体，剑意先替主人看见了身后。",
+        "hooks": [
+          "onSecond"
+        ]
+      },
+      "thunderbaby": {
+        "id": "thunderbaby",
+        "name": "雷婴",
+        "tags": [
+          "thunder",
+          "realm",
+          "nascent"
+        ],
+        "description": "第一次受到致命伤害时化雷闪离原位，并恢复 35% 生命。",
+        "lore": "肉身可伤，雷光不受伤。",
+        "hooks": [
+          "onDamageTaken"
+        ]
+      },
+      "spiritbaby": {
+        "id": "spiritbaby",
+        "name": "灵婴",
+        "tags": [
+          "spirit",
+          "realm",
+          "nascent"
+        ],
+        "description": "每 12 秒锁定当前高威胁目标，释放一次元婴术法。",
+        "lore": "神识先行，灵婴替你决定该杀谁。",
+        "hooks": [
+          "onSecond"
+        ]
+      },
+      "sworddomain": {
+        "id": "sworddomain",
+        "name": "剑域雏形",
+        "tags": [
+          "sword",
+          "realm",
+          "domain"
+        ],
+        "description": "敌人承受 3 次剑伤后，剑域会对附近敌群爆剑。",
+        "lore": "剑还未成域，但域已经记住了每一道剑痕。",
+        "hooks": [
+          "onHit"
+        ]
+      },
+      "thunderdomain": {
+        "id": "thunderdomain",
+        "name": "雷域雏形",
+        "tags": [
+          "thunder",
+          "realm",
+          "domain"
+        ],
+        "description": "雷击目标之间形成导电链，短时间内再次受雷会传导。",
+        "lore": "神念外放之后，雷不再只听一个目标。",
+        "hooks": [
+          "onHit"
+        ]
+      },
+      "destiny": {
+        "id": "destiny",
+        "name": "天机",
+        "tags": [
+          "spirit",
+          "realm",
+          "domain"
+        ],
+        "description": "每 9 秒冻结一次主动灵器冷却，制造短爆发窗口。",
+        "lore": "天机不是预言，是把一瞬间留给真正重要的事。",
+        "hooks": [
+          "onSecond",
+          "modifyCooldown"
+        ]
+      },
+      "taixu": {
+        "id": "taixu",
+        "name": "太虚剑境",
+        "tags": [
+          "sword",
+          "realm",
+          "void"
+        ],
+        "description": "移动穿行足够距离后留下剑阵节点，短暂斩击经过的敌人。",
+        "lore": "虚实相合，走过的路也开始拥有锋芒。",
+        "hooks": [
+          "onSecond"
+        ]
+      },
+      "thunderpool": {
+        "id": "thunderpool",
+        "name": "雷池",
+        "tags": [
+          "thunder",
+          "realm",
+          "void"
+        ],
+        "description": "每次闪避在路径上留下短暂雷场。",
+        "lore": "足迹不再落地，而是把雷意留在身后。",
+        "hooks": [
+          "onDash"
+        ]
+      },
+      "voidreturn": {
+        "id": "voidreturn",
+        "name": "万法归虚",
+        "tags": [
+          "realm",
+          "hybrid",
+          "void"
+        ],
+        "description": "本局使用过的不同道途越多，下一次主动灵器越强。",
+        "lore": "万法归于一念，虚空只留下最锋利的那一下。",
+        "hooks": [
+          "onWeaponCast",
+          "modifyDamage"
+        ]
+      }
+    },
+    "weapon_tags": {
+      "bolt": [
+        "spirit"
+      ],
+      "blades": [
+        "sword"
+      ],
+      "storm": [
+        "thunder"
+      ],
+      "nova": [
+        "spirit"
+      ],
+      "aura": [
+        "fire"
+      ],
+      "meteor": [
+        "fire"
+      ],
+      "void": [
+        "array"
+      ],
+      "raven": [
+        "spirit",
+        "sword"
+      ],
+      "spear": [
+        "sword"
+      ]
+    },
+    "weapons": {
+      "bolt": {
+        "name": "青霄灵弩",
+        "icon": "bolt",
+        "desc": "凝聚灵气为矢，自动锁定最近妖物。",
+        "evo": "万星归弦",
+        "evoDesc": "灵矢获得额外穿透与分裂火力。"
+      },
+      "blades": {
+        "name": "太阴月轮",
+        "icon": "blades",
+        "desc": "月轮护体，持续斩击近身敌人。",
+        "evo": "双月诛邪轮",
+        "evoDesc": "双月扩大轨道并形成交错斩击。"
+      },
+      "storm": {
+        "name": "五雷正印",
+        "icon": "storm",
+        "desc": "引动雷法，在多个敌人之间跳跃。",
+        "evo": "九霄雷狱",
+        "evoDesc": "雷链延长，覆盖更多目标。"
+      },
+      "nova": {
+        "name": "玄冰法环",
+        "icon": "nova",
+        "desc": "周期释放玄冰灵气，冻结并伤害周围敌人。",
+        "evo": "太阴玄霜界",
+        "evoDesc": "玄霜脉冲在首次爆发后再次回响。"
+      },
+      "aura": {
+        "name": "离火护身诀",
+        "icon": "aura",
+        "desc": "以离火环身，持续焚烧靠近的敌人。",
+        "evo": "南明离火域",
+        "evoDesc": "火域扩大并稳定维持灼烧压力。"
+      },
+      "meteor": {
+        "name": "天火陨星术",
+        "icon": "meteor",
+        "desc": "牵引天火轰击高威胁目标。",
+        "evo": "万火朝天",
+        "evoDesc": "一次锁定多个高威胁目标。"
+      },
+      "void": {
+        "name": "乾坤吞灵阵",
+        "icon": "void",
+        "desc": "布下吞灵阵眼，吸引并撕扯敌人。",
+        "evo": "混元吞天阵",
+        "evoDesc": "吞灵阵扩大，牵引和伤害同步增强。"
+      },
+      "raven": {
+        "name": "灵鹤剑侍",
+        "icon": "raven",
+        "desc": "御使灵鹤环绕并发射剑羽。",
+        "evo": "百鹤剑阵",
+        "evoDesc": "剑侍分化为多只灵鹤协同出击。"
+      },
+      "spear": {
+        "name": "青竹剑阵",
+        "icon": "spear",
+        "desc": "剑气贯穿一整条路径。",
+        "evo": "万竹诛仙阵",
+        "evoDesc": "剑阵分出多道贯穿路径。"
+      }
+    },
+    "passives": {
+      "might": {
+        "name": "剑心",
+        "desc": "+12% 总伤害",
+        "max": 5
+      },
+      "haste": {
+        "name": "行气",
+        "desc": "+10% 施法速度",
+        "max": 5
+      },
+      "area": {
+        "name": "神识",
+        "desc": "+11% 范围",
+        "max": 5
+      },
+      "speed": {
+        "name": "御风",
+        "desc": "+9% 移速",
+        "max": 5
+      },
+      "armor": {
+        "name": "金身",
+        "desc": "+1.5 护体",
+        "max": 5
+      },
+      "regen": {
+        "name": "吐纳",
+        "desc": "+0.65/秒 回复",
+        "max": 5
+      },
+      "magnet": {
+        "name": "聚灵",
+        "desc": "+27% 拾取范围",
+        "max": 5
+      },
+      "growth": {
+        "name": "悟性",
+        "desc": "+11% 经验",
+        "max": 5
+      },
+      "crit": {
+        "name": "天眼",
+        "desc": "+6% 暴击",
+        "max": 5
+      },
+      "dodge": {
+        "name": "凌波",
+        "desc": "+4% 闪避",
+        "max": 5
+      },
+      "maxhp": {
+        "name": "炼体",
+        "desc": "+16% 最大生命",
+        "max": 5
+      },
+      "luck": {
+        "name": "气运",
+        "desc": "+12% 高稀有奖励率",
+        "max": 5
+      }
+    },
+    "tiers": {
+      "玄阶": {
+        "rank": 1,
+        "color": "#4fa18d",
+        "ink": "#275f55",
+        "paper": "#dff0e7"
+      },
+      "地阶": {
+        "rank": 2,
+        "color": "#4e8fb9",
+        "ink": "#285974",
+        "paper": "#dceaf3"
+      },
+      "天阶": {
+        "rank": 3,
+        "color": "#c79738",
+        "ink": "#7a5520",
+        "paper": "#f5e8bd"
+      },
+      "仙阶": {
+        "rank": 4,
+        "color": "#c95a55",
+        "ink": "#7e302f",
+        "paper": "#f5d7d2"
+      }
+    },
+    "relics": [
+      {
+        "id": "blood",
+        "name": "青莲玉佩",
+        "tier": "地阶",
+        "type": "护身法宝",
+        "school": "木 · 生息",
+        "icon": "lotus",
+        "desc": "造成伤害的 1.5% 转化为生命。",
+        "lore": "传说以东海青莲第一滴晨露温养，贴身佩戴，灵机自生。",
+        "tags": [
+          "续航",
+          "近战",
+          "生息"
+        ]
+      },
+      {
+        "id": "glass",
+        "name": "碎星剑胆",
+        "tier": "天阶",
+        "type": "剑道奇物",
+        "school": "金 · 杀伐",
+        "icon": "sword",
+        "desc": "伤害 +35%，最大生命 -18%。",
+        "lore": "剑修陨落后不散的一缕锋芒。纳入丹田，先伤己，再伤天。",
+        "tags": [
+          "高伤",
+          "风险",
+          "剑意"
+        ]
+      },
+      {
+        "id": "phoenix",
+        "name": "九转涅槃羽",
+        "tier": "仙阶",
+        "type": "真灵遗蜕",
+        "school": "火 · 涅槃",
+        "icon": "feather",
+        "desc": "死亡时涅槃一次，并震退附近敌人。",
+        "lore": "羽上九纹自燃不灭，据说每一道都记着一次从死境归来的因果。",
+        "tags": [
+          "复生",
+          "保命",
+          "真灵"
+        ]
+      },
+      {
+        "id": "clock",
+        "name": "岁月砂",
+        "tier": "地阶",
+        "type": "时序奇物",
+        "school": "宙 · 时序",
+        "icon": "hourglass",
+        "desc": "所有灵器冷却缩短 12%。",
+        "lore": "一粒一岁，握得越紧，流得越快。",
+        "tags": [
+          "冷却",
+          "施法",
+          "时序"
+        ]
+      },
+      {
+        "id": "thunder",
+        "name": "雷灵印",
+        "tier": "地阶",
+        "type": "雷法印玺",
+        "school": "雷 · 天威",
+        "icon": "thunder",
+        "desc": "每 18 次击杀引发一次五雷轰顶。",
+        "lore": "印底刻“敕”字，朱砂已褪，天威未散。",
+        "tags": [
+          "群伤",
+          "连杀",
+          "雷法"
+        ]
+      },
+      {
+        "id": "rage",
+        "name": "修罗血符",
+        "tier": "玄阶",
+        "type": "禁术符箓",
+        "school": "血 · 修罗",
+        "icon": "talisman",
+        "desc": "生命低于 35% 时伤害 +45%。",
+        "lore": "朱砂不是朱砂。每次催动，符纸都会更红一点。",
+        "tags": [
+          "残血",
+          "爆发",
+          "禁术"
+        ]
+      },
+      {
+        "id": "moon",
+        "name": "斩妖令",
+        "tier": "地阶",
+        "type": "宗门法令",
+        "school": "正 · 镇邪",
+        "icon": "seal",
+        "desc": "精英和首领额外承受 24% 伤害。",
+        "lore": "昔日镇妖司颁下的旧令，妖气越重，令纹越亮。",
+        "tags": [
+          "首领",
+          "精英",
+          "镇邪"
+        ]
+      },
+      {
+        "id": "crown",
+        "name": "万剑玉冠",
+        "tier": "仙阶",
+        "type": "剑宗遗宝",
+        "school": "金 · 万剑",
+        "icon": "crown",
+        "desc": "每件已蜕变灵器 +8% 总伤害。",
+        "lore": "玉冠无主，万剑有宗。只认真正炼成本命灵器的人。",
+        "tags": [
+          "蜕变",
+          "终局",
+          "剑宗"
+        ]
+      },
+      {
+        "id": "windboots",
+        "name": "踏云靴",
+        "tier": "玄阶",
+        "type": "身法灵器",
+        "school": "风 · 轻灵",
+        "icon": "boot",
+        "desc": "移动速度 +14%。",
+        "lore": "一步踏风，两步借云。赶路之外，逃命亦是大道。",
+        "tags": [
+          "移速",
+          "身法",
+          "风"
+        ]
+      },
+      {
+        "id": "turtle",
+        "name": "玄武护心镜",
+        "tier": "地阶",
+        "type": "护心古镜",
+        "school": "水 · 玄武",
+        "icon": "shield",
+        "desc": "护体 +3。",
+        "lore": "镜背龟蛇盘结，遇杀机时先冷三分。",
+        "tags": [
+          "护甲",
+          "减伤",
+          "玄武"
+        ]
+      },
+      {
+        "id": "dragonblood",
+        "name": "蛟龙精血",
+        "tier": "地阶",
+        "type": "炼体灵材",
+        "school": "水 · 龙血",
+        "icon": "drop",
+        "desc": "最大生命 +22%，并立刻回满新增生命。",
+        "lore": "一滴沉如铅汞，吞服之后筋骨会先疼上半日。",
+        "tags": [
+          "气血",
+          "炼体",
+          "龙属"
+        ]
+      },
+      {
+        "id": "alchemy",
+        "name": "百草丹炉",
+        "tier": "玄阶",
+        "type": "丹道法器",
+        "school": "木 · 丹道",
+        "icon": "cauldron",
+        "desc": "生命回复 +1.1/秒。",
+        "lore": "小炉只有掌心大，却常年飘着药香。",
+        "tags": [
+          "回复",
+          "丹道",
+          "生存"
+        ]
+      },
+      {
+        "id": "spiritplate",
+        "name": "聚灵罗盘",
+        "tier": "玄阶",
+        "type": "寻灵法器",
+        "school": "灵 · 聚气",
+        "icon": "compass",
+        "desc": "拾取范围 +35%，悟性收益 +8%。",
+        "lore": "指针从不指北，只指向灵气最盛之处。",
+        "tags": [
+          "拾取",
+          "悟性",
+          "聚灵"
+        ]
+      },
+      {
+        "id": "skyeye",
+        "name": "破妄天眼",
+        "tier": "地阶",
+        "type": "神识秘宝",
+        "school": "神 · 洞察",
+        "icon": "eye",
+        "desc": "暴击率 +10%。",
+        "lore": "闭肉眼，开天眼。弱点便不再藏在皮肉之下。",
+        "tags": [
+          "暴击",
+          "洞察",
+          "神识"
+        ]
+      },
+      {
+        "id": "qilin",
+        "name": "麒麟步",
+        "tier": "地阶",
+        "type": "身法残篇",
+        "school": "风 · 瑞兽",
+        "icon": "cloud",
+        "desc": "闪避率 +8%。",
+        "lore": "残页只画了七步，第八步却在敌人的刀光之外。",
+        "tags": [
+          "闪避",
+          "身法",
+          "瑞兽"
+        ]
+      },
+      {
+        "id": "bagua",
+        "name": "八卦阵盘",
+        "tier": "地阶",
+        "type": "阵道法器",
+        "school": "阵 · 八卦",
+        "icon": "bagua",
+        "desc": "技能范围 +18%。",
+        "lore": "阴阳转一格，乾坤便多出三尺。",
+        "tags": [
+          "范围",
+          "阵法",
+          "术法"
+        ]
+      },
+      {
+        "id": "swordheart",
+        "name": "先天剑心",
+        "tier": "天阶",
+        "type": "先天道种",
+        "school": "金 · 剑道",
+        "icon": "swordheart",
+        "desc": "总伤害 +18%，暴击率 +5%。",
+        "lore": "不是剑，却比万柄剑更接近“锋利”二字。",
+        "tags": [
+          "伤害",
+          "暴击",
+          "剑道"
+        ]
+      },
+      {
+        "id": "spiritgourd",
+        "name": "养灵葫芦",
+        "tier": "玄阶",
+        "type": "养灵法器",
+        "school": "木 · 蕴养",
+        "icon": "gourd",
+        "desc": "每 25 次击杀恢复 8% 最大生命。",
+        "lore": "葫中不装酒，只收战场散逸的精气。",
+        "tags": [
+          "击杀",
+          "回复",
+          "养灵"
+        ]
+      },
+      {
+        "id": "goldenbody",
+        "name": "不灭金身符",
+        "tier": "仙阶",
+        "type": "护道仙箓",
+        "school": "金 · 不灭",
+        "icon": "shield",
+        "desc": "受到的单次伤害最多不超过最大生命的 28%。",
+        "lore": "符成之日雷火不侵，真正可怕的却是写符者留下的那一笔。",
+        "tags": [
+          "减伤",
+          "保命",
+          "仙箓"
+        ]
+      },
+      {
+        "id": "lotus",
+        "name": "十二品青莲瓣",
+        "tier": "天阶",
+        "type": "天地灵物",
+        "school": "木 · 青莲",
+        "icon": "lotus",
+        "desc": "最大生命 +12%，生命回复 +0.8/秒。",
+        "lore": "只是残瓣，仍有一池春意。",
+        "tags": [
+          "气血",
+          "回复",
+          "天地灵物"
+        ]
+      },
+      {
+        "id": "daoheart",
+        "name": "悟道茶",
+        "tier": "地阶",
+        "type": "悟道灵物",
+        "school": "木 · 悟性",
+        "icon": "leaf",
+        "desc": "经验获取 +20%。",
+        "lore": "茶只一盏，喝完之后却会觉得世间许多事都慢了下来。",
+        "tags": [
+          "经验",
+          "悟性",
+          "成长"
+        ]
+      },
+      {
+        "id": "qiankun",
+        "name": "乾坤袋",
+        "tier": "地阶",
+        "type": "空间法器",
+        "school": "空 · 乾坤",
+        "icon": "bag",
+        "desc": "首领额外掉落一件天材地宝。",
+        "lore": "袋口不过寸许，里面却像是从天地间偷来了一间小屋。",
+        "tags": [
+          "掉落",
+          "首领",
+          "空间"
+        ]
+      },
+      {
+        "id": "starfire",
+        "name": "星火灵珠",
+        "tier": "地阶",
+        "type": "火道灵珠",
+        "school": "火 · 星辰",
+        "icon": "orb",
+        "desc": "每 30 次击杀触发一次范围天火。",
+        "lore": "珠内有一点不灭星火，最喜欢热闹的战场。",
+        "tags": [
+          "群伤",
+          "连杀",
+          "火法"
+        ]
+      },
+      {
+        "id": "soulbell",
+        "name": "摄魂铃",
+        "tier": "天阶",
+        "type": "魂道禁器",
+        "school": "魂 · 摄魄",
+        "icon": "bell",
+        "desc": "击杀精英时永久获得 +2% 总伤害。",
+        "lore": "铃声很轻，死者却听得最清楚。",
+        "tags": [
+          "精英",
+          "成长",
+          "魂道"
+        ]
+      }
+    ],
+    "resonance_paths": {
+      "sword": {
+        "name": "剑道",
+        "glyph": "剑",
+        "css": "#b78a3e",
+        "color": 14135128,
+        "members": [
+          "glass",
+          "crown",
+          "swordheart",
+          "moon"
+        ],
+        "two": "剑痕",
+        "four": "万剑归宗",
+        "desc2": "每第 6 次有效命中，自动追斩一道穿透剑气。",
+        "desc4": "每 8 秒释放八方飞剑，主动清出身位。"
+      },
+      "thunder": {
+        "name": "雷道",
+        "glyph": "雷",
+        "css": "#4f8fb6",
+        "color": 9363455,
+        "members": [
+          "thunder",
+          "clock",
+          "skyeye",
+          "spiritplate"
+        ],
+        "two": "引雷",
+        "four": "九霄连锁",
+        "desc2": "每第 5 次有效命中，引雷跳向附近目标。",
+        "desc4": "引雷最多连续跳跃 4 个目标。"
+      },
+      "fire": {
+        "name": "火道",
+        "glyph": "火",
+        "css": "#c46742",
+        "color": 16751437,
+        "members": [
+          "starfire",
+          "phoenix",
+          "rage",
+          "alchemy"
+        ],
+        "two": "焚身",
+        "four": "留火成域",
+        "desc2": "每 7 次击杀引爆一次焚风，炸开周围敌群。",
+        "desc4": "焚风会留下持续灼烧的朱金火域。"
+      },
+      "array": {
+        "name": "阵道",
+        "glyph": "阵",
+        "css": "#568f7b",
+        "color": 7523250,
+        "members": [
+          "bagua",
+          "qiankun",
+          "spiritplate",
+          "clock"
+        ],
+        "two": "定阵",
+        "four": "两仪回转",
+        "desc2": "周期性在脚下留下阵眼，持续减速并灼伤入阵之敌。",
+        "desc4": "阵眼扩大，并周期性将敌人推离阵心。"
+      },
+      "spirit": {
+        "name": "御灵",
+        "glyph": "灵",
+        "css": "#6f8f68",
+        "color": 10935456,
+        "members": [
+          "spiritgourd",
+          "blood",
+          "daoheart",
+          "soulbell"
+        ],
+        "two": "唤灵",
+        "four": "三灵巡狩",
+        "desc2": "每 12 次击杀唤出一道灵影追猎高威胁目标。",
+        "desc4": "每 8 次击杀同时唤出三灵，命中后回气。"
+      },
+      "body": {
+        "name": "炼体",
+        "glyph": "体",
+        "css": "#9c7b4d",
+        "color": 14726504,
+        "members": [
+          "turtle",
+          "dragonblood",
+          "goldenbody",
+          "lotus",
+          "windboots",
+          "qilin"
+        ],
+        "two": "罡气踏",
+        "four": "金身卸力",
+        "desc2": "每次闪避爆发护体罡气，震伤并推开近身敌人。",
+        "desc4": "闪避后短时间获得一次完全卸力。"
+      }
+    },
+    "spirit_vein": {
+      "firstAt": 36,
+      "interval": 68,
+      "duration": 25,
+      "radius": 3.25,
+      "captureRate": 0.14,
+      "decayRate": 0.035,
+      "boonDuration": 18,
+      "damageBonus": 0.26,
+      "hasteBonus": 0.2,
+      "moveBonus": 0.08,
+      "waveInterval": 4.2
+    },
+    "regions": {
+      "ruins": {
+        "id": "ruins",
+        "name": "晨曦遗庭",
+        "short": "庭",
+        "subtitle": "断壁仍守着第一缕天光",
+        "background": 12573161,
+        "fog": 13162447,
+        "accent": 8312520,
+        "pools": [
+          "ghoul",
+          "hound",
+          "skeleton",
+          "cultist"
+        ]
+      },
+      "bamboo": {
+        "id": "bamboo",
+        "name": "碧篁剑林",
+        "short": "篁",
+        "subtitle": "竹影切风，妖影沿林线合围",
+        "background": 12179663,
+        "fog": 12243645,
+        "accent": 6470023,
+        "pools": [
+          "hound",
+          "ghoul",
+          "wraith",
+          "cultist"
+        ]
+      },
+      "marsh": {
+        "id": "marsh",
+        "name": "青莲灵泽",
+        "short": "莲",
+        "subtitle": "莲灯照水，邪修在雾中游弋",
+        "background": 12049632,
+        "fog": 11916494,
+        "accent": 6736325,
+        "pools": [
+          "wraith",
+          "skeleton",
+          "bomber",
+          "cultist"
+        ]
+      },
+      "sword": {
+        "id": "sword",
+        "name": "问剑古冢",
+        "short": "剑",
+        "subtitle": "残剑列阵，亡者守望旧誓",
+        "background": 12833759,
+        "fog": 12504016,
+        "accent": 9352918,
+        "pools": [
+          "skeleton",
+          "shield",
+          "necromancer",
+          "wraith"
+        ]
+      },
+      "ember": {
+        "id": "ember",
+        "name": "丹霞裂谷",
+        "short": "丹",
+        "subtitle": "朱岩藏火，重甲妖物压迫前线",
+        "background": 14666680,
+        "fog": 13877418,
+        "accent": 15240020,
+        "pools": [
+          "brute",
+          "bomber",
+          "hound",
+          "shield"
+        ]
+      }
+    },
+    "encounter_templates": {
+      "pincer": {
+        "id": "pincer",
+        "name": "双翼合围",
+        "telegraph": "两侧妖气逼近",
+        "baseCount": 6,
+        "stagger": 0.34,
+        "eliteAt": 0.82
+      },
+      "hunt": {
+        "id": "hunt",
+        "name": "猎杀印记",
+        "telegraph": "高威胁目标现身",
+        "baseCount": 5,
+        "stagger": 0.48,
+        "eliteAt": 0.36
+      },
+      "crossfire": {
+        "id": "crossfire",
+        "name": "远近交错",
+        "telegraph": "远程火力正在展开",
+        "baseCount": 7,
+        "stagger": 0.42,
+        "eliteAt": 0.68
+      },
+      "vanguard": {
+        "id": "vanguard",
+        "name": "破阵先锋",
+        "telegraph": "重甲先锋压入战场",
+        "baseCount": 6,
+        "stagger": 0.56,
+        "eliteAt": 0.2
+      }
+    },
+    "level_metrics": {
+      "playerRadius": 0.42,
+      "enemyRadius": 0.72,
+      "corridorWidth": 8,
+      "arenaClearance": 2.2,
+      "worldLimit": 43,
+      "blockoutUnit": 1
+    },
+    "map_rooms": [
+      {
+        "id": "ruins",
+        "x": 0,
+        "z": 0,
+        "w": 22,
+        "d": 22,
+        "h": 0.34,
+        "label": "中央教学场"
+      },
+      {
+        "id": "bamboo",
+        "x": 28,
+        "z": 0,
+        "w": 26,
+        "d": 28,
+        "h": 0.42,
+        "label": "柱阵走位场"
+      },
+      {
+        "id": "marsh",
+        "x": -28,
+        "z": 0,
+        "w": 26,
+        "d": 28,
+        "h": 0.28,
+        "label": "桥岛控制场"
+      },
+      {
+        "id": "sword",
+        "x": 0,
+        "z": -28,
+        "w": 28,
+        "d": 26,
+        "h": 0.48,
+        "label": "碑阵决斗场"
+      },
+      {
+        "id": "ember",
+        "x": 0,
+        "z": 28,
+        "w": 28,
+        "d": 26,
+        "h": 0.38,
+        "label": "峡谷压迫场"
+      }
+    ],
+    "map_links": [
+      {
+        "id": "ruins-bamboo",
+        "a": "ruins",
+        "b": "bamboo",
+        "x": 13,
+        "z": 0,
+        "w": 8,
+        "d": 8
+      },
+      {
+        "id": "ruins-marsh",
+        "a": "ruins",
+        "b": "marsh",
+        "x": -13,
+        "z": 0,
+        "w": 8,
+        "d": 8
+      },
+      {
+        "id": "ruins-sword",
+        "a": "ruins",
+        "b": "sword",
+        "x": 0,
+        "z": -13,
+        "w": 8,
+        "d": 8
+      },
+      {
+        "id": "ruins-ember",
+        "a": "ruins",
+        "b": "ember",
+        "x": 0,
+        "z": 13,
+        "w": 8,
+        "d": 8
+      }
+    ],
+    "map_blockers": [
+      {
+        "id": "center-nw",
+        "region": "ruins",
+        "x": -7,
+        "z": -7,
+        "w": 2.4,
+        "d": 2.4,
+        "h": 1.1,
+        "type": "plinth"
+      },
+      {
+        "id": "center-ne",
+        "region": "ruins",
+        "x": 7,
+        "z": -7,
+        "w": 2.4,
+        "d": 2.4,
+        "h": 1.1,
+        "type": "plinth"
+      },
+      {
+        "id": "center-sw",
+        "region": "ruins",
+        "x": -7,
+        "z": 7,
+        "w": 2.4,
+        "d": 2.4,
+        "h": 1.1,
+        "type": "plinth"
+      },
+      {
+        "id": "center-se",
+        "region": "ruins",
+        "x": 7,
+        "z": 7,
+        "w": 2.4,
+        "d": 2.4,
+        "h": 1.1,
+        "type": "plinth"
+      },
+      {
+        "id": "bamboo-p1",
+        "region": "bamboo",
+        "x": 22,
+        "z": -8,
+        "w": 1.2,
+        "d": 5,
+        "h": 3.8,
+        "type": "pillar"
+      },
+      {
+        "id": "bamboo-p2",
+        "region": "bamboo",
+        "x": 28,
+        "z": 4,
+        "w": 1.2,
+        "d": 5,
+        "h": 4.8,
+        "type": "pillar"
+      },
+      {
+        "id": "bamboo-p3",
+        "region": "bamboo",
+        "x": 34,
+        "z": 8,
+        "w": 1.2,
+        "d": 5,
+        "h": 4.2,
+        "type": "pillar"
+      },
+      {
+        "id": "bamboo-p4",
+        "region": "bamboo",
+        "x": 35,
+        "z": -8,
+        "w": 1.2,
+        "d": 4.2,
+        "h": 3.4,
+        "type": "pillar"
+      },
+      {
+        "id": "bamboo-p5",
+        "region": "bamboo",
+        "x": 22,
+        "z": 8,
+        "w": 1.2,
+        "d": 4.2,
+        "h": 3.4,
+        "type": "pillar"
+      },
+      {
+        "id": "marsh-i1",
+        "region": "marsh",
+        "x": -23,
+        "z": -7,
+        "w": 4.2,
+        "d": 3.2,
+        "h": 0.72,
+        "type": "island"
+      },
+      {
+        "id": "marsh-i2",
+        "region": "marsh",
+        "x": -31,
+        "z": 0,
+        "w": 4.6,
+        "d": 3.4,
+        "h": 0.92,
+        "type": "island"
+      },
+      {
+        "id": "marsh-i3",
+        "region": "marsh",
+        "x": -23,
+        "z": 8,
+        "w": 3.8,
+        "d": 3.2,
+        "h": 0.66,
+        "type": "island"
+      },
+      {
+        "id": "marsh-i4",
+        "region": "marsh",
+        "x": -37,
+        "z": -8,
+        "w": 3.2,
+        "d": 3,
+        "h": 0.62,
+        "type": "island"
+      },
+      {
+        "id": "sword-s1",
+        "region": "sword",
+        "x": -8,
+        "z": -24,
+        "w": 1,
+        "d": 3.6,
+        "h": 2.7,
+        "type": "stele"
+      },
+      {
+        "id": "sword-s2",
+        "region": "sword",
+        "x": 0,
+        "z": -33,
+        "w": 1,
+        "d": 4,
+        "h": 3.4,
+        "type": "stele"
+      },
+      {
+        "id": "sword-s3",
+        "region": "sword",
+        "x": 8,
+        "z": -24,
+        "w": 1,
+        "d": 3.6,
+        "h": 2.7,
+        "type": "stele"
+      },
+      {
+        "id": "sword-s4",
+        "region": "sword",
+        "x": -8,
+        "z": -36,
+        "w": 1,
+        "d": 3,
+        "h": 2.3,
+        "type": "stele"
+      },
+      {
+        "id": "sword-s5",
+        "region": "sword",
+        "x": 8,
+        "z": -36,
+        "w": 1,
+        "d": 3,
+        "h": 2.3,
+        "type": "stele"
+      },
+      {
+        "id": "ember-w1",
+        "region": "ember",
+        "x": -8,
+        "z": 23,
+        "w": 7,
+        "d": 1.4,
+        "h": 2.8,
+        "type": "canyon"
+      },
+      {
+        "id": "ember-w2",
+        "region": "ember",
+        "x": 6,
+        "z": 29,
+        "w": 8,
+        "d": 1.4,
+        "h": 3.4,
+        "type": "canyon"
+      },
+      {
+        "id": "ember-w3",
+        "region": "ember",
+        "x": -6,
+        "z": 36,
+        "w": 8,
+        "d": 1.4,
+        "h": 3,
+        "type": "canyon"
+      }
+    ],
+    "enemies": {
+      "ghoul": {
+        "hp": 34,
+        "speed": 2.25,
+        "dmg": 12,
+        "xp": 5,
+        "r": 0.46,
+        "color": 5859401
+      },
+      "hound": {
+        "hp": 27,
+        "speed": 3.55,
+        "dmg": 11,
+        "xp": 7,
+        "r": 0.42,
+        "color": 6307908,
+        "dash": true
+      },
+      "skeleton": {
+        "hp": 42,
+        "speed": 1.8,
+        "dmg": 10,
+        "xp": 9,
+        "r": 0.45,
+        "color": 13813669,
+        "ranged": true
+      },
+      "cultist": {
+        "hp": 48,
+        "speed": 1.65,
+        "dmg": 12,
+        "xp": 11,
+        "r": 0.46,
+        "color": 4797775,
+        "ranged": true
+      },
+      "brute": {
+        "hp": 138,
+        "speed": 1.25,
+        "dmg": 23,
+        "xp": 19,
+        "r": 0.68,
+        "color": 6637891
+      },
+      "bomber": {
+        "hp": 58,
+        "speed": 2.7,
+        "dmg": 28,
+        "xp": 14,
+        "r": 0.54,
+        "color": 8075311,
+        "bomber": true
+      },
+      "wraith": {
+        "hp": 64,
+        "speed": 2.55,
+        "dmg": 15,
+        "xp": 15,
+        "r": 0.5,
+        "color": 7310482,
+        "blink": true
+      },
+      "shield": {
+        "hp": 175,
+        "speed": 1.35,
+        "dmg": 20,
+        "xp": 21,
+        "r": 0.62,
+        "color": 5200227,
+        "shield": true
+      },
+      "necromancer": {
+        "hp": 118,
+        "speed": 1.35,
+        "dmg": 16,
+        "xp": 24,
+        "r": 0.58,
+        "color": 4206926,
+        "summon": true
+      }
+    },
+    "bosses": [
+      {
+        "name": "青木猿王",
+        "title": "百兽山 · 护山妖王",
+        "hp": 2200,
+        "speed": 1.55,
+        "dmg": 30,
+        "xp": 220,
+        "r": 1.02,
+        "color": 6589778
+      },
+      {
+        "name": "赤焰丹炉灵",
+        "title": "丹霞谷 · 失控炉灵",
+        "hp": 3600,
+        "speed": 1.18,
+        "dmg": 34,
+        "xp": 320,
+        "r": 1.02,
+        "color": 14904888
+      },
+      {
+        "name": "玄雷道君",
+        "title": "九霄台 · 雷法残魂",
+        "hp": 5200,
+        "speed": 1.28,
+        "dmg": 39,
+        "xp": 430,
+        "r": 1.06,
+        "color": 7317977
+      },
+      {
+        "name": "金翅鹏王",
+        "title": "天风岭 · 妖禽之王",
+        "hp": 7000,
+        "speed": 1.55,
+        "dmg": 44,
+        "xp": 560,
+        "r": 1.18,
+        "color": 14264898
+      },
+      {
+        "name": "镇岳石尊",
+        "title": "昆仑墟 · 山灵化身",
+        "hp": 9300,
+        "speed": 0.98,
+        "dmg": 52,
+        "xp": 720,
+        "r": 1.32,
+        "color": 9407858
+      },
+      {
+        "name": "太虚剑尊",
+        "title": "问剑峰 · 一缕剑意",
+        "hp": 12800,
+        "speed": 1.22,
+        "dmg": 58,
+        "xp": 980,
+        "r": 1.12,
+        "color": 14215396
+      }
+    ],
+    "boss_schedule_seconds": [
+      70,
+      145,
+      230,
+      330,
+      445,
+      575
+    ]
+  },
+  "counts": {
+    "realms": 6,
+    "rules": 15,
+    "weapons": 9,
+    "passives": 12,
+    "relics": 24,
+    "resonance_paths": 6,
+    "regions": 5,
+    "encounter_templates": 4,
+    "enemies": 9,
+    "bosses": 6
+  }
+}

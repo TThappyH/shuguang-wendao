@@ -1,0 +1,48 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/world/level_builder.gd" id="2_level"]
+[ext_resource type="Script" path="res://scripts/player/player_controller.gd" id="3_player"]
+[ext_resource type="Script" path="res://scripts/camera/follow_camera.gd" id="4_camera"]
+[ext_resource type="Script" path="res://scripts/ui/game_hud.gd" id="5_hud"]
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_main")
+
+[node name="World" type="Node3D" parent="."]
+script = ExtResource("2_level")
+
+[node name="Actors" type="Node3D" parent="."]
+
+[node name="Player" type="CharacterBody3D" parent="Actors" node_paths=PackedStringArray("level_path")]
+collision_layer = 2
+collision_mask = 1
+position = Vector3(0, 0.08, 2)
+script = ExtResource("3_player")
+level_path = NodePath("../../World")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Actors/Player"]
+
+[node name="VisualRoot" type="Node3D" parent="Actors/Player"]
+
+[node name="CameraRig" type="Node3D" parent="."]
+script = ExtResource("4_camera")
+target_path = NodePath("../Actors/Player")
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig"]
+current = true
+fov = 36.0
+near = 0.1
+far = 180.0
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="GameHUD" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("5_hud")

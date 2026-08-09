@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EnemyArchetypeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_archetype_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"skirmisher"
+display_name = "游煞"
+design_note = "轻量侧压单位，让玩家持续修正穿透角度。"
+model_slot = &"enemy_skirmisher"
+behavior = &"flank"
+max_hp = 46.0
+move_speed = 3.05
+acceleration = 6.6
+contact_damage = 7.0
+contact_cooldown = 0.82
+contact_range = 0.98
+radius = 0.41
+visual_scale = 0.88
+essence_reward = 1
+spawn_weight = 0.72
+unlock_intensity = 0.28

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/upgrade_definition.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"sword_velocity"
+title = "流光"
+description = "飞剑速度 +12%"
+target = &"sword"
+stat = &"travel_speed_multiplier"
+amount = 0.12
+max_stacks = 4
+draft_weight = 0.95
+accent = Color(0.35, 0.86, 0.8, 1)

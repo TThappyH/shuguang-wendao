@@ -1,0 +1,9 @@
+{
+  "source": "E:\\shuguang-wendao-v68\\godot\\assets\\weapons\\qingyao_flying_sword\\qingyao_flying_sword_v1.glb",
+  "output": "E:\\shuguang-wendao-v68\\godot\\assets\\weapons\\qingyao_flying_sword\\qingyao_flying_sword_gameplay_lod.glb",
+  "target_triangles": 10000,
+  "source_triangles": 836868,
+  "output_triangles": 10000,
+  "ratio": 0.011949315782178312,
+  "mesh_count": 1
+}

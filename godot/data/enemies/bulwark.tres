@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EnemyArchetypeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_archetype_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"bulwark"
+display_name = "镇岳"
+design_note = "低速高血量压力锚点，维持敌群形状与路线风险。"
+model_slot = &"enemy_bulwark"
+behavior = &"pressure"
+max_hp = 118.0
+move_speed = 1.7
+acceleration = 4.2
+contact_damage = 14.0
+contact_cooldown = 0.95
+contact_range = 1.15
+radius = 0.58
+visual_scale = 1.18
+essence_reward = 2
+spawn_weight = 0.5
+unlock_intensity = 0.58

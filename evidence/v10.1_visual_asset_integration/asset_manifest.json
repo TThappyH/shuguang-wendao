@@ -1,0 +1,22 @@
+{
+  "gate": "V10.1_VISUAL_ASSET_INTEGRATION",
+  "generated": "2026-08-09T20:37:48.2767922+08:00",
+  "assets": [
+    {
+      "path": "godot/assets/characters/qingyao/qingyao_v1_rodin_textured.glb",
+      "bytes": 61363700,
+      "sha256": "d273592703b865bb2d39e3d3cee7046a05887d29cba5274622a672864a1d83b8"
+    },
+    {
+      "path": "godot/assets/maps/qingyun_island/qingyun_island_v1.glb",
+      "bytes": 48966096,
+      "sha256": "562a720fb0a63a634edae87bbd0898a165b3f85a7f98b386f3a0c37467f3937e"
+    },
+    {
+      "path": "godot/assets/weapons/qingyao_flying_sword/qingyao_flying_sword_v1.glb",
+      "bytes": 31400908,
+      "sha256": "746fb5017c89a29f58e0aeb59aac579eecdda9290657ef8d13fdf665448f5a96"
+    }
+  ],
+  "quality_gate": "V10_QUALITY_GATE_PASS"
+}
