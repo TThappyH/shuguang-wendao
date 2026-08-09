@@ -3,6 +3,7 @@ extends CharacterBody3D
 
 signal defeated(enemy: EnemyController)
 signal contact_damage(amount: float)
+signal health_changed(enemy: EnemyController, current: float, maximum: float)
 
 enum EnemyState { APPROACH, HIT, DEAD }
 
@@ -20,6 +21,9 @@ var contact_range := 1.05
 var radius := 0.48
 var state := EnemyState.APPROACH
 var dead := false
+var is_boss := false
+var boss_index := -1
+var display_name := ""
 var _contact_timer := 0.0
 var _hit_timer := 0.0
 var _phase := 0.0
@@ -41,6 +45,12 @@ func configure(owner_player: Node3D, owner_level: Node, serial: int, data: Enemy
 		contact_range = archetype.contact_range
 		radius = archetype.radius
 	hp = max_hp
+	display_name = archetype.display_name if archetype != null else "妖物"
+
+func configure_as_boss(index: int, name_value: String) -> void:
+	is_boss = true
+	boss_index = index
+	display_name = name_value
 
 func _ready() -> void:
 	add_to_group("enemies")
@@ -98,6 +108,7 @@ func take_damage(amount: float, direction := Vector3.ZERO) -> void:
 	if dead:
 		return
 	hp = maxf(0.0, hp - amount)
+	health_changed.emit(self, hp, max_hp)
 	if direction.length_squared() > 0.001:
 		_knockback_velocity += direction.normalized() * 1.8
 	if hp <= 0.0:
@@ -128,7 +139,10 @@ func snapshot() -> Dictionary:
 		"archetype": String(archetype.id) if archetype != null else "fallback",
 		"state": state_name(),
 		"hp": hp,
-		"speed": move_speed
+		"speed": move_speed,
+		"boss": is_boss,
+		"boss_index": boss_index,
+		"display_name": display_name
 	}
 
 func _animate_visual() -> void:

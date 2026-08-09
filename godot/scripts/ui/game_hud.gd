@@ -17,6 +17,7 @@ var player: PlayerController
 var swords: SwordManager
 var director: EncounterDirector
 var progression: RunProgression
+var realms: RealmProgression
 var region_id := "ruins"
 var debug_visible := false
 
@@ -41,6 +42,13 @@ var _draft_overlay: ColorRect
 var _draft_cards: HBoxContainer
 var _run_over_overlay: ColorRect
 var _run_summary: Label
+var _boss_panel: PanelContainer
+var _boss_name: Label
+var _boss_bar: ProgressBar
+var _boss_hp: Label
+var _breakthrough_overlay: ColorRect
+var _breakthrough_title: Label
+var _breakthrough_cards: HBoxContainer
 var _refresh_clock := 0.0
 var _hp_tween: Tween
 
@@ -51,12 +59,13 @@ func _ready() -> void:
 	_build_theme()
 	_build_hud()
 
-func configure(owner_game: Node, owner_player: PlayerController, owner_swords: SwordManager, owner_director: EncounterDirector, owner_progression: RunProgression) -> void:
+func configure(owner_game: Node, owner_player: PlayerController, owner_swords: SwordManager, owner_director: EncounterDirector, owner_progression: RunProgression, owner_realms: RealmProgression) -> void:
 	game = owner_game
 	player = owner_player
 	swords = owner_swords
 	director = owner_director
 	progression = owner_progression
+	realms = owner_realms
 	player.health_changed.connect(_on_health_changed)
 	player.dash_ready_changed.connect(_on_dash_ready_changed)
 	swords.metrics_changed.connect(_on_metrics_changed)
@@ -66,6 +75,9 @@ func configure(owner_game: Node, owner_player: PlayerController, owner_swords: S
 	progression.progression_changed.connect(_on_progression_changed)
 	progression.draft_opened.connect(_on_draft_opened)
 	progression.draft_closed.connect(_on_draft_closed)
+	realms.realm_changed.connect(_on_realm_changed)
+	realms.breakthrough_opened.connect(_on_breakthrough_opened)
+	realms.breakthrough_closed.connect(_on_breakthrough_closed)
 	refresh()
 
 func set_region(next_region: String) -> void:
@@ -121,7 +133,7 @@ func _process(delta: float) -> void:
 		_refresh_debug()
 
 func _runtime_valid() -> bool:
-	return is_instance_valid(game) and is_instance_valid(player) and is_instance_valid(swords) and is_instance_valid(director) and is_instance_valid(progression)
+	return is_instance_valid(game) and is_instance_valid(player) and is_instance_valid(swords) and is_instance_valid(director) and is_instance_valid(progression) and is_instance_valid(realms)
 
 func _build_theme() -> void:
 	var hud_theme := Theme.new()
@@ -140,7 +152,9 @@ func _build_hud() -> void:
 	_build_sword_dock()
 	_build_command_panel()
 	_build_debug_panel()
+	_build_boss_panel()
 	_build_draft_overlay()
+	_build_breakthrough_overlay()
 	_build_run_over_overlay()
 
 func _build_health_panel() -> void:
@@ -280,6 +294,38 @@ func _build_debug_panel() -> void:
 	_debug_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	margin.add_child(_debug_text)
 
+func _build_boss_panel() -> void:
+	_boss_panel = _panel("BossGatePanel", Color("24171a", 0.94), DANGER, 9)
+	_boss_panel.set_anchors_preset(Control.PRESET_CENTER_TOP)
+	_boss_panel.position = Vector2(-260, 126)
+	_boss_panel.custom_minimum_size = Vector2(520, 68)
+	_boss_panel.visible = false
+	add_child(_boss_panel)
+	var margin := _margin(16, 8, 16, 8)
+	_boss_panel.add_child(margin)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 4)
+	margin.add_child(column)
+	var row := HBoxContainer.new()
+	column.add_child(row)
+	_boss_name = _label("首领", 14, IVORY, true)
+	_boss_name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(_boss_name)
+	_boss_hp = _label("0 / 0", 12, GOLD, true)
+	row.add_child(_boss_hp)
+	_boss_bar = _bar("BossHealth", DANGER, Color("321e22"), Vector2(488, 10))
+	column.add_child(_boss_bar)
+
+func set_boss_gate(name_value: String, current: float, maximum: float, visible_value: bool) -> void:
+	if not is_instance_valid(_boss_panel):
+		return
+	_boss_panel.visible = visible_value
+	if not visible_value:
+		return
+	_boss_name.text = name_value
+	_boss_hp.text = "%d / %d" % [roundi(current), roundi(maximum)]
+	_boss_bar.value = current / maxf(maximum, 1.0) * 100.0
+
 func _build_draft_overlay() -> void:
 	_draft_overlay = ColorRect.new()
 	_draft_overlay.name = "UpgradeDraftOverlay"
@@ -306,6 +352,33 @@ func _build_draft_overlay() -> void:
 	_draft_cards.alignment = BoxContainer.ALIGNMENT_CENTER
 	_draft_cards.add_theme_constant_override("separation", 18)
 	column.add_child(_draft_cards)
+
+func _build_breakthrough_overlay() -> void:
+	_breakthrough_overlay = ColorRect.new()
+	_breakthrough_overlay.name = "BreakthroughOverlay"
+	_breakthrough_overlay.color = Color(0.018, 0.05, 0.058, 0.94)
+	_breakthrough_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_breakthrough_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	_breakthrough_overlay.process_mode = Node.PROCESS_MODE_ALWAYS
+	_breakthrough_overlay.visible = false
+	add_child(_breakthrough_overlay)
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_breakthrough_overlay.add_child(center)
+	var column := VBoxContainer.new()
+	column.custom_minimum_size = Vector2(1100, 420)
+	column.add_theme_constant_override("separation", 18)
+	center.add_child(column)
+	_breakthrough_title = _label("境界突破", 34, IVORY, true)
+	_breakthrough_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	column.add_child(_breakthrough_title)
+	var subtitle := _label("首领已倒，选择本局唯一道基", 14, GOLD, true)
+	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	column.add_child(subtitle)
+	_breakthrough_cards = HBoxContainer.new()
+	_breakthrough_cards.alignment = BoxContainer.ALIGNMENT_CENTER
+	_breakthrough_cards.add_theme_constant_override("separation", 18)
+	column.add_child(_breakthrough_cards)
 
 func _build_run_over_overlay() -> void:
 	_run_over_overlay = ColorRect.new()
@@ -352,7 +425,9 @@ func _refresh_health(animated := true) -> void:
 	_hp_bar.modulate = Color.WHITE if ratio > 0.3 else Color(1.2, 0.72, 0.72)
 
 func _refresh_progression() -> void:
-	_level_value.text = "道行 %02d" % progression.level
+	var realm_name := String(realms.current_realm().get("name", "炼气"))
+	_level_value.text = "%s · 道行 %02d" % [realm_name, progression.level]
+	_level_value.custom_minimum_size.x = 130
 	_essence_bar.value = float(progression.essence) / float(maxi(1, progression.next_level_essence)) * 100.0
 
 func _refresh_encounter() -> void:
@@ -384,8 +459,10 @@ func _refresh_dash() -> void:
 
 func _refresh_overlays() -> void:
 	var draft := progression.draft_active
-	_draft_overlay.visible = draft
-	_run_over_overlay.visible = game.run_over and not draft
+	var breakthrough := realms.breakthrough_active
+	_draft_overlay.visible = draft and not breakthrough
+	_breakthrough_overlay.visible = breakthrough
+	_run_over_overlay.visible = game.run_over and not draft and not breakthrough
 	if _run_over_overlay.visible:
 		_run_summary.text = "道行 %d  ·  击破 %d  ·  行进 %.1f m\n平均命中 %.2f  ·  连穿率 %.1f%%" % [progression.level, director.kills, player.total_distance, swords.average_hits_per_shot(), swords.multi_hit_rate() * 100.0]
 
@@ -426,6 +503,51 @@ func _on_draft_opened(_options: Array[UpgradeDefinition]) -> void:
 
 func _on_draft_closed() -> void:
 	_draft_overlay.visible = false
+
+func _on_realm_changed(_realm: Dictionary, _rule: Dictionary) -> void:
+	_refresh_progression()
+
+func _on_breakthrough_opened(from_realm: Dictionary, to_realm: Dictionary, _options: Array[Dictionary]) -> void:
+	_breakthrough_title.text = "%s  →  %s" % [String(from_realm.get("name", "炼气")), String(to_realm.get("name", "筑基"))]
+	_rebuild_breakthrough_cards()
+	_breakthrough_overlay.visible = true
+
+func _on_breakthrough_closed() -> void:
+	_breakthrough_overlay.visible = false
+
+func _rebuild_breakthrough_cards() -> void:
+	for child in _breakthrough_cards.get_children():
+		child.queue_free()
+	for index in realms.pending_options.size():
+		var option: Dictionary = realms.pending_options[index]
+		var card := _panel("RealmRuleCard%d" % (index + 1), PANEL, GOLD, 12)
+		card.custom_minimum_size = Vector2(330, 270)
+		_breakthrough_cards.add_child(card)
+		var margin := _margin(18, 18, 18, 18)
+		card.add_child(margin)
+		var column := VBoxContainer.new()
+		column.add_theme_constant_override("separation", 12)
+		margin.add_child(column)
+		column.add_child(_label("道基 0%d" % (index + 1), 14, GOLD, true))
+		var title := _label(String(option.get("name", "未知道基")), 23, IVORY, true)
+		title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		column.add_child(title)
+		var description := _label(String(option.get("description", "")), 14, JADE_PALE)
+		description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		description.custom_minimum_size.y = 74
+		column.add_child(description)
+		var lore := _label(String(option.get("lore", "")), 12, MUTED)
+		lore.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		lore.custom_minimum_size.y = 54
+		column.add_child(lore)
+		var choose := Button.new()
+		choose.text = "立此道基"
+		choose.custom_minimum_size.y = 42
+		choose.pressed.connect(_on_realm_rule_pressed.bind(index))
+		column.add_child(choose)
+
+func _on_realm_rule_pressed(index: int) -> void:
+	realms.choose_breakthrough(index)
 
 func _rebuild_draft_cards() -> void:
 	for child in _draft_cards.get_children():

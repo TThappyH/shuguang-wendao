@@ -5,6 +5,7 @@ const DirectorScript := preload("res://scripts/enemies/encounter_director.gd")
 const ProgressionScript := preload("res://scripts/progression/run_progression.gd")
 const FeedbackScript := preload("res://scripts/effects/combat_feedback.gd")
 const PerformanceMonitorScript := preload("res://scripts/core/runtime_performance_monitor.gd")
+const RealmProgressionScript := preload("res://scripts/progression/realm_progression.gd")
 
 @onready var level: LevelBuilder = $World
 @onready var player: PlayerController = $Actors/Player
@@ -16,6 +17,7 @@ var director: EncounterDirector
 var progression: RunProgression
 var feedback: CombatFeedback
 var performance_monitor: RuntimePerformanceMonitor
+var realm_progression: RealmProgression
 var debug_mode := false
 var run_over := false
 var run_seed := 9271
@@ -25,7 +27,7 @@ func _ready() -> void:
 	GameEvents.begin_run(run_seed)
 	_create_runtime_systems()
 	_connect_runtime_signals()
-	hud.configure(self, player, sword_manager, director, progression)
+	hud.configure(self, player, sword_manager, director, progression, realm_progression)
 	_on_region_changed("ruins")
 
 func _create_runtime_systems() -> void:
@@ -45,6 +47,10 @@ func _create_runtime_systems() -> void:
 	progression.name = "RunProgression"
 	add_child(progression)
 	progression.configure(player, sword_manager, director, run_seed)
+	realm_progression = RealmProgressionScript.new()
+	realm_progression.name = "RealmProgression"
+	add_child(realm_progression)
+	realm_progression.configure(player, sword_manager, director)
 	performance_monitor = PerformanceMonitorScript.new()
 	performance_monitor.name = "RuntimePerformanceMonitor"
 	add_child(performance_monitor)
@@ -66,6 +72,10 @@ func _connect_runtime_signals() -> void:
 	progression.progression_changed.connect(_on_progression_changed)
 	progression.draft_opened.connect(_on_draft_changed)
 	progression.draft_closed.connect(_on_draft_closed)
+	realm_progression.realm_changed.connect(_on_realm_changed)
+	realm_progression.breakthrough_opened.connect(_on_breakthrough_opened)
+	realm_progression.breakthrough_closed.connect(_on_draft_closed)
+	realm_progression.boss_gate_changed.connect(hud.set_boss_gate)
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("restart"):
@@ -90,6 +100,7 @@ func _reset_runtime() -> void:
 	GameEvents.reset_run()
 	GameEvents.begin_run(run_seed)
 	progression.reset_runtime(run_seed)
+	realm_progression.reset_runtime()
 	player.reset_runtime()
 	director.reset_runtime()
 	sword_manager.reset_runtime()
@@ -143,6 +154,12 @@ func _on_draft_changed(_options: Array[UpgradeDefinition]) -> void:
 func _on_draft_closed() -> void:
 	hud.refresh()
 
+func _on_realm_changed(_realm: Dictionary, _rule: Dictionary) -> void:
+	hud.refresh()
+
+func _on_breakthrough_opened(_from: Dictionary, _to: Dictionary, _options: Array[Dictionary]) -> void:
+	hud.refresh()
+
 func debug_snapshot() -> Dictionary:
 	return {
 		"engine": "Godot 4.7.1",
@@ -155,6 +172,8 @@ func debug_snapshot() -> Dictionary:
 		"encounter": director.snapshot(),
 		"combat": sword_manager.snapshot(),
 		"progression": progression.snapshot(),
+		"realm_progression": realm_progression.snapshot(),
+		"legacy_html_content": LegacyContentCatalog.snapshot(),
 		"world": level.snapshot(),
 		"qingyao": player._visual.snapshot(),
 		"presentation": player.presentation_snapshot(),

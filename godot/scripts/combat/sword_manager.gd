@@ -4,6 +4,7 @@ extends Node3D
 signal metrics_changed(shots: int, hits: int, multi_hit_shots: int)
 signal impact(world_position: Vector3, hit_count: int, damage: float)
 signal sword_state_changed(index: int, state_name: StringName)
+signal enemy_hit(enemy: Node, hit_count: int)
 
 var player: Node3D
 var shots_fired := 0
@@ -35,8 +36,9 @@ func _on_shot_fired() -> void:
 	shots_fired += 1
 	metrics_changed.emit(shots_fired, hits, multi_hit_shots)
 
-func _on_hit_registered(_enemy: Node, _hit_count: int) -> void:
+func _on_hit_registered(enemy: Node, hit_count: int) -> void:
 	hits += 1
+	enemy_hit.emit(enemy, hit_count)
 	metrics_changed.emit(shots_fired, hits, multi_hit_shots)
 
 func _on_multi_hit_completed(_hit_count: int) -> void:

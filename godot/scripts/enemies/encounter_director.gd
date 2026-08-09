@@ -6,6 +6,9 @@ signal enemy_defeated(enemy: EnemyController, archetype_id: StringName, essence_
 signal damage_taken(amount: float)
 signal region_changed(region_id: String)
 signal phase_changed(phase_id: StringName, intensity: float, target_count: int)
+signal boss_spawned(enemy: EnemyController, boss_index: int, boss_data: Dictionary)
+signal boss_health_changed(name: String, current: float, maximum: float)
+signal boss_defeated(boss_index: int, boss_data: Dictionary)
 
 const STALKER: EnemyArchetypeData = preload("res://data/enemies/stalker.tres")
 const SKIRMISHER: EnemyArchetypeData = preload("res://data/enemies/skirmisher.tres")
@@ -41,6 +44,9 @@ var _debug_target := 0
 var _last_reported_count := -1
 var _rng := RandomNumberGenerator.new()
 var _pressure_relief := 0.0
+var active_boss: EnemyController
+var active_boss_index := -1
+var active_boss_data: Dictionary = {}
 
 func configure(owner_player: PlayerController, owner_level: Node) -> void:
 	player = owner_player
@@ -98,6 +104,9 @@ func reset_runtime() -> void:
 	current_region = "ruins"
 	_debug_target = 0
 	_pressure_relief = 0.0
+	active_boss = null
+	active_boss_index = -1
+	active_boss_data = {}
 	_spawn_clock = 0.1
 	_last_reported_count = -1
 	_rng.seed = GameEvents.run_seed + 311
@@ -114,8 +123,46 @@ func snapshot() -> Dictionary:
 		"total_spawned": total_spawned,
 		"kills": kills,
 		"damage_taken": damage_taken_total,
-		"debug_target": _debug_target
+		"debug_target": _debug_target,
+		"active_boss": active_boss.snapshot() if is_instance_valid(active_boss) else {}
 	}
+
+func spawn_legacy_boss(index: int, boss_data: Dictionary) -> EnemyController:
+	if is_instance_valid(active_boss) or boss_data.is_empty():
+		return active_boss
+	var data := EnemyArchetypeData.new()
+	data.id = StringName("legacy_boss_%d" % index)
+	data.display_name = String(boss_data.get("name", "首领"))
+	data.design_note = String(boss_data.get("title", "HTML V6.7 Boss migration"))
+	data.model_slot = &""
+	data.behavior = &"direct"
+	data.max_hp = float(boss_data.get("hp", 2200.0))
+	data.move_speed = float(boss_data.get("speed", 1.4))
+	data.acceleration = 4.2
+	data.contact_damage = float(boss_data.get("dmg", 30.0))
+	data.contact_cooldown = 0.92
+	data.contact_range = 1.45
+	data.radius = float(boss_data.get("r", 1.0))
+	data.visual_scale = maxf(1.35, data.radius * 1.35)
+	data.essence_reward = maxi(8, roundi(float(boss_data.get("xp", 220.0)) / 30.0))
+	var enemy := EnemyScript.new() as EnemyController
+	spawn_serial += 1
+	enemy.name = "Boss_%02d_%s" % [index + 1, data.display_name]
+	enemy.position = _find_spawn_point()
+	enemy.configure(player, level, spawn_serial, data, 1.0)
+	enemy.configure_as_boss(index, data.display_name)
+	enemy.defeated.connect(_on_enemy_defeated)
+	enemy.contact_damage.connect(_on_contact_damage)
+	enemy.health_changed.connect(_on_boss_health_changed)
+	add_child(enemy)
+	enemies.append(enemy)
+	active_boss = enemy
+	active_boss_index = index
+	active_boss_data = boss_data.duplicate(true)
+	total_spawned += 1
+	boss_spawned.emit(enemy, index, active_boss_data)
+	boss_health_changed.emit(enemy.display_name, enemy.hp, enemy.max_hp)
+	return enemy
 
 func _update_phase() -> void:
 	if _debug_target > 0:
@@ -192,7 +239,18 @@ func _on_enemy_defeated(enemy: EnemyController) -> void:
 	var reward := data.essence_reward if data != null else 1
 	enemy_defeated.emit(enemy, archetype_id, reward)
 	GameEvents.enemy_defeated.emit(enemy, archetype_id, reward)
+	if enemy.is_boss:
+		var defeated_index := enemy.boss_index
+		var defeated_data := active_boss_data.duplicate(true)
+		active_boss = null
+		active_boss_index = -1
+		active_boss_data = {}
+		boss_defeated.emit(defeated_index, defeated_data)
 	_notify_count_if_changed()
+
+func _on_boss_health_changed(enemy: EnemyController, current: float, maximum: float) -> void:
+	if enemy == active_boss:
+		boss_health_changed.emit(enemy.display_name, current, maximum)
 
 func _on_contact_damage(amount: float) -> void:
 	if player.take_contact_damage(amount):
