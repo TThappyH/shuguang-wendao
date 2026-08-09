@@ -8,6 +8,8 @@ signal impact(world_position: Vector3, hit_count: int, damage: float)
 
 enum SwordState { FORMATION, ACQUIRE, ANTICIPATE, LAUNCH, TRAVEL, IMPACT, RETURN, REFORM }
 
+const MODEL_ASSET_SLOT: StringName = &"qingyao_flying_sword"
+
 var state := SwordState.FORMATION
 var formation_index := 0
 var player: Node3D
@@ -163,7 +165,16 @@ func reset_runtime() -> void:
 
 func _build_sword_visual() -> void:
 	_blade_root = Node3D.new()
+	_blade_root.name = "QingyaoFlyingSwordVisual"
 	add_child(_blade_root)
+	var rodin_sword := RodinAssetRegistry.instantiate(MODEL_ASSET_SLOT)
+	if rodin_sword != null:
+		rodin_sword.name = "QingyaoFlyingSwordV1"
+		_blade_root.add_child(rodin_sword)
+		return
+	_build_fallback_sword_visual()
+
+func _build_fallback_sword_visual() -> void:
 	var blade := MeshInstance3D.new()
 	var blade_mesh := BoxMesh.new()
 	blade_mesh.size = Vector3(0.105, 0.055, 1.22)

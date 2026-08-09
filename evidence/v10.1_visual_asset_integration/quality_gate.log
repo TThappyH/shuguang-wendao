@@ -1,0 +1,48 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Started 项目初始化 (5 steps)[39m[0m
+[   0% ] [90m[1mfirst_scan_filesystem[22m | 正在扫描文件结构……[39m[0m
+[  16% ] [90m[1mfirst_scan_filesystem[22m | 正在加载全局类名……[39m[0m
+[  33% ] [90m[1mfirst_scan_filesystem[22m | 正在校验 GDExtension……[39m[0m
+[  50% ] [90m[1mfirst_scan_filesystem[22m | 正在创建自动加载脚本……[39m[0m
+[  66% ] [90m[1mfirst_scan_filesystem[22m | 正在初始化插件……[39m[0m
+[  83% ] [90m[1mfirst_scan_filesystem[22m | 正在启动文件扫描……[39m[0m
+[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
+[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Started 正在加载编辑器 (5 steps)[39m[0m
+[   0% ] [90m[1mloading_editor_layout[22m | 正在加载编辑器布局……[39m[0m
+[  16% ] [90m[1mloading_editor_layout[22m | 正在加载停靠面板……[39m[0m
+[92m[ DONE ][39m [1mloading_editor_layout[22m
+[0m
+
+=== res://tests/smoke_test.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+GODOT_SMOKE_SNAPSHOT={"branch_gate":"V10_CORE_GAMEPLAY_FRAMEWORK","combat":{"avg_hits_per_shot":0.666666666666667,"damage_multiplier":1.0,"hits":2,"max_hits":2,"multi_hit_rate":0.0,"multi_hit_shots":0,"penetration_bonus":0.0,"shots_fired":3,"travel_speed_multiplier":1.0},"damage_taken":0.0,"encounter":{"damage_taken":0.0,"debug_target":0,"enemy_count":1,"intensity":0.16,"kills":1,"peak_enemies":1,"phase":"WARMUP","target_count":1,"total_spawned":2},"engine":"Godot 4.7.1","feedback_pool_size":24,"player_distance":0.0,"player_hp":120.0,"progression":{"draft_active":false,"essence":1,"level":1,"next_level_essence":4,"total_essence":1,"upgrade_stacks":{}},"qingyao":{"asset_path":"res://assets/characters/qingyao/qingyao_v1_rodin_textured.glb","asset_slot":"qingyao_player","loaded":true,"meshes":1,"triangles":999998,"vertices":826718},"region":"ruins","rodin_assets":[{"exists":true,"path":"res://assets/characters/qingyao/qingyao_v1_rodin_textured.glb","prototype_exempt":true,"required":true,"slot":"qingyao_player"},{"exists":true,"path":"res://assets/maps/qingyun_island/qingyun_island_v1.glb","prototype_exempt":true,"required":true,"slot":"qingyun_island"},{"exists":true,"path":"res://assets/weapons/qingyao_flying_sword/qingyao_flying_sword_v1.glb","prototype_exempt":true,"required":true,"slot":"qingyao_flying_sword"},{"exists":false,"path":"","prototype_exempt":false,"required":false,"slot":"enemy_stalker"},{"exists":false,"path":"","prototype_exempt":false,"required":false,"slot":"enemy_skirmisher"},{"exists":false,"path":"","prototype_exempt":false,"required":false,"slot":"enemy_bulwark"}],"run_over":false,"world":{"asset_path":"res://assets/maps/qingyun_island/qingyun_island_v1.glb","asset_slot":"qingyun_island","external_map_loaded":true,"fallback_blockers":0}}
+GODOT_SMOKE_PASS
+
+=== res://tests/penetration_test.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PENETRATION_SNAPSHOT={"first_hits":1,"registered":2,"second_hits":1}
+PENETRATION_TEST_PASS
+
+=== res://tests/progression_test.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PROGRESSION_SNAPSHOT={"draft_active":false,"essence":1,"level":2,"next_level_essence":7,"total_essence":5,"upgrade_stacks":{"sword_edge":1}}
+PROGRESSION_TEST_PASS
+
+=== res://tests/asset_contract_test.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+RODIN_ASSET_CONTRACT={"geometry":[{"budget":{"hard_max_triangles":70000.0,"max_materials":6.0,"max_texture_size":2048.0,"target_triangles":50000.0},"exists":true,"material_slots":1,"meshes":1,"over_material_max":false,"over_triangle_hard_max":true,"over_triangle_target":true,"prototype_exempt":true,"slot":"qingyao_player","surfaces":1,"triangles":999998,"vertices":826718},{"budget":{"hard_max_triangles":300000.0,"max_materials":12.0,"max_texture_size":2048.0,"target_triangles":180000.0},"exists":true,"material_slots":1,"meshes":1,"over_material_max":false,"over_triangle_hard_max":true,"over_triangle_target":true,"prototype_exempt":true,"slot":"qingyun_island","surfaces":1,"triangles":999992,"vertices":900612},{"budget":{"hard_max_triangles":12000.0,"max_materials":3.0,"max_texture_size":2048.0,"target_triangles":6000.0},"exists":true,"material_slots":1,"meshes":1,"over_material_max":false,"over_triangle_hard_max":true,"over_triangle_target":true,"prototype_exempt":true,"slot":"qingyao_flying_sword","surfaces":1,"triangles":836868,"vertices":463352}],"slots":[{"exists":true,"path":"res://assets/characters/qingyao/qingyao_v1_rodin_textured.glb","prototype_exempt":true,"required":true,"slot":"qingyao_player"},{"exists":true,"path":"res://assets/maps/qingyun_island/qingyun_island_v1.glb","prototype_exempt":true,"required":true,"slot":"qingyun_island"},{"exists":true,"path":"res://assets/weapons/qingyao_flying_sword/qingyao_flying_sword_v1.glb","prototype_exempt":true,"required":true,"slot":"qingyao_flying_sword"},{"exists":false,"path":"","prototype_exempt":false,"required":false,"slot":"enemy_stalker"},{"exists":false,"path":"","prototype_exempt":false,"required":false,"slot":"enemy_skirmisher"},{"exists":false,"path":"","prototype_exempt":false,"required":false,"slot":"enemy_bulwark"}],"warnings":["prototype_budget_exempt_qingyao_player","triangle_hard_max_qingyao_player_999998","prototype_budget_exempt_qingyun_island","triangle_hard_max_qingyun_island_999992","prototype_budget_exempt_qingyao_flying_sword","triangle_hard_max_qingyao_flying_sword_836868"]}
+ASSET_CONTRACT_TEST_PASS
+
+=== res://tests/lifecycle_test.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+LIFECYCLE_SHORT_SNAPSHOT={"branch_gate":"V10_CORE_GAMEPLAY_FRAMEWORK","combat":{"avg_hits_per_shot":0.0,"damage_multiplier":1.0,"hits":0,"max_hits":2,"multi_hit_rate":0.0,"multi_hit_shots":0,"penetration_bonus":0.0,"shots_fired":0,"travel_speed_multiplier":1.0},"damage_taken":0.0,"encounter":{"damage_taken":0.0,"debug_target":0,"enemy_count":1,"intensity":0.16,"kills":0,"peak_enemies":1,"phase":"WARMUP","target_count":1,"total_spawned":1},"engine":"Godot 4.7.1","feedback_pool_size":24,"player_distance":0.0,"player_hp":120.0,"progression":{"draft_active":false,"essence":0,"level":1,"next_level_essence":4,"total_essence":0,"upgrade_stacks":{}},"qingyao":{"asset_path":"res://assets/characters/qingyao/qingyao_v1_rodin_textured.glb","asset_slot":"qingyao_player","loaded":true,"meshes":1,"triangles":999998,"vertices":826718},"region":"ruins","rodin_assets":[{"exists":true,"path":"res://assets/characters/qingyao/qingyao_v1_rodin_textured.glb","prototype_exempt":true,"required":true,"slot":"qingyao_player"},{"exists":true,"path":"res://assets/maps/qingyun_island/qingyun_island_v1.glb","prototype_exempt":true,"required":true,"slot":"qingyun_island"},{"exists":true,"path":"res://assets/weapons/qingyao_flying_sword/qingyao_flying_sword_v1.glb","prototype_exempt":true,"required":true,"slot":"qingyao_flying_sword"},{"exists":false,"path":"","prototype_exempt":false,"required":false,"slot":"enemy_stalker"},{"exists":false,"path":"","prototype_exempt":false,"required":false,"slot":"enemy_skirmisher"},{"exists":false,"path":"","prototype_exempt":false,"required":false,"slot":"enemy_bulwark"}],"run_over":false,"world":{"asset_path":"res://assets/maps/qingyun_island/qingyun_island_v1.glb","asset_slot":"qingyun_island","external_map_loaded":true,"fallback_blockers":0}}
+LIFECYCLE_SHORT_TEST_PASS
+
+V10_QUALITY_GATE_PASS

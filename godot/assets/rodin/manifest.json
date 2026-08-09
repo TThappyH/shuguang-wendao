@@ -5,7 +5,7 @@
   "assets": {
     "qingyao_player": {
       "role": "playable_character",
-      "path": "res://assets/characters/qingyao/qingyao_v1.glb",
+      "path": "res://assets/characters/qingyao/qingyao_v1_rodin_textured.glb",
       "required": true,
       "prototype_exempt": true,
       "budget": {"target_triangles": 50000, "hard_max_triangles": 70000, "max_materials": 6, "max_texture_size": 2048}
@@ -16,6 +16,13 @@
       "required": true,
       "prototype_exempt": true,
       "budget": {"target_triangles": 180000, "hard_max_triangles": 300000, "max_materials": 12, "max_texture_size": 2048}
+    },
+    "qingyao_flying_sword": {
+      "role": "weapon",
+      "path": "res://assets/weapons/qingyao_flying_sword/qingyao_flying_sword_v1.glb",
+      "required": true,
+      "prototype_exempt": true,
+      "budget": {"target_triangles": 6000, "hard_max_triangles": 12000, "max_materials": 3, "max_texture_size": 2048}
     },
     "enemy_stalker": {
       "role": "enemy_character",

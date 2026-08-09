@@ -1,0 +1,24 @@
+{
+  "asset": "qingyao_flying_sword_v1",
+  "vertices": 418436,
+  "triangles": 836868,
+  "materials": 1,
+  "bounds_min": [
+    -0.14329922199249268,
+    -0.07881695032119751,
+    -1.100000023841858
+  ],
+  "bounds_max": [
+    0.14329922199249268,
+    0.07881695032119751,
+    1.100000023841858
+  ],
+  "dimensions": [
+    0.28659844398498535,
+    0.15763390064239502,
+    2.200000047683716
+  ],
+  "output": "E:\\shuguang-wendao-v68\\godot\\assets\\weapons\\qingyao_flying_sword\\qingyao_flying_sword_v1.glb",
+  "output_bytes": 31400908,
+  "geometry_preserved": true
+}
