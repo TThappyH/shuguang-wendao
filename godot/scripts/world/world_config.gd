@@ -57,8 +57,6 @@ static func region_for_position(world_position: Vector3) -> String:
 
 static func is_walkable(world_position: Vector3, radius: float = PLAYER_RADIUS) -> bool:
 	var point := Vector2(world_position.x, world_position.z)
-	if EXTERNAL_MAP_ENABLED:
-		return point.length() <= EXTERNAL_MAP_RADIUS - radius
 	for id: String in REGIONS:
 		var region: Dictionary = REGIONS[id]
 		if _point_in_rect(point, region.center, region.size, radius):
@@ -69,8 +67,6 @@ static func is_walkable(world_position: Vector3, radius: float = PLAYER_RADIUS) 
 	return false
 
 static func navigation_target(from_position: Vector3, to_position: Vector3) -> Vector3:
-	if EXTERNAL_MAP_ENABLED:
-		return to_position
 	var from_region := region_for_position(from_position)
 	var to_region := region_for_position(to_position)
 	if from_region == to_region:

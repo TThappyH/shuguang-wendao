@@ -5,6 +5,7 @@ signal shot_fired
 signal hit_registered(enemy: Node, hit_count: int)
 signal multi_hit_completed(hit_count: int)
 signal impact(world_position: Vector3, hit_count: int, damage: float)
+signal state_changed(index: int, state_name: StringName)
 
 enum SwordState { FORMATION, ACQUIRE, ANTICIPATE, LAUNCH, TRAVEL, IMPACT, RETURN, REFORM }
 
@@ -27,9 +28,13 @@ var first_hit_position := Vector3.ZERO
 var hit_targets: Array[Node] = []
 var _trail_points: Array[Vector3] = []
 var _blade_root: Node3D
+var _trail_mesh: ImmediateMesh
+var _trail_instance: MeshInstance3D
+var _trail_material: StandardMaterial3D
 
 func _ready() -> void:
 	_build_sword_visual()
+	_build_trail()
 
 func configure(owner_player: Node3D, index: int) -> void:
 	player = owner_player
@@ -81,6 +86,7 @@ func _set_state(next_state: SwordState) -> void:
 		multi_hit_completed.emit(hit_targets.size())
 	state = next_state
 	state_time = 0.0
+	state_changed.emit(formation_index, StringName(SwordState.keys()[state]))
 
 func _formation_position() -> Vector3:
 	var offsets := [Vector3(-1.05, 1.45, 0.65), Vector3(0.0, 1.9, 0.95), Vector3(1.05, 1.45, 0.65)]
@@ -92,12 +98,16 @@ func _update_formation(delta: float, expansion := 1.0) -> void:
 	global_position = global_position.lerp(destination, 1.0 - exp(-delta * 15.0))
 	rotation.y = player.rotation.y
 	rotation.z = sin(Time.get_ticks_msec() * 0.004 + formation_index) * 0.08
+	if not _trail_points.is_empty():
+		_trail_points.clear()
+		_redraw_trail()
 
 func _update_travel(delta: float) -> void:
 	var previous_position := global_position
 	global_position += travel_direction * speed * delta
 	look_at(global_position + travel_direction, Vector3.UP)
 	rotation.x += PI * 0.5
+	_append_trail_point(global_position)
 	_check_enemy_hits(previous_position, global_position)
 	if not hit_targets.is_empty() and global_position.distance_to(first_hit_position) >= penetration_distance:
 		_set_state(SwordState.RETURN)
@@ -136,6 +146,7 @@ func _update_return(delta: float) -> void:
 	var direction := (destination - global_position).normalized()
 	global_position += direction * speed * 1.2 * delta
 	look_at(destination, Vector3.UP)
+	_append_trail_point(global_position)
 	if global_position.distance_to(destination) < 0.5:
 		_set_state(SwordState.REFORM)
 
@@ -173,6 +184,56 @@ func _build_sword_visual() -> void:
 		_blade_root.add_child(rodin_sword)
 		return
 	_build_fallback_sword_visual()
+
+func _build_trail() -> void:
+	_trail_mesh = ImmediateMesh.new()
+	_trail_instance = MeshInstance3D.new()
+	_trail_instance.name = "SwordTrail"
+	_trail_instance.mesh = _trail_mesh
+	_trail_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(_trail_instance)
+	_trail_material = StandardMaterial3D.new()
+	_trail_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	_trail_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	_trail_material.vertex_color_use_as_albedo = true
+	_trail_material.albedo_color = Color(0.45, 0.98, 0.9, 0.8)
+	_trail_material.emission_enabled = true
+	_trail_material.emission = Color(0.22, 0.84, 0.76)
+	_trail_material.emission_energy_multiplier = 1.35
+	_trail_material.cull_mode = BaseMaterial3D.CULL_DISABLED
+
+func _append_trail_point(world_point: Vector3) -> void:
+	if not _trail_points.is_empty() and _trail_points.back().distance_squared_to(world_point) < 0.06:
+		return
+	_trail_points.append(world_point)
+	while _trail_points.size() > 14:
+		_trail_points.pop_front()
+	_redraw_trail()
+
+func _redraw_trail() -> void:
+	if _trail_mesh == null:
+		return
+	_trail_mesh.clear_surfaces()
+	if _trail_points.size() < 2:
+		return
+	_trail_mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, _trail_material)
+	for index in _trail_points.size():
+		var point := _trail_points[index]
+		var direction := Vector3.ZERO
+		if index == 0:
+			direction = _trail_points[1] - point
+		else:
+			direction = point - _trail_points[index - 1]
+		direction.y = 0.0
+		var side := Vector3.UP.cross(direction.normalized()) if direction.length_squared() > 0.0001 else Vector3.RIGHT
+		var life := float(index + 1) / float(_trail_points.size())
+		var width := lerpf(0.025, 0.13, life)
+		var color := Color(0.32, 0.95, 0.86, life * life * 0.78)
+		_trail_mesh.surface_set_color(color)
+		_trail_mesh.surface_add_vertex(to_local(point + side * width))
+		_trail_mesh.surface_set_color(color)
+		_trail_mesh.surface_add_vertex(to_local(point - side * width))
+	_trail_mesh.surface_end()
 
 func _build_fallback_sword_visual() -> void:
 	var blade := MeshInstance3D.new()

@@ -18,7 +18,9 @@ func _ready() -> void:
 	_world_root = Node3D.new()
 	_world_root.name = "QingyunIslandWorld"
 	add_child(_world_root)
-	if not _build_external_map():
+	if _build_external_map():
+		_build_gameplay_collision_graph()
+	else:
 		_world_root.name = "FiveRealmArtFallback"
 		_build_backdrop()
 		_build_floor_graph()
@@ -31,6 +33,43 @@ func _ready() -> void:
 
 func can_stand(position: Vector3, radius := WorldConfig.PLAYER_RADIUS) -> bool:
 	return WorldConfig.is_walkable(position, radius)
+
+func _build_gameplay_collision_graph() -> void:
+	# The Rodin map is presentation only. Gameplay remains deterministic and uses the
+	# same authored footprints as the whitebox so art replacement cannot silently
+	# remove cover, gates, or traversal constraints.
+	for id: String in WorldConfig.REGIONS:
+		var region: Dictionary = WorldConfig.REGIONS[id]
+		_add_floor_collision(region.center, region.size, id)
+	for link: Dictionary in WorldConfig.LINKS:
+		_add_floor_collision(link.center, link.size, String(link.id))
+	for blocker: Dictionary in WorldConfig.BLOCKERS:
+		_add_blocker_collision(blocker)
+
+func _add_floor_collision(center: Vector2, size: Vector2, id: String) -> void:
+	var body := StaticBody3D.new()
+	body.name = "GameplayFloor_%s" % id
+	body.collision_layer = 1
+	var shape := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = Vector3(size.x, 0.18, size.y)
+	shape.shape = box
+	shape.position = Vector3(center.x, -0.12, center.y)
+	body.add_child(shape)
+	add_child(body)
+
+func _add_blocker_collision(blocker: Dictionary) -> void:
+	var body := StaticBody3D.new()
+	body.name = "GameplayBlocker_%s" % String(blocker.id)
+	body.collision_layer = 1
+	var shape := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = Vector3(blocker.s.x, blocker.h, blocker.s.y)
+	shape.shape = box
+	shape.position = Vector3(blocker.p.x, blocker.h * 0.5, blocker.p.y)
+	body.add_child(shape)
+	add_child(body)
+	_blockers.append(body)
 
 func _build_external_map() -> bool:
 	loaded_asset_path = RodinAssetRegistry.asset_path(MAP_ASSET_SLOT)
@@ -59,7 +98,9 @@ func snapshot() -> Dictionary:
 		"external_map_loaded": external_map_loaded,
 		"asset_slot": String(MAP_ASSET_SLOT),
 		"asset_path": loaded_asset_path,
-		"fallback_blockers": _blockers.size()
+		"fallback_blockers": _blockers.size(),
+		"gameplay_collision_proxies": _blockers.size(),
+		"navigation_profile": "FIVE_REGION_GRAPH"
 	}
 
 func _build_environment() -> void:
@@ -75,18 +116,18 @@ func _build_environment() -> void:
 	environment.sky = sky
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
 	environment.ambient_light_color = Color("bfded7")
-	environment.ambient_light_energy = 0.22
+	environment.ambient_light_energy = 0.17
 	environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
-	environment.tonemap_exposure = 0.56
+	environment.tonemap_exposure = 0.48
 	environment.fog_enabled = true
 	environment.fog_light_color = Color("b5cfca")
-	environment.fog_light_energy = 0.82
+	environment.fog_light_energy = 0.68
 	environment.fog_density = 0.0065
 	environment.fog_height = 5.0
 	environment.fog_height_density = 0.045
 	environment.glow_enabled = true
-	environment.glow_intensity = 0.55
-	environment.glow_strength = 0.72
+	environment.glow_intensity = 0.38
+	environment.glow_strength = 0.58
 	var world := WorldEnvironment.new()
 	world.name = "XianxiaAtmosphere"
 	world.environment = environment

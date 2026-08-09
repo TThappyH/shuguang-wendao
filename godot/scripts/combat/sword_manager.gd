@@ -3,6 +3,7 @@ extends Node3D
 
 signal metrics_changed(shots: int, hits: int, multi_hit_shots: int)
 signal impact(world_position: Vector3, hit_count: int, damage: float)
+signal sword_state_changed(index: int, state_name: StringName)
 
 var player: Node3D
 var shots_fired := 0
@@ -26,6 +27,7 @@ func configure(owner_player: Node3D) -> void:
 		sword.hit_registered.connect(_on_hit_registered)
 		sword.multi_hit_completed.connect(_on_multi_hit_completed)
 		sword.impact.connect(_on_impact)
+		sword.state_changed.connect(_on_sword_state_changed)
 		swords.append(sword)
 	_apply_tuning_to_swords()
 
@@ -43,6 +45,9 @@ func _on_multi_hit_completed(_hit_count: int) -> void:
 
 func _on_impact(world_position: Vector3, hit_count: int, dealt_damage: float) -> void:
 	impact.emit(world_position, hit_count, dealt_damage)
+
+func _on_sword_state_changed(index: int, state_name: StringName) -> void:
+	sword_state_changed.emit(index, state_name)
 
 func apply_upgrade(stat: StringName, amount: float) -> void:
 	match stat:

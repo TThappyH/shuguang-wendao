@@ -26,10 +26,18 @@ func _run() -> void:
 		failures.append("qingyao_glb")
 	if not world.get("external_map_loaded", false) and world.get("fallback_blockers", 0) < 20:
 		failures.append("world_geometry")
+	if world.get("navigation_profile", "") != "FIVE_REGION_GRAPH" or world.get("gameplay_collision_proxies", 0) < WorldConfig.BLOCKERS.size():
+		failures.append("world_gameplay_collision")
 	if snapshot.get("feedback_pool_size", 0) != 24:
 		failures.append("feedback_pool")
 	if snapshot.get("rodin_assets", []).size() < 5:
 		failures.append("rodin_registry")
+	var camera: Dictionary = snapshot.get("camera", {})
+	if float(camera.get("pitch_degrees", 0.0)) < 55.0 or float(camera.get("pitch_degrees", 0.0)) > 60.0:
+		failures.append("gameplay_camera")
+	var hud: Dictionary = snapshot.get("hud", {})
+	if not hud.get("structured_controls", false):
+		failures.append("structured_hud")
 	if failures.is_empty():
 		print("GODOT_SMOKE_PASS")
 		quit(0)

@@ -1,6 +1,6 @@
 extends SceneTree
 
-const OUTPUT_PATH := "res://../evidence/v10.1_visual_asset_integration/05_godot_gameplay_60deg.png"
+const OUTPUT_PATH := "res://../evidence/v10.2_code_presentation/01_runtime_gameplay_default.png"
 
 func _init() -> void:
 	call_deferred("_capture")
@@ -14,20 +14,11 @@ func _capture() -> void:
 		push_error("VISUAL_CAPTURE_NO_MAIN_SCENE")
 		quit(1)
 		return
-	main.camera_rig.follow_height = 18.0
-	main.camera_rig.follow_distance = 10.5
-	main.camera_rig.reset_runtime()
-	main.sword_manager.reset_runtime()
-	for enemy: Node in get_nodes_in_group("enemies"):
-		if enemy is Node3D:
-			(enemy as Node3D).visible = false
-	for sword: FlyingSword in main.sword_manager.swords:
-		sword.set_physics_process(false)
-		sword.reset_runtime()
-	main.player.set_physics_process(false)
-	await process_frame
-	await process_frame
-	await process_frame
+	# Capture the shipped camera and live combat state. Do not freeze actors, hide
+	# enemies, or override camera values: this image is gameplay evidence, not an
+	# isolated asset beauty shot.
+	main.director.set_debug_count(3)
+	await create_timer(1.2).timeout
 	var image := root.get_texture().get_image()
 	var absolute_path := ProjectSettings.globalize_path(OUTPUT_PATH)
 	DirAccess.make_dir_recursive_absolute(absolute_path.get_base_dir())
@@ -36,5 +27,5 @@ func _capture() -> void:
 		push_error("VISUAL_CAPTURE_SAVE_FAILED=%d" % error)
 		quit(1)
 		return
-	print("VISUAL_CAPTURE_PASS=" + absolute_path)
+	print("RUNTIME_VISUAL_CAPTURE_PASS=" + absolute_path)
 	quit(0)

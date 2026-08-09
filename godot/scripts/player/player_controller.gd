@@ -5,11 +5,13 @@ signal health_changed(current: float, maximum: float)
 signal distance_changed(total_distance: float)
 signal damage_taken(amount: float)
 signal dash_started(direction: Vector3)
+signal dash_ready_changed(ready: bool)
 signal died
 
 @export var level_path: NodePath
 @export var move_speed := 5.4
 @export var acceleration := 22.0
+@export var deceleration := 30.0
 @export var dash_speed := 13.5
 @export var dash_duration := 0.18
 @export var dash_cooldown := 1.05
@@ -21,13 +23,14 @@ var contact_immunity := 0.0
 var _dash_time := 0.0
 var _dash_cooldown_left := 0.0
 var _dash_direction := Vector3.ZERO
-var _move_blend := 0.0
 var _level: Node
 var _visual_root: Node3D
+var _presentation: PlayerPresentation
 var _visual: QingyaoVisual
 var _base_move_speed := 5.4
 var _base_dash_cooldown := 1.05
 var _base_max_hp := 120.0
+var _dash_was_ready := true
 
 func _ready() -> void:
 	add_to_group("player")
@@ -38,8 +41,12 @@ func _ready() -> void:
 		_level = get_tree().current_scene.get_node_or_null("World")
 	_visual_root = $VisualRoot
 	_setup_collision()
+	_presentation = PlayerPresentation.new()
+	_presentation.name = "PlayerPresentation"
+	_visual_root.add_child(_presentation)
 	_visual = QingyaoVisual.new()
-	_visual_root.add_child(_visual)
+	_presentation.add_child(_visual)
+	_presentation.configure(_visual)
 	health_changed.emit(hp, max_hp)
 	_base_move_speed = move_speed
 	_base_dash_cooldown = dash_cooldown
@@ -65,9 +72,13 @@ func _physics_process(delta: float) -> void:
 	var desired := move_direction.normalized() * move_speed
 	if _dash_time > 0.0:
 		_dash_time -= delta
-		desired = _dash_direction * dash_speed
-	velocity.x = move_toward(velocity.x, desired.x, acceleration * delta)
-	velocity.z = move_toward(velocity.z, desired.z, acceleration * delta)
+		var dash_ratio_left := clampf(_dash_time / maxf(dash_duration, 0.001), 0.0, 1.0)
+		desired = _dash_direction * dash_speed * lerpf(0.78, 1.0, dash_ratio_left)
+	var horizontal := Vector3(velocity.x, 0.0, velocity.z)
+	var response := acceleration if not desired.is_zero_approx() else deceleration
+	horizontal = horizontal.move_toward(desired, response * delta)
+	velocity.x = horizontal.x
+	velocity.z = horizontal.z
 	velocity.y = 0.0
 	var before := global_position
 	move_and_slide()
@@ -80,7 +91,11 @@ func _physics_process(delta: float) -> void:
 		total_distance += travelled
 		distance_changed.emit(total_distance)
 		_face_motion(Vector3(velocity.x, 0.0, velocity.z), delta)
-	_animate_visual(delta, move_direction.length())
+	_presentation.set_motion(Vector3(velocity.x, 0.0, velocity.z), move_speed, is_dashing(), delta)
+	var dash_ready := _dash_cooldown_left <= 0.0
+	if dash_ready != _dash_was_ready:
+		_dash_was_ready = dash_ready
+		dash_ready_changed.emit(dash_ready)
 
 func _face_motion(direction: Vector3, delta: float) -> void:
 	if direction.length_squared() < 0.04:
@@ -88,21 +103,17 @@ func _face_motion(direction: Vector3, delta: float) -> void:
 	var target_angle := atan2(direction.x, direction.z)
 	_visual_root.rotation.y = lerp_angle(_visual_root.rotation.y, target_angle, 1.0 - exp(-delta * 12.0))
 
-func _animate_visual(delta: float, intent: float) -> void:
-	_move_blend = move_toward(_move_blend, intent, delta * 5.0)
-	var time := Time.get_ticks_msec() * 0.001
-	_visual_root.position.y = sin(time * 8.0) * 0.018 * _move_blend
-	_visual_root.rotation.z = sin(time * 5.0) * 0.012 * _move_blend
-
 func take_contact_damage(amount: float) -> bool:
 	if contact_immunity > 0.0 or _dash_time > 0.0 or hp <= 0.0:
 		return false
 	contact_immunity = 0.62
 	hp = maxf(0.0, hp - amount)
+	_presentation.notify_damage()
 	health_changed.emit(hp, max_hp)
 	damage_taken.emit(amount)
 	GameEvents.player_damaged.emit(amount, hp)
 	if hp <= 0.0:
+		_presentation.notify_death()
 		died.emit()
 	return true
 
@@ -117,8 +128,12 @@ func reset_runtime() -> void:
 	velocity = Vector3.ZERO
 	_dash_time = 0.0
 	_dash_cooldown_left = 0.0
+	_dash_was_ready = true
+	_visual_root.rotation = Vector3.ZERO
+	_presentation.reset_runtime()
 	health_changed.emit(hp, max_hp)
 	distance_changed.emit(total_distance)
+	dash_ready_changed.emit(true)
 
 func apply_upgrade(stat: StringName, amount: float) -> void:
 	match stat:
@@ -138,3 +153,6 @@ func is_dashing() -> bool:
 
 func dash_ratio() -> float:
 	return clampf(1.0 - _dash_cooldown_left / maxf(dash_cooldown, 0.001), 0.0, 1.0)
+
+func presentation_snapshot() -> Dictionary:
+	return _presentation.snapshot() if is_instance_valid(_presentation) else {}

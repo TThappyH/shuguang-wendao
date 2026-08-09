@@ -74,7 +74,7 @@ func _process(_delta: float) -> void:
 			director.set_debug_count(3)
 		if Input.is_key_pressed(KEY_8):
 			director.set_debug_count(8)
-	hud.queue_redraw()
+	hud.refresh()
 
 func _reset_runtime() -> void:
 	get_tree().paused = false
@@ -91,7 +91,7 @@ func _reset_runtime() -> void:
 
 func _on_enemy_defeated(_enemy: EnemyController, _archetype_id: StringName, reward: int) -> void:
 	progression.grant_essence(reward)
-	hud.queue_redraw()
+	hud.refresh()
 
 func _on_player_damage_feedback(amount: float) -> void:
 	feedback.play_player_damage(player.global_position, amount)
@@ -102,38 +102,38 @@ func _on_dash_started(_direction: Vector3) -> void:
 func _on_player_died() -> void:
 	run_over = true
 	get_tree().paused = true
-	hud.queue_redraw()
+	hud.refresh()
 
 func _on_sword_metrics(_shots: int, _hits: int, _multi: int) -> void:
-	hud.queue_redraw()
+	hud.refresh()
 
 func _on_runtime_changed(_value := 0) -> void:
-	hud.queue_redraw()
+	hud.refresh()
 
 func _on_damage_taken(_amount: float) -> void:
-	hud.queue_redraw()
+	hud.refresh()
 
 func _on_player_health_changed(_current: float, _maximum: float) -> void:
-	hud.queue_redraw()
+	hud.refresh()
 
 func _on_player_distance_changed(_total: float) -> void:
-	hud.queue_redraw()
+	hud.refresh()
 
 func _on_region_changed(region_id: String) -> void:
 	hud.set_region(region_id)
-	hud.queue_redraw()
+	hud.refresh()
 
 func _on_phase_changed(_phase_id: StringName, _intensity: float, _target: int) -> void:
-	hud.queue_redraw()
+	hud.refresh()
 
 func _on_progression_changed(_level: int, _essence: int, _next: int) -> void:
-	hud.queue_redraw()
+	hud.refresh()
 
 func _on_draft_changed(_options: Array[UpgradeDefinition]) -> void:
-	hud.queue_redraw()
+	hud.refresh()
 
 func _on_draft_closed() -> void:
-	hud.queue_redraw()
+	hud.refresh()
 
 func debug_snapshot() -> Dictionary:
 	return {
@@ -149,6 +149,9 @@ func debug_snapshot() -> Dictionary:
 		"progression": progression.snapshot(),
 		"world": level.snapshot(),
 		"qingyao": player._visual.snapshot(),
+		"presentation": player.presentation_snapshot(),
+		"camera": camera_rig.snapshot(),
+		"hud": hud.snapshot(),
 		"feedback_pool_size": feedback._pool.size(),
 		"rodin_assets": RodinAssetRegistry.audit_slots()
 	}

@@ -20,16 +20,27 @@ func _load_model() -> void:
 	loaded_asset_path = RodinAssetRegistry.asset_path(MODEL_ASSET_SLOT)
 	if loaded_asset_path.is_empty():
 		loaded_asset_path = MODEL_FALLBACK_PATH
-	var resource := load(loaded_asset_path)
-	if not resource is PackedScene:
-		push_error("Qingyao GLB did not import as PackedScene: %s" % loaded_asset_path)
+	var resolved := resolve_model_scene(loaded_asset_path, MODEL_FALLBACK_PATH)
+	var resource: PackedScene = resolved.scene
+	loaded_asset_path = resolved.path
+	if resource == null:
+		push_error("Qingyao primary and fallback models failed to import")
 		return
-	model_root = (resource as PackedScene).instantiate()
+	model_root = resource.instantiate()
 	model_root.name = "QingyaoGLB"
 	add_child(model_root)
 	_collect_mesh_metrics(model_root)
 	_fit_to_gameplay_scale()
 	loaded = true
+
+static func resolve_model_scene(primary_path: String, fallback_path: String) -> Dictionary:
+	for candidate in [primary_path, fallback_path]:
+		if candidate.is_empty() or not ResourceLoader.exists(candidate, "PackedScene"):
+			continue
+		var resource := ResourceLoader.load(candidate, "PackedScene")
+		if resource is PackedScene:
+			return {"scene": resource as PackedScene, "path": candidate}
+	return {"scene": null, "path": ""}
 
 func snapshot() -> Dictionary:
 	return {
